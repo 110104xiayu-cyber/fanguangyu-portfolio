@@ -1662,6 +1662,15 @@ if(VIEWS.includes(init)) openView(init,false); else openView('home',false);
   try{var st=localStorage.getItem(TK); if(st) tdata=JSON.parse(st);}catch(e){}
   function tApply(){ tT().forEach(function(el,i){ if(tdata[i]!=null) el.innerText=tdata[i]; }); }
   tApply();
+  // load permanent / cross-device base config from the repo (applies to all visitors); localStorage wins on the owner's device
+  function loadBase(j){
+    var f = Object.assign({}, DEF, j.font || {});
+    var t = (Array.isArray(j.text) ? j.text.slice() : []);
+    try{var sf=localStorage.getItem(LS); if(sf) f = Object.assign({}, f, JSON.parse(sf));}catch(e){}
+    try{var st=localStorage.getItem(TK); if(st) t = JSON.parse(st);}catch(e){}
+    cfg=f; tdata=t; applyF(cfg); tApply();
+  }
+  fetch('assets/default-config.json?t='+Date.now()).then(function(r){return r.json();}).then(function(j){ if(j && (j.font || j.text)) loadBase(j); }).catch(function(){});
   var editing=false;
   function setEdit(){
     tT().forEach(function(el){
@@ -1684,7 +1693,7 @@ if(VIEWS.includes(init)) openView(init,false); else openView('home',false);
     '<label style="display:block;margin-bottom:8px">正文字体<br><select id="gfyFont" style="width:100%;margin-top:3px"></select></label>'+
     '<label style="display:block;margin-bottom:8px">标题字体<br><select id="gfyHead" style="width:100%;margin-top:3px"></select></label>'+
     '<label style="display:block;margin-bottom:8px">整体字号 <span id="gfyZv"></span><br><input id="gfyZoom" type="range" min="85" max="115" step="5" style="width:100%;margin-top:3px"></label>'+
-    '<div style="display:flex;gap:6px;flex-wrap:wrap"><button id="gfySave">保存</button><button id="gfyReset">重置</button><button id="gfyExp">导出</button><button id="gfyImp">导入</button></div>'+
+    '<div style="display:flex;gap:6px;flex-wrap:wrap"><button id="gfySave">保存</button><button id="gfyReset">重置</button><button id="gfyExp">导出</button><button id="gfyCopy">复制配置</button><button id="gfyImp">导入</button></div>'+
     '<div id="gfyTex" style="margin-top:12px;border-top:1px solid #eee;padding-top:10px">'+
       '<div style="font-weight:700;margin-bottom:6px;font-size:14px">文字内容编辑</div>'+
       '<div style="font-size:12px;color:#777;margin-bottom:8px">点「开始编辑」后，直接点网页上的文字即可修改；改完点「保存文字」。</div>'+
@@ -1714,6 +1723,7 @@ if(VIEWS.includes(init)) openView(init,false); else openView('home',false);
   document.getElementById('gfySave').onclick=function(){localStorage.setItem(LS,JSON.stringify(cfg));msg.textContent='字体已保存（跨设备用 导出/导入）';};
   document.getElementById('gfyReset').onclick=function(){cfg=Object.assign({},DEF);fillF();applyF(cfg);localStorage.removeItem(LS);msg.textContent='字体已恢复默认';};
   document.getElementById('gfyExp').onclick=function(){var b=new Blob([JSON.stringify({font:cfg,text:tdata},null,2)],{type:'application/json'});var a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='portfolio-config.json';a.click();};
+  document.getElementById('gfyCopy').onclick=function(){var s2=JSON.stringify({font:cfg,text:tdata});(navigator.clipboard&&navigator.clipboard.writeText)?navigator.clipboard.writeText(s2).then(function(){msg.textContent='配置已复制，粘贴发给我即可上传云端';},function(){prompt('复制下面内容发给我：',s2);}):prompt('复制下面内容发给我：',s2);};
   document.getElementById('gfyImp').onclick=function(){var t=prompt('粘贴导出的配置 JSON：');if(!t)return;try{var o=JSON.parse(t);if(o.font){cfg=Object.assign({},DEF,o.font);fillF();applyF(cfg);localStorage.setItem(LS,JSON.stringify(cfg));}if(o.text){tdata=o.text;tApply();localStorage.setItem(TK,JSON.stringify(tdata));}msg.textContent='已导入并保存';}catch(e){msg.textContent='JSON 格式错误';}};
   document.getElementById('gfyTOn').onclick=function(){editing=!editing;setEdit();this.textContent=editing?'退出编辑':'开始编辑';};
   document.getElementById('gfyTSave').onclick=function(){tdata=tT().map(function(el){return el.innerText;});localStorage.setItem(TK,JSON.stringify(tdata));msg.textContent='文字已保存（跨设备用 导出/导入）';};
