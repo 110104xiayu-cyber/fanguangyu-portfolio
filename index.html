@@ -1630,6 +1630,8 @@ if(VIEWS.includes(init)) openView(init,false); else openView('home',false);
 (function(){
   var KEY='fgy2026';
   var owner = new URLSearchParams(location.search).get('owner')===KEY;
+
+  /* ===== fonts ===== */
   var LS='gfy_portfolio_style_v1';
   var DEF={font:'sys',head:'sys',zoom:100};
   var FV={
@@ -1642,7 +1644,7 @@ if(VIEWS.includes(init)) openView(init,false); else openView('home',false);
   var FONTNAME={sys:'默认 / 黑体',hei:'微软雅黑 / 苹方',song:'宋体',kai:'楷体',round:'圆体 / 幼圆'};
   var cfg=Object.assign({},DEF);
   try{var s=localStorage.getItem(LS);if(s)cfg=Object.assign({},DEF,JSON.parse(s));}catch(e){}
-  function apply(c){
+  function applyF(c){
     var f=FV[c.font]||FV.sys;
     document.documentElement.style.setProperty('--font',f);
     document.body.style.fontFamily=f;
@@ -1650,36 +1652,71 @@ if(VIEWS.includes(init)) openView(init,false); else openView('home',false);
     var h=FV[c.head]||FV.sys;
     document.querySelectorAll('h1,h2,h3,h4').forEach(function(x){x.style.fontFamily=h;});
   }
-  apply(cfg);
+  applyF(cfg);
+
+  /* ===== text content ===== */
+  var TK='gfy_portfolio_text_v1';
+  var TSEL='.wish, .intro, .tags span, .sub-title, .sub-sub, .vid-card h3, .vid-card p, .web-card h3, .web-card p, .more-title, .more-desc, .doc-card h3, .doc-card p';
+  function tT(){ return Array.prototype.slice.call(document.querySelectorAll(TSEL)); }
+  var tdata=[];
+  try{var st=localStorage.getItem(TK); if(st) tdata=JSON.parse(st);}catch(e){}
+  function tApply(){ tT().forEach(function(el,i){ if(tdata[i]!=null) el.innerText=tdata[i]; }); }
+  tApply();
+  var editing=false;
+  function setEdit(){
+    tT().forEach(function(el){
+      el.contentEditable = editing ? 'true' : 'false';
+      el.classList.toggle('gfy-edit', editing);
+    });
+  }
+
   if(!owner)return;
   var bar=document.createElement('div');
   bar.id='gfyEditor';
   bar.style.cssText='position:fixed;right:14px;bottom:14px;z-index:99999;font-family:sans-serif';
-  bar.innerHTML='<button id="gfyBtn" style="background:#1a1e26;color:#fff;border:1px solid #e0b45c;border-radius:12px;padding:9px 14px;font-size:14px;cursor:pointer">✦ 字体编辑</button>'+
-    '<div id="gfyPanel" style="display:none;margin-top:8px;background:#fff;color:#111;border:1px solid #ddd;border-radius:12px;padding:14px;width:250px;box-shadow:0 12px 30px rgba(0,0,0,.22);font-size:13px">'+
+  bar.innerHTML=
+    '<div style="display:flex;gap:6px">'+
+    '<button id="gfyBtn" style="background:#1a1e26;color:#fff;border:1px solid #e0b45c;border-radius:12px;padding:9px 14px;font-size:14px;cursor:pointer">✦ 字体编辑</button>'+
+    '<button id="gfyTextBtn" style="background:#1a1e26;color:#fff;border:1px solid #e0b45c;border-radius:12px;padding:9px 12px;font-size:14px;cursor:pointer">✎ 文字编辑</button>'+
+    '</div>'+
+    '<div id="gfyPanel" style="display:none;margin-top:8px;background:#fff;color:#111;border:1px solid #ddd;border-radius:12px;padding:14px;width:252px;box-shadow:0 12px 30px rgba(0,0,0,.22);font-size:13px">'+
     '<div style="font-weight:700;margin-bottom:8px;font-size:14px">字体编辑（仅本人可见）</div>'+
     '<label style="display:block;margin-bottom:8px">正文字体<br><select id="gfyFont" style="width:100%;margin-top:3px"></select></label>'+
     '<label style="display:block;margin-bottom:8px">标题字体<br><select id="gfyHead" style="width:100%;margin-top:3px"></select></label>'+
     '<label style="display:block;margin-bottom:8px">整体字号 <span id="gfyZv"></span><br><input id="gfyZoom" type="range" min="85" max="115" step="5" style="width:100%;margin-top:3px"></label>'+
-    '<div style="display:flex;gap:6px;flex-wrap:wrap">'+
-    '<button id="gfySave">保存</button><button id="gfyReset">重置</button><button id="gfyExp">导出</button><button id="gfyImp">导入</button>'+
-    '</div><div id="gfyMsg" style="margin-top:8px;min-height:16px;color:#2a7;font-size:12px"></div></div>';
+    '<div style="display:flex;gap:6px;flex-wrap:wrap"><button id="gfySave">保存</button><button id="gfyReset">重置</button><button id="gfyExp">导出</button><button id="gfyImp">导入</button></div>'+
+    '<div id="gfyTex" style="margin-top:12px;border-top:1px solid #eee;padding-top:10px">'+
+      '<div style="font-weight:700;margin-bottom:6px;font-size:14px">文字内容编辑</div>'+
+      '<div style="font-size:12px;color:#777;margin-bottom:8px">点「开始编辑」后，直接点网页上的文字即可修改；改完点「保存文字」。</div>'+
+      '<div style="display:flex;gap:6px;flex-wrap:wrap"><button id="gfyTOn">开始编辑</button><button id="gfyTSave">保存文字</button><button id="gfyTReset">重置文字</button></div>'+
+    '</div>'+
+    '<div id="gfyMsg" style="margin-top:8px;min-height:16px;color:#2a7;font-size:12px"></div></div>';
   document.body.appendChild(bar);
-  var btn=document.getElementById('gfyBtn'),panel=document.getElementById('gfyPanel');
+
+  // inject style for editable highlight
+  var st2=document.createElement('style');
+  st2.textContent='.gfy-edit{outline:2px dashed #e0b45c;outline-offset:2px;cursor:text;border-radius:4px}';
+  document.head.appendChild(st2);
+
+  var btn=document.getElementById('gfyBtn'),textBtn=document.getElementById('gfyTextBtn'),panel=document.getElementById('gfyPanel');
   var fs=document.getElementById('gfyFont'),hs=document.getElementById('gfyHead'),zm=document.getElementById('gfyZoom'),zv=document.getElementById('gfyZv');
   Object.keys(FV).forEach(function(k){
     var o=document.createElement('option');o.value=k;o.textContent=FONTNAME[k];fs.appendChild(o);
     var o2=document.createElement('option');o2.value=k;o2.textContent=FONTNAME[k];hs.appendChild(o2);
   });
-  function fill(){fs.value=cfg.font;hs.value=cfg.head;zm.value=cfg.zoom;zv.textContent=cfg.zoom+'%';}
-  fill();
-  function refresh(){cfg.font=fs.value;cfg.head=hs.value;cfg.zoom=+zm.value;zv.textContent=cfg.zoom+'%';apply(cfg);}
+  function fillF(){fs.value=cfg.font;hs.value=cfg.head;zm.value=cfg.zoom;zv.textContent=cfg.zoom+'%';}
+  fillF();
+  function refreshF(){cfg.font=fs.value;cfg.head=hs.value;cfg.zoom=+zm.value;zv.textContent=cfg.zoom+'%';applyF(cfg);}
   btn.onclick=function(){panel.style.display=panel.style.display==='none'?'block':'none';};
-  fs.onchange=refresh;hs.onchange=refresh;zm.oninput=refresh;
+  textBtn.onclick=function(){panel.style.display=panel.style.display==='none'?'block':'none'; setEdit(); textBtn.textContent=editing?'✎ 停止编辑':'✎ 文字编辑';};
+  fs.onchange=refreshF;hs.onchange=refreshF;zm.oninput=refreshF;
   var msg=document.getElementById('gfyMsg');
-  document.getElementById('gfySave').onclick=function(){localStorage.setItem(LS,JSON.stringify(cfg));msg.textContent='已保存到本机（跨设备用 导出/导入）';};
-  document.getElementById('gfyReset').onclick=function(){cfg=Object.assign({},DEF);fill();apply(cfg);localStorage.removeItem(LS);msg.textContent='已恢复默认';};
-  document.getElementById('gfyExp').onclick=function(){var b=new Blob([JSON.stringify(cfg,null,2)],{type:'application/json'});var a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='portfolio-font.json';a.click();};
-  document.getElementById('gfyImp').onclick=function(){var t=prompt('粘贴导出的字体配置 JSON：');if(!t)return;try{cfg=Object.assign({},DEF,JSON.parse(t));fill();apply(cfg);localStorage.setItem(LS,JSON.stringify(cfg));msg.textContent='已导入并保存';}catch(e){msg.textContent='JSON 格式错误';}};
+  document.getElementById('gfySave').onclick=function(){localStorage.setItem(LS,JSON.stringify(cfg));msg.textContent='字体已保存（跨设备用 导出/导入）';};
+  document.getElementById('gfyReset').onclick=function(){cfg=Object.assign({},DEF);fillF();applyF(cfg);localStorage.removeItem(LS);msg.textContent='字体已恢复默认';};
+  document.getElementById('gfyExp').onclick=function(){var b=new Blob([JSON.stringify({font:cfg,text:tdata},null,2)],{type:'application/json'});var a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='portfolio-config.json';a.click();};
+  document.getElementById('gfyImp').onclick=function(){var t=prompt('粘贴导出的配置 JSON：');if(!t)return;try{var o=JSON.parse(t);if(o.font){cfg=Object.assign({},DEF,o.font);fillF();applyF(cfg);localStorage.setItem(LS,JSON.stringify(cfg));}if(o.text){tdata=o.text;tApply();localStorage.setItem(TK,JSON.stringify(tdata));}msg.textContent='已导入并保存';}catch(e){msg.textContent='JSON 格式错误';}};
+  document.getElementById('gfyTOn').onclick=function(){editing=!editing;setEdit();this.textContent=editing?'退出编辑':'开始编辑';};
+  document.getElementById('gfyTSave').onclick=function(){tdata=tT().map(function(el){return el.innerText;});localStorage.setItem(TK,JSON.stringify(tdata));msg.textContent='文字已保存（跨设备用 导出/导入）';};
+  document.getElementById('gfyTReset').onclick=function(){localStorage.removeItem(TK);tdata=[];tApply();msg.textContent='文字已恢复默认';};
 })();
 </script></body></html>
