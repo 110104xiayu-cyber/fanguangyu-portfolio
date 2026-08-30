@@ -658,7 +658,7 @@ body.np-editing .np-pad .k:hover{filter:brightness(1.06)}
           <div class="more-desc">内容策划 / 传播 / 消费者行为专业底色</div>
         </div>
         <div class="more-item">
-          <div class="more-title">英语 CET-6</div>
+          <div class="more-title">英语 CET-4</div>
           <div class="more-desc">可借助 AI 高效产出行业多语内容</div>
         </div>
         <div class="more-item">
@@ -1655,12 +1655,12 @@ if(VIEWS.includes(init)) openView(init,false); else openView('home',false);
   applyF(cfg);
 
   /* ===== text content ===== */
-  var TK='gfy_portfolio_text_v1';
+  var TK='gfy_portfolio_text_v2';
   var TSEL='.wish, .intro, .tags span, .sub-title, .sub-sub, .vid-card h3, .vid-card p, .web-card h3, .web-card p, .more-title, .more-desc, .doc-card h3, .doc-card p';
   function tT(){ return Array.prototype.slice.call(document.querySelectorAll(TSEL)); }
   var tdata=[];
   try{var st=localStorage.getItem(TK); if(st) tdata=JSON.parse(st);}catch(e){}
-  function tApply(){ tT().forEach(function(el,i){ if(tdata[i]!=null) el.innerText=tdata[i]; }); }
+  function tApply(){ tT().forEach(function(el,i){ if(tdata[i]) el.textContent=tdata[i]; }); }
   tApply();
   // load permanent / cross-device base config from the repo (applies to all visitors); localStorage wins on the owner's device
   function loadBase(j){
@@ -1726,7 +1726,7 @@ if(VIEWS.includes(init)) openView(init,false); else openView('home',false);
   document.getElementById('gfyCopy').onclick=function(){var s2=JSON.stringify({font:cfg,text:tdata});(navigator.clipboard&&navigator.clipboard.writeText)?navigator.clipboard.writeText(s2).then(function(){msg.textContent='配置已复制，粘贴发给我即可上传云端';},function(){prompt('复制下面内容发给我：',s2);}):prompt('复制下面内容发给我：',s2);};
   document.getElementById('gfyImp').onclick=function(){var t=prompt('粘贴导出的配置 JSON：');if(!t)return;try{var o=JSON.parse(t);if(o.font){cfg=Object.assign({},DEF,o.font);fillF();applyF(cfg);localStorage.setItem(LS,JSON.stringify(cfg));}if(o.text){tdata=o.text;tApply();localStorage.setItem(TK,JSON.stringify(tdata));}msg.textContent='已导入并保存';}catch(e){msg.textContent='JSON 格式错误';}};
   document.getElementById('gfyTOn').onclick=function(){editing=!editing;setEdit();this.textContent=editing?'退出编辑':'开始编辑';};
-  document.getElementById('gfyTSave').onclick=function(){tdata=tT().map(function(el){return el.innerText;});localStorage.setItem(TK,JSON.stringify(tdata));msg.textContent='文字已保存（跨设备用 导出/导入）';};
+  document.getElementById('gfyTSave').onclick=function(){tdata=tT().map(function(el){return el.textContent;});localStorage.setItem(TK,JSON.stringify(tdata));msg.textContent='文字已保存（跨设备用 导出/导入）';};
   document.getElementById('gfyTReset').onclick=function(){localStorage.removeItem(TK);tdata=[];tApply();msg.textContent='文字已恢复默认';};
 })();
 </script></body></html>
