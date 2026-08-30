@@ -1626,5 +1626,60 @@ if(VIEWS.includes(init)) openView(init,false); else openView('home',false);
   renderKeys();applyCfg();
 })();
 </script>
-</body>
-</html>
+<script>
+(function(){
+  var KEY='fgy2026';
+  var owner = new URLSearchParams(location.search).get('owner')===KEY;
+  var LS='gfy_portfolio_style_v1';
+  var DEF={font:'sys',head:'sys',zoom:100};
+  var FV={
+    sys:"-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',system-ui,sans-serif",
+    hei:"'Microsoft YaHei','PingFang SC',system-ui,sans-serif",
+    song:"'SimSun','Songti SC',serif",
+    kai:"'KaiTi','Kaiti SC','STKaiti',serif",
+    round:"'Yuanti SC','YouYuan','PingFang SC',sans-serif"
+  };
+  var FONTNAME={sys:'默认 / 黑体',hei:'微软雅黑 / 苹方',song:'宋体',kai:'楷体',round:'圆体 / 幼圆'};
+  var cfg=Object.assign({},DEF);
+  try{var s=localStorage.getItem(LS);if(s)cfg=Object.assign({},DEF,JSON.parse(s));}catch(e){}
+  function apply(c){
+    var f=FV[c.font]||FV.sys;
+    document.documentElement.style.setProperty('--font',f);
+    document.body.style.fontFamily=f;
+    document.body.style.zoom=(c.zoom||100)/100;
+    var h=FV[c.head]||FV.sys;
+    document.querySelectorAll('h1,h2,h3,h4').forEach(function(x){x.style.fontFamily=h;});
+  }
+  apply(cfg);
+  if(!owner)return;
+  var bar=document.createElement('div');
+  bar.id='gfyEditor';
+  bar.style.cssText='position:fixed;right:14px;bottom:14px;z-index:99999;font-family:sans-serif';
+  bar.innerHTML='<button id="gfyBtn" style="background:#1a1e26;color:#fff;border:1px solid #e0b45c;border-radius:12px;padding:9px 14px;font-size:14px;cursor:pointer">✦ 字体编辑</button>'+
+    '<div id="gfyPanel" style="display:none;margin-top:8px;background:#fff;color:#111;border:1px solid #ddd;border-radius:12px;padding:14px;width:250px;box-shadow:0 12px 30px rgba(0,0,0,.22);font-size:13px">'+
+    '<div style="font-weight:700;margin-bottom:8px;font-size:14px">字体编辑（仅本人可见）</div>'+
+    '<label style="display:block;margin-bottom:8px">正文字体<br><select id="gfyFont" style="width:100%;margin-top:3px"></select></label>'+
+    '<label style="display:block;margin-bottom:8px">标题字体<br><select id="gfyHead" style="width:100%;margin-top:3px"></select></label>'+
+    '<label style="display:block;margin-bottom:8px">整体字号 <span id="gfyZv"></span><br><input id="gfyZoom" type="range" min="85" max="115" step="5" style="width:100%;margin-top:3px"></label>'+
+    '<div style="display:flex;gap:6px;flex-wrap:wrap">'+
+    '<button id="gfySave">保存</button><button id="gfyReset">重置</button><button id="gfyExp">导出</button><button id="gfyImp">导入</button>'+
+    '</div><div id="gfyMsg" style="margin-top:8px;min-height:16px;color:#2a7;font-size:12px"></div></div>';
+  document.body.appendChild(bar);
+  var btn=document.getElementById('gfyBtn'),panel=document.getElementById('gfyPanel');
+  var fs=document.getElementById('gfyFont'),hs=document.getElementById('gfyHead'),zm=document.getElementById('gfyZoom'),zv=document.getElementById('gfyZv');
+  Object.keys(FV).forEach(function(k){
+    var o=document.createElement('option');o.value=k;o.textContent=FONTNAME[k];fs.appendChild(o);
+    var o2=document.createElement('option');o2.value=k;o2.textContent=FONTNAME[k];hs.appendChild(o2);
+  });
+  function fill(){fs.value=cfg.font;hs.value=cfg.head;zm.value=cfg.zoom;zv.textContent=cfg.zoom+'%';}
+  fill();
+  function refresh(){cfg.font=fs.value;cfg.head=hs.value;cfg.zoom=+zm.value;zv.textContent=cfg.zoom+'%';apply(cfg);}
+  btn.onclick=function(){panel.style.display=panel.style.display==='none'?'block':'none';};
+  fs.onchange=refresh;hs.onchange=refresh;zm.oninput=refresh;
+  var msg=document.getElementById('gfyMsg');
+  document.getElementById('gfySave').onclick=function(){localStorage.setItem(LS,JSON.stringify(cfg));msg.textContent='已保存到本机（跨设备用 导出/导入）';};
+  document.getElementById('gfyReset').onclick=function(){cfg=Object.assign({},DEF);fill();apply(cfg);localStorage.removeItem(LS);msg.textContent='已恢复默认';};
+  document.getElementById('gfyExp').onclick=function(){var b=new Blob([JSON.stringify(cfg,null,2)],{type:'application/json'});var a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='portfolio-font.json';a.click();};
+  document.getElementById('gfyImp').onclick=function(){var t=prompt('粘贴导出的字体配置 JSON：');if(!t)return;try{cfg=Object.assign({},DEF,JSON.parse(t));fill();apply(cfg);localStorage.setItem(LS,JSON.stringify(cfg));msg.textContent='已导入并保存';}catch(e){msg.textContent='JSON 格式错误';}};
+})();
+</script></body></html>
