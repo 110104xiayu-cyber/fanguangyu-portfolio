@@ -1,0 +1,2613 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>求职作战台 v2 · 专属求职工作台</title>
+<style>
+  :root{
+    --ink:#1F3A5F; --ink2:#2E5A88; --bg:#EEF2F7; --card:#FFFFFF;
+    --line:#D9E2EC; --muted:#6B7280; --ok:#1E7A3C; --warn:#B7791F; --danger:#B23A3A;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:"Microsoft YaHei","PingFang SC",sans-serif;background:var(--bg);color:#262626;font-size:14px;line-height:1.5}
+  header{background:linear-gradient(135deg,var(--ink),var(--ink2));color:#fff;padding:12px 18px;position:sticky;top:0;z-index:20;box-shadow:0 2px 8px rgba(31,58,95,.25)}
+  header .top{display:flex;justify-content:space-between;align-items:center;gap:10px}
+  header h1{font-size:17px;font-weight:700}
+  header .sub{font-size:12px;opacity:.85;margin-top:2px}
+  #saveInfo{font-size:11px;font-weight:600;color:#fff;background:rgba(0,0,0,.22);border:1px solid rgba(255,255,255,.25);border-radius:999px;padding:4px 10px;white-space:nowrap}
+  .btn.refresh{display:inline-flex;align-items:center;gap:6px;background:#F59E0B;color:#fff;border:none;border-radius:999px;padding:8px 14px;font-size:13px;font-weight:700;cursor:pointer;box-shadow:0 2px 10px rgba(245,158,11,.45);font-family:inherit;white-space:nowrap}
+  .btn.refresh:hover{filter:brightness(1.08)}
+  .btn.refresh:disabled{opacity:.75;cursor:wait}
+  .btn.refresh svg{flex:0 0 auto}
+  .refresh-line{display:inline-block;font-size:12.5px;font-weight:700;margin-top:6px;min-height:22px;background:#FFFFFF;color:#1F3A5F;border:1px solid rgba(255,255,255,.45);border-radius:999px;padding:3px 12px}
+  .refresh-line.upd-ok{color:#0E6B3C}
+  .refresh-line.upd-warn{color:#B45309}
+  .search-row{position:relative;padding:9px 18px 2px}
+  .search-box{display:flex;gap:8px;max-width:660px}
+  .search-box input{flex:1;border:none;border-radius:999px;padding:9px 16px;font-size:13px;background:#fff;color:var(--ink);outline:none;box-shadow:inset 0 0 0 1px rgba(255,255,255,.35)}
+  .search-box input::placeholder{color:#8AA0BC}
+  .search-go{flex:0 0 auto;background:#fff;color:var(--ink);border:none;border-radius:999px;padding:9px 20px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit}
+  .search-go:hover{background:#E7EDF5}
+  .search-results{position:absolute;left:18px;top:50px;width:min(660px,calc(100% - 36px));max-height:430px;overflow:auto;background:#fff;border:1px solid var(--line);border-radius:12px;box-shadow:0 12px 32px rgba(31,58,95,.28);z-index:60}
+  .sr-head{padding:8px 12px;font-size:12px;color:var(--muted);background:#F7F9FC;border-bottom:1px solid var(--line);position:sticky;top:0}
+  .sr-item{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 12px;border-bottom:1px solid #EEF2F7;cursor:pointer}
+  .sr-item:last-child{border-bottom:none}
+  .sr-item:hover{background:#F2F6FB}
+  .sr-main{min-width:0;flex:1}
+  .sr-main b{font-size:13.5px;color:var(--ink);display:block}
+  .sr-sub{font-size:12px;color:var(--muted);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .sr-actions{display:flex;gap:6px;flex:0 0 auto}
+  .sr-empty{padding:16px;font-size:13px;color:var(--muted);line-height:1.7}
+  .stats{display:flex;flex-wrap:wrap;gap:8px;padding:12px 14px 0}
+  .chip{background:#fff;border:1px solid var(--line);border-radius:10px;padding:8px 12px;min-width:88px;text-align:center}
+  .chip b{display:block;font-size:18px;color:var(--ink)}
+  .chip span{font-size:11px;color:var(--muted)}
+  .chip.hl b{color:var(--ok)}
+  .chip.warn b{color:var(--warn)}
+  nav{display:flex;gap:6px;padding:12px 14px;overflow-x:auto;position:sticky;top:62px;background:var(--bg);z-index:10}
+  nav button{flex:0 0 auto;border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:999px;padding:7px 14px;font-size:13px;cursor:pointer;font-family:inherit}
+  nav button.active{background:var(--ink);color:#fff;border-color:var(--ink)}
+  main{padding:4px 14px 40px;max-width:1080px;margin:0 auto}
+  .view{display:none}
+  .view.active{display:block}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;margin:12px 0;box-shadow:0 1px 3px rgba(31,58,95,.06)}
+  .card h2{font-size:15px;color:var(--ink);margin-bottom:10px;border-bottom:1px solid var(--line);padding-bottom:8px}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+  @media(max-width:760px){.grid2,.grid3{grid-template-columns:1fr}}
+  label{display:block;font-size:12px;color:var(--muted);margin:8px 0 3px}
+  input,select,textarea{width:100%;border:1px solid var(--line);border-radius:8px;padding:8px 10px;font-size:13px;font-family:inherit;background:#fff;color:#262626}
+  textarea{resize:vertical;min-height:64px}
+  .btn{display:inline-block;border:none;border-radius:8px;padding:8px 14px;font-size:13px;cursor:pointer;background:var(--ink);color:#fff;font-family:inherit}
+  .btn.ghost{background:#fff;color:var(--ink);border:1px solid var(--line)}
+  .btn.ok{background:var(--ok)}
+  .btn.danger{background:var(--danger)}
+  .btn.small{padding:4px 9px;font-size:12px;border-radius:6px}
+  .btn-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+  table{width:100%;border-collapse:collapse;font-size:12.5px}
+  th{background:var(--ink);color:#fff;padding:7px 8px;text-align:left;white-space:nowrap;position:sticky;top:116px;z-index:5}
+  td{border-bottom:1px solid var(--line);padding:7px 8px;vertical-align:top}
+  .tbl-wrap{overflow-x:auto;max-height:66vh}
+  tbody tr.jrow{cursor:pointer}
+  tbody tr.jrow:hover{background:#F5F9FF}
+  .tag{display:inline-block;border-radius:999px;padding:2px 9px;font-size:11px;white-space:nowrap}
+  .tag.b1{background:#E7F4E4;color:var(--ok)}
+  .tag.b2{background:#E8F0FB;color:var(--ink)}
+  .tag.b3{background:#F2F2F2;color:var(--muted)}
+  .tag.st{background:#FDF3E3;color:var(--warn)}
+  .tag.offer{background:#E7F4E4;color:var(--ok);font-weight:700}
+  .tag.nope{background:#F7E8E8;color:var(--danger)}
+  .muted{color:var(--muted);font-size:12px}
+  .small{font-size:12px}
+  .search{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+  .search input{flex:1;min-width:160px}
+  .search select{width:auto}
+  .log-item,.qa-item,.wk-item{border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin-bottom:8px}
+  .log-item .date{font-weight:700;color:var(--ink);font-size:13px}
+  .log-item .nums{color:var(--muted);font-size:12px;margin:3px 0}
+  .modal-mask{position:fixed;inset:0;background:rgba(31,58,95,.5);z-index:50;display:none;align-items:flex-start;justify-content:center;padding:20px 10px;overflow:auto}
+  .modal-mask.show{display:flex}
+  .modal{background:#fff;border-radius:14px;max-width:820px;width:100%;padding:16px;max-height:92vh;overflow:auto}
+  .modal h3{color:var(--ink);font-size:16px;margin-bottom:2px}
+  .modal .muted{margin-bottom:6px}
+  .close{float:right;border:none;background:none;font-size:22px;cursor:pointer;color:var(--muted)}
+  .sub-sec{border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin:10px 0}
+  .sub-sec h4{font-size:13px;color:var(--ink);margin-bottom:6px}
+  .empty{text-align:center;color:var(--muted);padding:22px 0}
+  .tip{background:#F2F7FF;border:1px solid #C9D8EF;border-radius:10px;padding:10px 12px;font-size:12.5px;color:var(--ink);margin-top:8px}
+  .todo-item{display:flex;justify-content:space-between;gap:10px;padding:8px 0;border-bottom:1px dashed var(--line)}
+  .todo-item:last-child{border-bottom:none}
+  .btn-mini{border:1px solid var(--line);background:#fff;border-radius:6px;padding:3px 8px;font-size:11px;cursor:pointer;color:var(--ink);font-family:inherit}
+  .feed-item{display:flex;gap:8px;padding:6px 0;border-bottom:1px dashed var(--line);font-size:12.5px}
+  .feed-item:last-child{border-bottom:none}
+  .feed-item .d{color:var(--muted);flex:0 0 74px}
+  .step-item{display:flex;gap:8px;align-items:baseline;padding:6px 0;border-bottom:1px dashed var(--line);font-size:12.5px}
+  .step-item .d{flex:0 0 76px;font-weight:700;color:var(--ink)}
+  .step-item .t{flex:0 0 74px}
+  .step-item .n{flex:1;color:#444}
+  .jdcard{border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin-bottom:8px;cursor:pointer}
+  .jdcard:hover{background:#F5F9FF}
+  .jdcard .hd{display:flex;justify-content:space-between;gap:8px;align-items:center}
+  .kv{display:grid;grid-template-columns:auto 1fr;gap:3px 10px;font-size:12.5px;margin-top:6px}
+  .kv b{color:var(--ink)}
+  .series-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px}
+  .series-card{background:#fff;border:2px solid var(--line);border-radius:16px;padding:18px 16px 14px;position:relative;transition:box-shadow .15s}
+  .series-card:hover{box-shadow:0 4px 14px rgba(31,58,95,.12)}
+  .series-card.star{border-color:#E3B341;background:linear-gradient(180deg,#FFFBF0,#FFFFFF)}
+  .series-card.active{border-color:var(--ink);box-shadow:0 3px 12px rgba(31,58,95,.18)}
+  .series-card .star-btn{position:absolute;top:10px;right:12px;font-size:24px;background:none;border:none;cursor:pointer;color:#E3B341;line-height:1}
+  .series-card .name{font-size:19px;font-weight:700;color:var(--ink);padding-right:30px}
+  .series-card .intent{font-size:13px;color:#444;margin:8px 0 6px;line-height:1.5;min-height:40px}
+  .series-card .meta{font-size:11px;color:var(--muted)}
+  .series-card .acts{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}
+  .req-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
+  .req-chips .rchip{background:#D9E9FA;border:1px solid #9EC3EC;color:#16324F;font-weight:600;border-radius:20px;padding:3px 10px;font-size:12px}
+.req-match{display:flex;flex-wrap:wrap;gap:3px;margin-top:4px}
+.req-match .m{font-size:10px;border-radius:10px;padding:1px 6px;border:1px solid transparent}
+.req-match .m.ok{background:#E9F7EE;color:#1E7A3C;border-color:#9FD6B4}
+.req-match .m.no{background:#F6F7F9;color:#9AA3B2;border-color:#E2E8F0}
+.rec-badge{display:inline-block;font-size:11px;font-weight:600;border-radius:10px;padding:1px 7px;margin-left:4px;white-space:nowrap}
+.rec-badge.hot{background:#FFF1E0;color:#C2410C;border:1px solid #F5C08A}
+.rec-badge.mid{background:#EAF3FF;color:#1D5FBF;border:1px solid #A9CBF5}
+.rec-badge.low{background:#F1F3F6;color:#7A8599;border:1px solid #D8DEE8}
+.rec-date{display:inline-block;font-size:11px;color:#7A5B1D;background:#FFF8E6;border:1px solid #EFD9A7;border-radius:10px;padding:1px 7px;margin-left:4px;white-space:nowrap}
+.rec-big{font-size:16px;font-weight:700;color:#C2410C}
+.tag.dlg{background:#FDECEC;color:#C0392B;border-color:#F1B6B6}
+.tag.dls{background:#FFF3E0;color:#B45309;border-color:#F2C98A}
+.tag.cok{background:#E9F7EE;color:#1E7A3C;border-color:#9FD6B4}
+.tag.cwt{background:#FFF3E0;color:#B45309;border-color:#F2C98A}
+.upd-ok{background:#D9F0E2;color:#0F5B33;border:1px solid #8BCFA8}
+.upd-warn{background:#FFF0D1;color:#7A4700;border:1px solid #E5BC66}
+.upd-none{background:#E8EDF3;color:#39465A;border:1px solid #C3CDDA}
+.upd-strip{border-radius:10px;padding:9px 12px;margin:10px 0;font-size:13.5px;font-weight:700}
+  .alljob{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:8px 10px;border:1px solid var(--line);border-radius:10px;margin-bottom:6px;cursor:pointer;background:#fff}
+  .alljob:hover{border-color:var(--ink2);box-shadow:0 2px 8px rgba(31,58,95,.12)}
+  .alljob .al-main{min-width:0}
+  .alljob .al-side{display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:12px}
+  #view-resume input,#view-resume textarea{font-size:14px}
+  #view-resume textarea{line-height:1.5}
+  #resumeEditorWrap input,#resumeEditorWrap textarea{font-size:14px}
+  #resumeEditorWrap textarea{line-height:1.5}
+  .resume-zone{max-width:1080px;margin:12px auto 0;width:calc(100% - 28px);border:2px solid #C9D8EF;background:linear-gradient(180deg,#F7FAFF,#FFFFFF)}
+  .custom-zone{max-width:1080px;margin:12px auto 0;width:calc(100% - 28px)}
+  .custom-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:10px;margin-top:10px}
+  .custom-item{border:1px solid var(--line);border-radius:12px;padding:12px 14px;cursor:pointer;background:#fff;transition:box-shadow .15s;text-align:left;font-family:inherit}
+  .custom-item:hover{box-shadow:0 3px 12px rgba(31,58,95,.14);border-color:var(--ink2)}
+  .custom-item b{display:block;font-size:14px;color:var(--ink)}
+  .custom-item span{font-size:11px;color:var(--muted)}
+  .custom-item.done{border-color:#C9E4CF;background:#F3FAF5}
+  .ci-apply{display:inline-block;margin-top:8px;font-size:11px;font-weight:600;color:#0B5AD6;border:1px solid #B9D2F5;background:#EEF6FF;border-radius:6px;padding:3px 8px;text-decoration:none;line-height:1.5}
+  .ci-apply:hover{background:#DCECFF;border-color:#7FA7E8}
+.apply-bar{margin:0 0 10px;padding:10px 12px;border:1px solid #B9D2F5;background:#EEF6FF;border-radius:10px;font-size:13px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.apply-bar .ab-txt{flex:1;min-width:220px;color:var(--ink)}
+.apply-bar .ab-btn{margin:0;font-size:12px;padding:6px 12px}
+.apply-bar .ab-links{display:flex;flex-wrap:wrap;gap:6px;align-items:center;justify-content:flex-end}
+.apply-bar .ab-links .ci-apply{margin-top:0}
+  .up-tag{display:inline-block;margin-top:6px;font-size:10.5px;font-weight:700;color:#B45309;background:#FFF4E5;border:1px solid #F0C36D;border-radius:6px;padding:2px 8px}
+  .btn-mini.up-on{border-color:#F0C36D;background:#FFF4E5;color:#B45309}
+  .btn.talk-top{background:linear-gradient(135deg,#6C5CE7,#8E7CF3);border-color:#6C5CE7;color:#fff;font-weight:700}
+  .btn.talk-top:hover{background:#5A4BD6;border-color:#5A4BD6}
+  .talk-tpl-wrap{margin-bottom:8px}
+  .talk-tpl-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:5px}
+  .talk-tpl{border:1px solid var(--line);background:#fff;border-radius:999px;padding:5px 12px;font-size:12px;cursor:pointer;color:var(--ink);font-family:inherit;transition:all .12s}
+  .talk-tpl:hover{border-color:#7FA7E8;background:#F0F6FF}
+  .talk-tpl.active{border-color:#0B5AD6;background:#0B5AD6;color:#fff;font-weight:700;box-shadow:0 2px 8px rgba(11,90,214,.25)}
+  .btn-mini.talk-mini{border-color:#7FA7E8;background:#EEF6FF;color:#0B5AD6;font-weight:700}
+  .rz-head{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
+  .rz-head h2{font-size:16px;color:var(--ink);margin:0;border:none;padding:0}
+  .modal-wide{max-width:920px}
+  .pv-resume{background:#fff;border:1px solid var(--line);border-radius:10px;padding:18px 22px}
+  .pr-name{font-size:22px;font-weight:700;color:var(--ink)}
+  .pr-intent{font-size:13px;font-weight:700;margin:2px 0}
+  .pr-contact{font-size:11px;color:#595959}
+  .pr-sec{font-size:14px;font-weight:700;color:var(--ink);border-bottom:1px solid #C9D4E4;margin:12px 0 4px}
+  .pr-line{font-size:12.5px;margin:2px 0;line-height:1.55}
+  .pr-job{font-size:12.5px;font-weight:700;margin:7px 0 2px}
+  .pr-time{font-size:11px;color:#595959;float:right}
+  .pr-bullets li{font-size:12px;margin:1px 0}
+  #printResume{display:none}
+  @media print{
+    body *{visibility:hidden}
+    #printResume,#printResume *{visibility:visible}
+    #printResume{display:block;position:absolute;left:0;top:0;width:100%;padding:18px 22px;font-family:"Microsoft YaHei",sans-serif;color:#262626;background:#fff}
+    .pr-name{font-size:24pt;font-weight:700;color:#1F3A5F}
+    .pr-intent{font-size:11.5pt;font-weight:700;margin:2px 0}
+    .pr-contact{font-size:9pt;color:#595959}
+    .pr-sec{font-size:12pt;font-weight:700;color:#1F3A5F;border-bottom:1px solid #C9D4E4;margin:12px 0 4px}
+    .pr-line{font-size:10.5pt;margin:2px 0}
+    .pr-job{font-size:10.5pt;font-weight:700;margin:7px 0 2px}
+    .pr-time{font-size:9pt;color:#595959;float:right}
+    .pr-bullets li{font-size:10pt;margin:1px 0}
+  }
+  .city-switch{display:inline-flex;background:#eef2f7;border:1px solid #d5dde8;border-radius:999px;padding:2px;gap:2px;align-items:center}
+  .city-btn{border:0;background:transparent;color:#4a5568;font-size:13px;font-weight:600;padding:5px 14px;border-radius:999px;cursor:pointer;transition:background .15s,color .15s}
+  .city-btn.active{background:#1F3A5F;color:#fff}
+  .city-btn:hover{color:#1F3A5F}
+  .city-btn.active:hover{color:#fff}
+</style>
+</head>
+<body>
+<header>
+  <div class="top">
+    <div>
+      <h1>求职作战台 · 转行 AI 产品经理</h1>
+      <div class="sub" id="todayLine"></div>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end">
+      <div class="city-switch" title="切换城市：福州 / 合肥">
+        <button id="cityFZ" class="city-btn active" data-city="福州">福州</button>
+        <button id="cityHF" class="city-btn" data-city="合肥">合肥</button>
+      </div>
+      <button id="btnTalkTpl" class="btn talk-top" title="6 个打招呼场景模板，点开即用">💬 打招呼模板</button>
+      <button id="btnRefresh" class="btn refresh" title="立即联网搜索最新岗位并更新匹配"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg>手动刷新岗位</button>
+      <div id="saveInfo">自动保存已开启</div>
+    </div>
+  </div>
+  <div id="refreshLine" class="refresh-line"></div>
+  <div class="search-row">
+    <form id="searchForm" class="search-box" autocomplete="off">
+      <input id="globalSearch" type="search" placeholder="🔍 搜公司 / 岗位 / 关键词，如：瑞芯微、科大讯飞、AI产品经理" aria-label="全局搜索">
+      <button type="submit" class="search-go">搜索</button>
+    </form>
+    <div id="searchResults" class="search-results" style="display:none"></div>
+  </div>
+</header>
+
+<!-- 我的求职需求（第一位） -->
+<div class="card" id="reqCard">
+  <h2>🎯 我的求职需求 <button class="btn-mini" id="reqEdit">✏️ 编辑</button></h2>
+  <div id="reqChips" class="req-chips"></div>
+  <div id="reqForm" style="display:none">
+    <label>我的需求（每行一条；保存后，岗位追踪和雷达会自动按需求打勾 ✅）</label>
+    <textarea id="reqText" style="min-height:120px"></textarea>
+    <div class="btn-row">
+      <button class="btn ok" id="reqSave">保存需求</button>
+      <button class="btn small ghost" id="reqCancel">取消</button>
+    </div>
+  </div>
+</div>
+
+<!-- 简历系列：置顶专区，独立于投递/复盘，时时可查可改 -->
+<div class="card resume-zone">
+  <div class="rz-head">
+    <h2>📁 简历系列 · 我的简历专区（置顶）</h2>
+    <div class="btn-row" style="margin:0">
+      <button class="btn small ghost" id="rvNew">+ 新建版本</button>
+      <button class="btn small ghost" id="rvToggle">展开编辑器</button>
+    </div>
+  </div>
+  <div class="tip" style="margin-top:6px">点 ★ 置顶常用版本；点「✏️ 编辑」展开下方大编辑器，改动即时保存；投递岗位等功能在下方标签页。做出了新 AI 作品？先给通用版点「🔄 标为待更新」，更新完记得点「✅ 已更新」。</div>
+  <div id="resumeSeries" class="series-grid" style="margin-top:10px"></div>
+  <div id="resumeEditorWrap" style="display:none;margin-top:14px;border-top:1px dashed var(--line);padding-top:12px">
+    <div id="resumeApplyBar" class="apply-bar" style="display:none"></div>
+    <div class="btn-row">
+      <button class="btn ok" id="rvCleanPdf">⬇️ 无水印 PDF</button>
+      <button class="btn ok" id="rvPrint">打印 / 存为 PDF</button>
+      <button class="btn ghost" id="rvMd">下载 Markdown</button>
+      <button class="btn small ghost" id="rvReset">重置为默认</button>
+      <button class="btn small ghost" id="rvDel">删除当前</button>
+    </div>
+    <div class="tip">编辑中的版本：<span id="resumeEditingName"></span> · 改完自动保存。推荐直接点「⬇️ 无水印 PDF」一键生成（无页眉页脚水印）；用「打印 / 存为 PDF」时，请在预览里取消勾选「页眉和页脚」。</div>
+    <label>求职意向</label>
+    <input id="rIntent" placeholder="例：求职意向：AI 产品经理（政务数字化方向）｜可接受短期出差">
+    <label>个人定位</label>
+    <textarea id="rPositioning" style="min-height:56px"></textarea>
+    <label>核心优势（每行一条）</label>
+    <textarea id="rStrengths" style="min-height:88px"></textarea>
+    <label>工作经历</label>
+    <div id="rJobs"></div>
+    <div class="btn-row"><button class="btn-mini" id="rAddJob">+ 添加工作经历</button></div>
+    <label>实习经历</label>
+    <input id="rInternship">
+    <label>项目作品</label>
+    <div id="rProjects"></div>
+    <div class="btn-row"><button class="btn-mini" id="rAddProject">+ 添加项目作品</button></div>
+    <label>技能（每行一条）</label>
+    <textarea id="rSkills" style="min-height:72px"></textarea>
+    <label>教育背景</label>
+    <input id="rEdu">
+    <label>荣誉（每行一条）</label>
+    <textarea id="rHonors" style="min-height:56px"></textarea>
+  </div>
+</div>
+
+<!-- 一键定制简历 -->
+<div class="card custom-zone">
+  <h2>🎯 一键定制简历（点公司，自动生成专属版本）</h2>
+  <div class="tip">例如点「瑞芯微定制」→ 立即生成一份针对瑞芯微 JD 调整过的版本（求职意向/定位/优势/项目/技能已定制），生成后可继续微调、打印或导出。每个卡片下方都有对应公司的「投简历/招聘渠道」直达链接，生成完直接点过去投。</div>
+  <div id="customList" class="custom-grid"></div>
+</div>
+
+<div class="stats" id="statsRow"></div>
+
+<nav id="tabs">
+  <button data-tab="dashboard" class="active">总览</button>
+  <button data-tab="radar">岗位雷达 <span id="radarCount"></span></button>
+  <button data-tab="jobs">岗位追踪</button>
+  <button data-tab="jd">JD 拆解</button>
+  <button data-tab="daily">每日复盘</button>
+  <button data-tab="qa">面试题库</button>
+  <button data-tab="weekly">周复盘</button>
+  <button data-tab="data">数据管理</button>
+</nav>
+
+<div id="updateBanner" class="upd-strip upd-none"></div>
+
+<main>
+  <!-- 总览 -->
+  <section class="view active" id="view-dashboard">
+    <div class="card">
+      <h2>今日待办</h2>
+      <div id="todoList"></div>
+      <div class="tip">纪律：上午 9-11 点打招呼，下午 2-4 点跟进；每投 1 家立刻到岗位详情里记一步。</div>
+    </div>
+    <div class="card">
+      <h2>⏰ 即将截止（3 天内，别错过）</h2>
+      <div id="expiringList"></div>
+    </div>
+    <div class="card">
+      <h2>全部岗位 <span id="allJobsCount" class="muted"></span></h2>
+      <div id="allJobsList"></div>
+      <div class="tip">点任意一行打开岗位详情（JD 拆解 + 记每一步投递）。</div>
+    </div>
+    <div class="card">
+      <h2>最近动态（所有岗位的最新一步）</h2>
+      <div id="feedList"></div>
+    </div>
+    <div class="card">
+      <h2>本周速览（自动汇总每日复盘）</h2>
+      <div id="weekSummary" class="grid2"></div>
+    </div>
+  </section>
+
+  <!-- 岗位雷达 -->
+  <section class="view" id="view-radar">
+    <div class="card">
+      <h2>岗位雷达 · 新岗位自动合并</h2>
+      <div class="tip" id="radarInfo"></div>
+      <div id="radarList" style="margin-top:10px"></div>
+    </div>
+    <div class="card">
+      <h2>关注公司 · 一键直达</h2>
+      <div class="grid2" id="radarCompanies"></div>
+    </div>
+    <div class="card">
+      <h2>更新机制说明</h2>
+      <div class="small">
+        <p>1. Codex 每周（或你说"更新岗位"时）搜索福州/合肥新的合适岗位，写入 <b>data.js</b>；用顶部「福州 / 合肥」按钮切换城市。</p>
+        <p>2. 你打开 App 时，新岗位会<b>自动合并</b>进岗位追踪，标记为"雷达新岗"，状态"未投"。</p>
+        <p>3. 看完后点"标为已处理"，它就变成普通岗位参与日常追踪；简历可以让我帮你定制。</p>
+        <p>4. 电脑每天上午 9 点会自动打开 App 提醒你检查（可随时让我关掉）。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 岗位追踪 -->
+  <section class="view" id="view-jobs">
+    <div class="card">
+      <h2>岗位追踪（点任意一行打开详情：JD 拆解 + 每一步投递记录）</h2>
+      <div class="search">
+        <input id="jobSearch" placeholder="搜索公司/岗位/备注…">
+        <select id="statusFilter">
+          <option value="">全部状态</option>
+          <option>未投</option><option>已打招呼</option><option>已投递</option><option>已回复</option>
+          <option>面试中</option><option>不合适</option><option>拿到Offer</option><option>盯梢</option>
+        </select>
+        <label class="rchip"><input type="checkbox" id="jobRecOnly" style="vertical-align:-2px"> 只看推荐≥80%</label>
+        <button class="btn" id="addJobBtn">+ 新增岗位</button>
+      </div>
+      <div class="tbl-wrap">
+        <table id="jobTable">
+          <thead><tr>
+            <th>批次</th><th>公司</th><th>岗位</th><th>薪资</th><th>匹配度</th><th>推荐</th>
+            <th>对应简历</th><th>作品</th><th>状态</th><th>投递日期</th><th>JD 拆解</th><th>步骤</th><th>需求匹配</th>
+          </tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- JD 拆解 -->
+  <section class="view" id="view-jd">
+    <div class="card">
+      <h2>JD 拆解库（点击卡片进入岗位详情查看/编辑拆解）</h2>
+      <div class="search">
+        <input id="jdSearch" placeholder="搜索公司…">
+        <select id="jdFilter"><option value="">全部</option><option>已拆解</option><option>未拆解</option></select>
+      </div>
+      <div id="jdList"></div>
+    </div>
+  </section>
+
+  <!-- 每日复盘 -->
+  <section class="view" id="view-daily">
+    <div class="card">
+      <h2>记一笔今天的复盘</h2>
+      <div class="grid2">
+        <div><label>日期</label><input type="date" id="dlDate"></div>
+        <div class="grid2">
+          <div><label>今日投递数</label><input type="number" id="dlApplied" min="0" value="0"></div>
+          <div><label>今日回复数</label><input type="number" id="dlReplied" min="0" value="0"></div>
+          <div><label>今日面试数</label><input type="number" id="dlInterview" min="0" value="0"></div>
+          <div><label>加微信数</label><input type="number" id="dlContacts" min="0" value="0"></div>
+        </div>
+      </div>
+      <label>今天做了什么 / 遇到什么问题</label>
+      <textarea id="dlNote" placeholder="例：上午投了中友金科和新大陆，中友金科 HR 已读未回，下午跟进；面试问了为什么转行…"></textarea>
+      <label>明天重点</label>
+      <textarea id="dlTomorrow" placeholder="例：跟 3 家已回复的 HR 约面试；背自我介绍 30 秒版"></textarea>
+      <div class="btn-row"><button class="btn" id="dlSave">保存</button></div>
+    </div>
+    <div class="card">
+      <h2>历史记录</h2>
+      <div id="dlList"></div>
+    </div>
+  </section>
+
+  <!-- 面试题库 -->
+  <section class="view" id="view-qa">
+    <div class="card">
+      <h2>题库（自己增删改，面试前过一遍）</h2>
+      <div class="grid2">
+        <div><label>问题</label><input id="qaQ" placeholder="例：为什么转行 AI 产品经理？"></div>
+        <div><label>状态</label>
+          <select id="qaStatus"><option>待练</option><option>已练</option><option>面试被问到</option></select>
+        </div>
+      </div>
+      <label>我的回答要点（3-5 句）</label>
+      <textarea id="qaA" placeholder="要点式写，别写小作文"></textarea>
+      <label>面试反馈 / 改进点</label>
+      <textarea id="qaF" placeholder="面试后被问到就补这里，这是进步最快的方式"></textarea>
+      <div class="btn-row"><button class="btn" id="qaSave">保存题目</button></div>
+    </div>
+    <div class="card"><div id="qaList"></div></div>
+  </section>
+
+  <!-- 周复盘 -->
+  <section class="view" id="view-weekly">
+    <div class="card">
+      <h2>写周复盘</h2>
+      <div class="grid2">
+        <div><label>周次</label><input id="wkWeek" placeholder="例：2026-W32（默认本周）"></div>
+        <div><label>状态</label><select id="wkStatus"><option>进行中</option><option>已完成</option></select></div>
+      </div>
+      <label>本周成果（数字优先：投了几家、回复几家、面试几家）</label>
+      <textarea id="wkDone"></textarea>
+      <label>本周不足 / 卡点</label>
+      <textarea id="wkProblem"></textarea>
+      <label>下周目标（SMART）</label>
+      <textarea id="wkNext"></textarea>
+      <div class="btn-row"><button class="btn" id="wkSave">保存周复盘</button></div>
+    </div>
+    <div class="card"><div id="wkList"></div></div>
+  </section>
+
+  <!-- 数据管理 -->
+  <section class="view" id="view-data">
+    <div class="card">
+      <h2>数据备份（强烈建议每周导出一次）</h2>
+      <p class="muted">数据存在当前浏览器的本地存储里。换电脑 / 清浏览器缓存前，一定要先导出备份。点「导出备份」后，文件会下载到电脑的「下载」文件夹（文件名带日期），请把它移到网盘 / 微信传输助手 / U 盘保存，不要只留在电脑里；换好后在新电脑上用「导入备份」恢复。</p>
+      <div class="btn-row">
+        <button class="btn ok" id="exportBtn">导出备份（下载 JSON）</button>
+        <button class="btn" id="importBtn">导入备份</button>
+        <input type="file" id="importFile" accept=".json" style="display:none">
+      </div>
+      <div class="tip" id="backupTip">上次导出：未导出过。</div>
+    </div>
+    <div class="card">
+      <h2>使用说明（v2 新功能）</h2>
+      <div class="small">
+        <p>1. 双击打开即可使用；多个标签页同时打开会实时同步（改一处，其他标签自动更新）。</p>
+        <p>2. 岗位追踪：点任意一行打开详情，里面有「JD 拆解」和「投递时间线」——每做一步（打招呼/投递/回复/约面/面试/Offer）就记一步。</p>
+        <p>3. JD 拆解：粘贴 JD 原文 → 点「自动拆解」粗分 → 手动精修 6 个维度；10 家重点岗位已预置拆解。</p>
+        <p>4. 总览页有「最近动态」，所有岗位的最新一步都会汇总到这里。</p>
+        <p>5. 数据管理：每周导出一次备份；想恢复示例数据可「重置示例」。</p>
+      </div>
+    </div>
+    <div class="card">
+      <h2>危险区</h2>
+      <div class="btn-row"><button class="btn danger" id="resetBtn">重置为示例数据（会清空当前记录）</button></div>
+    </div>
+  </section>
+</main>
+
+<!-- 岗位详情弹窗 -->
+<div class="modal-mask" id="jobModal">
+  <div class="modal">
+    <button class="close" id="jobClose">×</button>
+    <h3 id="jobModalTitle">岗位详情</h3>
+    <div class="muted" id="jobModalSub"></div>
+
+<div class="sub-sec">
+<h4>🔗 官网 / 公众号 / 招聘渠道（点击直达）</h4>
+<div id="jobLinks"></div>
+</div>
+
+<div class="sub-sec" id="jobTalkSec" style="display:none">
+<h4>💬 打招呼话术 <span class="muted">（已按本岗位一键适配）</span></h4>
+<div id="jobTalkText" style="background:#FFF8E6;border:1px solid #F0D98A;border-radius:8px;padding:8px 10px;font-size:12.5px;color:var(--ink);line-height:1.65;white-space:pre-wrap"></div>
+<div class="btn-row" style="margin-top:8px">
+<button class="btn small" id="jobTalkCopy">📋 一键复制打招呼</button>
+<button class="btn small ghost" id="jobTalkMore">🎛 换场景模板（跟进 / 约面…）</button>
+</div>
+</div>
+
+<div class="sub-sec">
+<h4>基本信息</h4>
+      <div class="grid2">
+        <div><label>批次</label><select id="jBatch"><option>第一批</option><option>第二批</option><option>第三批</option></select></div>
+        <div><label>匹配度</label><select id="jMatch"><option>高</option><option>中高</option><option>中</option><option>远期</option></select></div>
+      </div>
+      <div class="grid2">
+        <div><label>公司 *</label><input id="jCompany" placeholder="例：中友金科"></div>
+        <div><label>岗位 *</label><input id="jJob" placeholder="例：AI 产品经理"></div>
+      </div>
+      <div class="grid2">
+        <div><label>薪资</label><input id="jSalary" placeholder="例：11-25K"></div>
+        <div><label>平台入口</label><input id="jPlatform" placeholder="例：Boss直聘 搜「中友金科 AI产品经理」"></div>
+      </div>
+      <div class="grid2">
+        <div><label>对应简历</label><input id="jResume" placeholder="例：范广钰-求职简历-中友金科定制.pdf"></div>
+        <div><label>作品</label><input id="jWorks" placeholder="例：AI文旅助手 + 行业分析"></div>
+      </div>
+      <label>为什么匹配</label>
+      <textarea id="jReason" placeholder="一句话写清楚匹配点"></textarea>
+      <div class="grid2">
+        <div><label>状态</label><select id="jStatus">
+          <option>未投</option><option>已打招呼</option><option>已投递</option><option>已回复</option>
+          <option>面试中</option><option>不合适</option><option>拿到Offer</option><option>盯梢</option>
+        </select></div>
+        <div><label>投递日期</label><input type="date" id="jDate"></div>
+      </div>
+      <label>下一步动作</label>
+      <textarea id="jNext" placeholder="例：今天重点投，发定制简历+行业分析"></textarea>
+    </div>
+
+    <div class="sub-sec">
+      <h4>🎯 推荐投递 <span class="muted">（星数/比例自动计算，随匹配度和状态自动变化）</span></h4>
+      <div class="grid2">
+        <div><label>推荐星数 / 比例（自动）</label><div id="jRecScore" class="rec-big">—</div></div>
+        <div><label>推荐投递日期</label><input type="date" id="jRecDate"></div>
+      </div>
+      <div class="grid2">
+        <div><label>投递开始日期</label><input type="date" id="jAppStart"></div>
+        <div><label>投递截止日期</label><input type="date" id="jAppEnd"></div>
+      </div>
+    </div>
+
+    <div class="sub-sec">
+      <h4>JD 拆解 <span class="muted">（粘贴原文 → 自动拆解 → 手动精修）</span></h4>
+      <label>JD 原文</label>
+      <textarea id="jdRaw" style="min-height:90px" placeholder="把招聘 JD 整段粘贴到这里"></textarea>
+      <div class="btn-row">
+        <button class="btn small" id="jdAuto">自动拆解（粗分）</button>
+        <button class="btn small ghost" id="jdClear">清空拆解</button>
+      </div>
+      <div class="grid2">
+        <div><label>岗位职责</label><textarea id="jdDuties"></textarea></div>
+        <div><label>任职要求</label><textarea id="jdReqs"></textarea></div>
+        <div><label>硬性条件（必须满足）</label><textarea id="jdMust"></textarea></div>
+        <div><label>加分项</label><textarea id="jdPlus"></textarea></div>
+        <div><label>我的匹配点</label><textarea id="jdMyMatch"></textarea></div>
+        <div><label>面试准备要点</label><textarea id="jdPrep"></textarea></div>
+      </div>
+    </div>
+
+    <div class="sub-sec">
+      <h4>投递时间线（每做一步记一步）</h4>
+      <div class="grid3">
+        <div><label>日期</label><input type="date" id="stDate"></div>
+        <div><label>步骤</label><select id="stType">
+          <option>打招呼</option><option>投递</option><option>已读未回</option><option>回复</option>
+          <option>约面试</option><option>面试一轮</option><option>面试二轮</option><option>加微信</option>
+          <option>Offer</option><option>不合适</option><option>其他</option>
+        </select></div>
+        <div><label>备注</label><input id="stNote" placeholder="例：HR 已读，发了定制简历+行业分析"></div>
+      </div>
+      <div class="btn-row"><button class="btn small" id="stSave">记录这一步</button></div>
+      <div id="stList" style="margin-top:8px"></div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn" id="jSave">保存岗位全部修改</button>
+      <button class="btn ghost" id="jCancel">关闭</button>
+      <button class="btn danger small" id="jDelete" style="margin-left:auto">删除岗位</button>
+    </div>
+  </div>
+</div>
+
+<!-- 简历预览中心 -->
+<div class="modal-mask" id="pvModal">
+  <div class="modal modal-wide">
+    <button class="close" id="pvClose">×</button>
+    <h3 id="pvTitle">简历预览</h3>
+    <div class="btn-row" id="pvTabs">
+      <button data-pv="web" class="btn small active">网页版</button>
+      <button data-pv="pdf" class="btn small">PDF 版</button>
+      <button data-pv="word" class="btn small">Word 版</button>
+    </div>
+    <div id="pvApplyRow" style="margin-top:8px"></div>
+    <div id="pvBody" style="margin-top:10px"></div>
+  </div>
+</div>
+
+<!-- 打招呼话术 -->
+<div class="modal-mask" id="talkModal">
+  <div class="modal">
+    <button class="close" id="talkClose">×</button>
+    <h3 id="talkTitle">打招呼话术</h3>
+    <div class="tip">选一个场景模板 → 复制 → 到 Boss直聘/猎聘发给 HR；HR 回复后再发定制简历 PDF + 作品。</div>
+    <div style="margin-bottom:8px">
+      <label style="font-size:12px;font-weight:700">关联岗位：</label>
+      <select id="talkJobSel" style="font-family:inherit;font-size:12.5px;padding:5px 8px;border:1px solid var(--line);border-radius:6px;background:#fff;color:var(--ink);max-width:100%"></select>
+    </div>
+    <div id="talkJobInfo" class="small muted" style="margin-bottom:8px"></div>
+    <div class="talk-tpl-wrap">
+      <div class="tip" style="margin-bottom:4px">👇 点一个场景，话术自动生成：</div>
+      <div id="talkTpls" class="talk-tpl-row"></div>
+    </div>
+    <textarea id="talkText" readonly style="min-height:110px"></textarea>
+    <div class="btn-row">
+      <button class="btn ok" id="talkCopy">复制话术</button>
+      <button class="btn ghost" id="talkClose2">关闭</button>
+    </div>
+  </div>
+</div>
+
+<div id="printResume"></div>
+
+<script src="data.js"></script>
+<script>
+const STORE_KEY = "job_war_room_v1";
+const today = () => new Date().toISOString().slice(0,10);
+const nowHM = () => new Date().toLocaleTimeString("zh-CN",{hour:"2-digit",minute:"2-digit",second:"2-digit"});
+const isoWeek = (d=new Date()) => {
+  const t = new Date(d); t.setHours(0,0,0,0); t.setDate(t.getDate()+3-((t.getDay()+6)%7));
+  const w1 = new Date(t.getFullYear(),0,4); const week = 1+Math.round(((t-w1)/86400000-3+((w1.getDay()+6)%7))/7);
+  return t.getFullYear()+"-W"+String(week).padStart(2,"0");
+};
+
+// 岗位雷达数据源（data.js 提供，Codex 定期更新）
+const SEED = (typeof window !== "undefined" && window.JOB_SEED && Array.isArray(window.JOB_SEED.jobs))
+  ? window.JOB_SEED : {version:0, updatedAt:"", jobs:[]};
+
+// 城市切换：福州（默认）/ 合肥（合肥岗位独立成组）
+const CITY_KEY = "job_war_city";
+let city = "福州";
+try{ city = localStorage.getItem(CITY_KEY) || "福州"; }catch(e){}
+const cityOf = x => ((x && x.city) || "福州");
+
+const RADAR_COMPANIES = [
+  {name:"中友金科（博思系）", city:"福州", site:"https://www.bosssoft.com.cn/"},
+  {name:"新大陆", city:"福州", site:"https://www.newland.com.cn/"},
+  {name:"瑞芯微", city:"福州", site:"https://www.rock-chips.com/"},
+  {name:"网龙网络", city:"福州", site:"https://www.nd.com.cn/"},
+  {name:"亚信科技", city:"福州", site:"https://www.asiainfo.com/"},
+  {name:"锐捷网络", city:"福州", site:"https://www.ruijie.com.cn/"},
+  {name:"科大讯飞", city:"福州", site:"https://www.iflytek.com/"},
+  {name:"南威软件", city:"福州", site:"https://www.linewell.com/"},
+  {name:"摩尔元数", city:"福州", site:""},
+  {name:"亿榕信息", city:"福州", site:""},
+  {name:"星云股份", city:"福州", site:""},
+  {name:"福建大数据集团", city:"福州", site:""},
+  {name:"科大讯飞（合肥总部）", city:"合肥", site:"https://www.iflytek.com/"},
+  {name:"容知日新（工业AI）", city:"合肥", site:"https://www.ronds.com.cn/"},
+  {name:"安徽省数源智通", city:"合肥", site:""}
+];
+
+// 45 家企业官网 / 公众号 / 招聘渠道链接（按公司名模糊匹配，顺序即优先级）
+const COMPANY_LINKS = [
+  {keys:["产才融合","鼓楼区产才融合"], site:"", jobs:"https://www.gl.gov.cn/xjwz/zwgkml/rsxx/zkzp/zlks_gtjt/202608/t20260824_5362723.htm", jobsLabel:"官方公告", note:"福州市鼓楼区产才融合创新科技研发中心（鼓楼国投全资子公司·国企）：聚焦 AI 智能体/智慧教育/基层社会治理，8/24 公告招产品经理 1 名，报名至 9/6，邮箱 glccrh@163.com"},
+  {keys:["星网锐捷通讯","锐捷通讯"], site:"https://www.ruijie.com.cn/", jobs:"https://starnet.zhiye.com/", jobsLabel:"校招入口", note:"星网锐捷通讯（002396，国企/国务院科改示范）：ICT+AI 应用，2027 届校招产品经理/营销管培生 8-12K，网申 8/24-10/31；公众号「星网锐捷」"},
+  {keys:["字节互连"], site:"", jobs:"https://www.liepin.com/job/1983582091.shtml", jobsLabel:"岗位直达", note:"安徽字节互连科技（与字节跳动无关，注意区分）：合肥高新区 AI 产品经理 15-25K·13薪，1-3 年/3 年左右经验，6/22 在招"},
+  {keys:["紫讯技术","紫鸟","紫讯"], site:"", jobs:"https://fg.ncss.cn/student/jobs/3FCn5EXLLKCxHUfSvvwRUv/detail.html", jobsLabel:"岗位直达", note:"紫讯技术（紫鸟）：福州电商科技/AI 公司，启航星 AI 产品运营培训生 10-15K，网申至 9/11；2027 届启航星校招（AI 产品/AI 数据分析等 7 大方向）8-10 月网申：https://campus.niuqizp.com/job-vUY5aLLZa.html，公众号「紫讯招聘」"},
+  {keys:["新大陆支付技术"], site:"https://www.newland.com.cn/", jobs:"https://www.zhaopin.com/jobdetail/CC479392380J40796525516.htm", jobsLabel:"岗位直达", note:"新大陆集团旗下支付科技业务；大数据/AI 产品经理 18-25K·14薪，马尾新大陆科技园"},
+  {keys:["紫光云"], site:"", jobs:"", jobsLabel:"", note:"紫光集团旗下云计算/大数据；AI 售前产品经理 15-20K，猎聘搜「紫光云 AI售前产品经理 福州」"},
+  {keys:["容知日新"], site:"https://www.ronds.com.cn/", jobs:"https://www.career.zju.edu.cn/jyxt/sczp/zpztgl/ckZpgwXq.zf?zpxxbh=2eab52fd47284d19944d1c80d7fc0917", jobsLabel:"校招入口", note:"容知日新（科创板 688768）：合肥蜀山，工业设备预测性维护/大模型 AI，产品经理 12-19K、2026 届可投，网申截止 8/28"},
+  {keys:["数源智通"], site:"", jobs:"https://yun.ahbys.com/job.html?jid=323413&cid=356187", jobsLabel:"岗位直达", note:"安徽省数源智通：合肥庐阳区，AI 产品经理 8-10K（参考），安徽省大学生就业服务平台"},
+  {keys:["中国移动"], site:"https://job.10086.cn/", jobs:"https://cmccfj.zhaopin.com/", jobsLabel:"福建移动招聘", note:"中国移动（福建）：马尾实训基地大模型/AI 产品与运营岗（智联发布），同步关注「福建移动人才招聘」公众号"},
+  {keys:["新大陆自动识别"], site:"https://www.newland.com.cn/", site2:"https://www.nlscan.com/", jobs:"https://nlscan.zhiye.com/campus", jobsLabel:"校招入口", note:"上市集团新大陆旗下 AIoT 识别业务；2027 届校招含助理产品经理（福州马尾，30 人），六险一金+1-2 年免费住宿；公众号「新大陆自动识别」"},
+  {keys:["新大陆（福建）公共服务"], site:"https://www.newland.com.cn/", jobs:"https://nlscan.zhiye.com/campus", jobsLabel:"集团校招", note:"新大陆集团旗下政企 AI 业务"},
+  {keys:["新大陆软件"], site:"https://www.nlsoft.com.cn/", jobs:"https://www.newland.com.cn/", jobsLabel:"集团官网", note:"新大陆集团旗下软件业务（大模型/AIGC）"},
+  {keys:["新大陆"], site:"https://www.newland.com.cn/", jobs:"https://nlscan.zhiye.com/campus", jobsLabel:"集团校招", note:"新大陆集团（上市公司）"},
+  {keys:["瑞芯微"], site:"http://www.rock-chips.com/", jobs:"http://hr.rock-chips.com/", jobsLabel:"官网招聘", note:"瑞芯微（Rockchip）：AIoT 芯片龙头、上证 603893；产品岗主要在猎聘/BOSS（猎头代招），官网社招以芯片/软件工程师为主；公众号「瑞芯微招聘」；邮箱 zhaopin@rock-chips.com"},
+  {keys:["微讯通"], site:"", jobs:"https://m.liepin.com/city-fujian/zpzbwrjcpjla38f/", jobsLabel:"岗位搜索页", note:"微讯通（福州）：无人机/低空经济方向，无人机产品经理 8-15K，猎聘搜索页（搜「微讯通 无人机产品经理 福州」）"},
+  {keys:["福州 AIGC"], site:"", jobs:"", jobsLabel:"", note:"猎聘搜「AIGC 产品运营 福州」，暂无固定官网，点下方 Boss直聘/平台入口搜索"},
+  {keys:["51job 福州鼓楼区"], site:"https://www.51job.com/", jobs:"https://jobs.51job.com/fuzhou-glq/169669363.html", jobsLabel:"岗位直达", note:"51job 岗位直链，可直接投递"},
+  {keys:["网龙"], site:"http://www.nd.com.cn/", jobs:"https://nd.zhiye.com/campus/jobs", jobsLabel:"校招入口", note:"公众号「网龙招聘」"},
+  {keys:["亚信"], site:"https://www.asiainfo.com/", jobs:"http://campus.51job.com/asiainfo/", jobsLabel:"招聘入口", note:"公众号「亚信科技招聘」"},
+  {keys:["星网锐捷智教"], site:"", jobs:"https://www.zhaopin.com/zhaopin/209f6f926e3744849454259716ef6820/", jobsLabel:"智联招聘", note:"星网锐捷旗下职业教育/数字教育公司（国企，20-99 人），产品营销经理 1.5-3万·14薪，闽侯上街，产教融合/AI 实训方向"},
+  {keys:["锐捷"], site:"https://www.ruijie.com.cn/", jobs:"https://www.ruijie.com.cn/campus-recruiting/", jobsLabel:"招聘入口", note:"公众号「锐捷网络招聘」"},
+  {keys:["摩尔元数"], site:"https://www.morewis.com/", jobs:"mailto:yuchuanqian@morewis.com", jobsLabel:"HR 邮箱", note:"HR 邮箱 yuchuanqian@morewis.com；工业互联网，法定节假日+带薪年假"},
+  {keys:["亿榕"], site:"", jobs:"", jobsLabel:"", note:"国网信通产业集团下属、福州软件园，无独立官网；关注智联/前程无忧及集团招聘"},
+  {keys:["中友金科"], site:"https://www.bosssoft.com.cn/", jobs:"https://www.liepin.com/job/1983677437.shtml", jobsLabel:"岗位直达", note:"博思软件系；公众号 bosssofthr；JD 明确短期出差"},
+  {keys:["中电福富"], site:"http://www.ffcs.cn/", jobs:"http://www.ffcs.cn/", jobsLabel:"官网社招", note:"中国电信旗下、数字中国主力"},
+  {keys:["星云股份"], site:"https://www.e-nebula.com/", jobs:"https://www.e-nebula.com/", jobsLabel:"官网", note:"上市公司 300648，新能源/储能充电（国家双碳扶持）"},
+  {keys:["福建移动"], site:"https://job.10086.cn/", jobs:"https://cmccfj.zhaopin.com/", jobsLabel:"校招入口", note:"公众号「福建移动人才招聘」"},
+  {keys:["科大讯飞"], site:"https://www.iflytek.com/", jobs:"https://iflytek.zhiye.com/", jobsLabel:"招聘官网", note:"公众号「科大讯飞招聘」；AI 国家队"},
+  {keys:["本源量子"], site:"https://originqc.com.cn/", jobs:"https://bt.jrzp.com/job3385107.shtml", jobsLabel:"岗位直达", note:"本源量子（量子计算国家队）：合肥包河，量子云平台产品经理，页面标应届可投"},
+  {keys:["中科类脑"], site:"http://www.leinao.ai/", jobs:"https://www.leinao.ai/jobdetail/132", jobsLabel:"岗位直达", note:"中科大系 AI 公司：合肥高新区，AI 训推平台产品经理 15-25K"},
+  {keys:["飞友","飞常准"], site:"https://www.variflight.com/", jobs:"https://www.zhaopin.com/zhaopin/ab95e0eb3798411aba3857900efac9e9/", jobsLabel:"岗位搜索页", note:"飞友科技（飞常准）：合肥高新区民航数据/AI 公司，产品助理（C端/AI）10-15K，重点投；公众号「飞常准招聘」"},
+  {keys:["中徽"], site:"http://www.zhonghui365.com/", jobs:"https://zjj.jrzp.com/job4205299666.shtml", jobsLabel:"岗位直达", note:"中徽机电科技：合肥蜀山，AI 产品经理（数字运营官）1.5-2.5万（参考）"},
+  {keys:["数安"], site:"", jobs:"https://www.zhaopin.com/jobdetail/CC450090720J40871555610.htm", jobsLabel:"岗位直达", note:"数安（安徽省国资委驻场·科大讯飞外包）：数字政府/政务需求分析岗，页面要求 5-10 年产品经验，远期岗"},
+  {keys:["阳光新能源"], site:"https://www.sungrowplant.com/", jobs:"https://m.liepin.com/city-hefei/zpxscpjlx6n6/", jobsLabel:"岗位搜索页", note:"阳光电源系新能源/储能（国家双碳战略），光储融合产品经理，远期目标"},
+  {keys:["蔚来"], site:"https://www.nio.cn/", jobs:"https://m.liepin.com/city-hefei/zpznyccpjls7l2/", jobsLabel:"岗位搜索页", note:"蔚来（NIO）：新能源智能汽车龙头，合肥基地 AI 智能解决方案产品经理 15-25K·14薪，冲刺岗"},
+  {keys:["科大国创"], site:"https://www.ustcsoft.com/", jobs:"https://m.liepin.com/city-hefei/zpyldsjyscpjl4wqrr1wf/pn0/", jobsLabel:"岗位搜索页", note:"科大国创：上市软件公司，数据要素/可信空间（数字经济国家级赛道）产品经理 15-25K，远期目标"},
+  {keys:["京东方"], site:"https://www.boe.com/", jobs:"http://boe.zhiye.com/", jobsLabel:"招聘官网", note:"京东方（BOE）：显示/半导体国家队，合肥瑶海软件产品经理（ITC）15-20K，远期目标；关注合肥初级/校招通道"},
+  {keys:["博思"], site:"https://www.bosssoft.com.cn/", jobs:"https://www.bosssoft.com.cn/", jobsLabel:"官网", note:"公众号 bosssofthr；财政信息化/电子政务 SaaS 龙头"},
+  {keys:["南威"], site:"https://www.linewell.com/", jobs:"https://www.linewell.com/", jobsLabel:"官网", note:"上市 603636；备用域名 southware.com.cn"},
+  {keys:["福建省大数据集团","福建大数据集团"], site:"http://fjbdg.com.cn/", jobs:"http://fjbdg.com.cn/rczp/zpxx/", jobsLabel:"官网招聘", note:"省属国企，数字中国/数据要素国家战略；2026 高层次人才招聘报名至 12/31（每半月筛选、招满即止）"},
+  {keys:["长威"], site:"https://www.evecom.net/", jobs:"https://jobs.evecom.net/", jobsLabel:"招聘官网", note:"福州数字政府/智慧城市上市企业"},
+  {keys:["新东网"], site:"https://doone.com.cn/", jobs:"", jobsLabel:"", note:"达华智能系、政企信息化"},
+  {keys:["中锐"], site:"http://www.zrwlkj.com.cn/", jobs:"", jobsLabel:"", note:"智慧教育信息化"},
+  {keys:["顶点"], site:"https://www.apexsoft.com.cn/", jobs:"https://apexsoft.hotjob.cn/", jobsLabel:"网申入口", note:"公众号「顶点招聘」；金融科技/证券 IT 上市企业"},
+  {keys:["福耀"], site:"https://www.fuyaogroup.com/", jobs:"https://www.fuyaogroup.com/", jobsLabel:"官网", note:"制造业龙头、上市 600660，智能制造/工业 AI 方向"},
+  {keys:["福建省卫星数据开发"], site:"https://www.fjswxsj.com/", jobs:"https://www.zhaopin.com/zhaopin/295c08c801af4726b9b75f176209514a/", jobsLabel:"智联招聘", note:"省招标采购集团权属，卫星数据/AI/空天信息，福州鼓楼、双休"},
+  {keys:["时代星云"], site:"https://www.cntepower.com/", jobs:"https://m.liepin.com/city-fuzhou/zpaifxjksjll9k3/", jobsLabel:"猎聘搜索", note:"宁德时代系储能（国家双碳扶持），福州马尾"},
+  {keys:["万物云"], site:"https://www.onewo.com/", jobs:"https://m.liepin.com/city-fuzhou/zpkszhjccpjlq31k/", jobsLabel:"猎聘搜索", note:"万科系、上市 02602，智慧园区/城市空间服务"},
+  {keys:["新意科技"], site:"http://www.shinetechnology.com/", jobs:"https://campus.niuqizp.com/job-vlk5zZNtC.html", jobsLabel:"校招入口", note:"证券 IT/金融科技，福州鼓楼"},
+  {keys:["百度"], site:"https://www.baidu.com/", jobs:"https://talent.baidu.com/", jobsLabel:"招聘官网", note:"AIGC/大模型国家队；福州岗位属区域性布局，可关注社招"},
+  {keys:["两岸照明"], site:"", jobs:"https://zmjob.cn/jobseeker/Position/57229.html", jobsLabel:"岗位直达", note:"福建省属国企，节能/双碳方向；平台为福建省人才集团旗下海峡人才市场"},
+  {keys:["帝视科技"], site:"", jobs:"https://bebee.com/cn/jobs/c--techmap_cn_83269747", jobsLabel:"岗位直达", note:"福建帝视科技集团，AI 视觉/图像识别，福州鼓楼"},
+  {keys:["兴业银行"], site:"https://www.cib.com.cn/", jobs:"https://www.mpaypass.com.cn/news/202607/06084534.html", jobsLabel:"招聘信息", note:"数字运营部社招走官网/公众号；数字金融方向"},
+  {keys:["奇拓"], site:"", jobs:"https://www.zhaopin.com/zhaopin/e74483ec7be242638625e319f650ed91/", jobsLabel:"智联招聘", note:"AI 能力产品运营，福州鼓楼五凤，20 人以下小公司"},
+  {keys:["一方威视"], site:"", jobs:"", jobsLabel:"", note:"福州鼓楼五凤，半导体/芯片小公司（20 人以下），智联招聘搜「福州一方威视 产品助理」"},
+  {keys:["可比信息"], site:"http://www.coobysoft.com/", jobs:"http://www.coobysoft.com/Mobile/JoinUs", jobsLabel:"官网招聘", note:"产品专员（AI/海外教育平台），法定节假日正常放假，福州台江宁化"},
+  {keys:["中科智与"], site:"", jobs:"", jobsLabel:"", note:"AI+物联网/矿山数字化，福州闽侯上街，智联招聘搜「福建中科智与 产品专员」"},
+  {keys:["文达森"], site:"", jobs:"", jobsLabel:"", note:"AI 能力产品运营（AIGC/API），周末双休、节假日正常放假，福州鼓楼五凤"},
+  {keys:["凯森"], site:"", jobs:"", jobsLabel:"", note:"AI 能力产品运营，福州鼓楼五凤，智联招聘搜「福建凯森信息 AI产品运营」"},
+  {keys:["华闽通达"], site:"http://www.chinaiss.com/", jobs:"https://zz.jrzp.com/job1792603074.shtml", jobsLabel:"岗位直达", note:"工程建设项目信息化（ToG），五险一金+法定节假日+免费住宿，福州仓山"},
+  {keys:["未名"], site:"", jobs:"https://www.liepin.com/job/1982340777.shtml", jobsLabel:"岗位直达", note:"未名医疗科技研究院：AI 产品经理 8-18K，AI 急救/医疗机器人/政企数字化，福州台江，经验不限，HR 在线已认证"},
+  {keys:["华网"], site:"", jobs:"", jobsLabel:"", note:"华网信息：气象 G 端软件产品经理，双休 8000-14000·13薪，福州鼓楼洪山；智联招聘搜「华网信息 产品经理 福州」"},
+  {keys:["腾途"], site:"", jobs:"", jobsLabel:"", note:"腾途科技：AIGC 出海内容科技，五险一金/周末双休/期权，约 30 人扩张期；全直聘职位号 144496717"},
+  {keys:["正孚"], site:"", jobs:"", jobsLabel:"", note:"正孚软件：B 轮，AI 产品经理 15-25K，福州；远期跳槽目标，猎聘搜「正孚软件 AI产品经理 福州」"},
+  {keys:["联创智云"], site:"", jobs:"", jobsLabel:"", note:"福州市联创智云信息：B端/AI/云计算/产业互联网，产品助理 5-8K（大专可投、五险一金+年终分红），闽侯上街；智联招聘搜「福州市联创智云信息 产品助理 福州」"},
+  {keys:["实达"], site:"https://www.start.com.cn/", jobs:"", jobsLabel:"", note:"福建省大数据集团控股上市国企（600734），智能算力/数智教育/数字政府；本岗位为数创联合（实达+鼓楼城投/国投合资）智慧教育运营岗，劳务派遣，智联招聘搜「福建数创联合 运营岗」"},
+  {keys:["汉特云"], site:"", jobs:"https://jobs.51job.com/fuzhou-csq/145666849.html", jobsLabel:"岗位直达", note:"福建汉特云智能科技：AI 机器人/智能硬件（自动驾驶环卫/保卫/物流/接驳），产品经理 12-18K，福州仓山，A轮、政府招商引资重点企业"},
+  {keys:["陆源"], site:"", jobs:"https://www.zhaopin.com/jobdetail/CCL1330948070J41022739404.htm", jobsLabel:"岗位直达", note:"福建陆源智能科技：省工业控股集团权属一级国企，大模型算法工程/AI 技术产品经理（硕士+2年经验，远期目标），智能制造/特种设备安全 AI，福州晋安，五险二金"},
+  {keys:["鼓楼国投"], site:"", jobs:"https://www.gl.gov.cn/xjwz/zwgkml/zdlyxxgk/gyqy/gyqyzp/202606/t20260602_5329393.htm", jobsLabel:"官方公告", note:"福州市鼓楼区属一级国企（AA+），AI 产品运营岗 8-15K；2026 年 6 月批次报名已截止（6/15），关注官网/猎聘下一轮公告"},
+  {keys:["中科大","科学智能物质创制中心"], site:"https://www.ustc.edu.cn/", jobs:"http://ah.anhuinews.com/szxw/202608/t20260802_9458721.html", jobsLabel:"招聘公告", note:"中科大科学智能物质创制中心（中科院+安徽省+合肥市+中科大共建 AI for Science 国家级平台）：合肥高新区，产品经理-实验室自动化平台产品负责人，邮箱投递 gaoyawen@ustc-csii.cn"},
+  {keys:["合肥城市云","城市云数据中心"], site:"", jobs:"https://www.yupao.com/zhaogong/389815765.html", jobsLabel:"岗位直达", note:"合肥城市云数据中心：数据中心/云计算（国家数字经济方向），资深产品策划师 20-25K（大模型/AIOps），远期目标岗"},
+  {keys:["扬腾"], site:"", jobs:"https://zph.fzrsrc.com/job/index.php?c=comapply&id=69279", jobsLabel:"岗位直达", note:"扬腾创新（福建）：福州高新区跨境电商/汽配数智化，产品经理 18-36 万/年（AI 大模型应用方向，智能客服/智能选品），8/19 更新显示本科可投、接收应届，六险一金+带薪年假+期权激励；另见福建人才联合网 http://fjrclh.fzu.edu.cn/cms/jobDetails.html?jobId=53416"},
+  {keys:["天翼视联"], site:"", jobs:"https://m.yingjiesheng.com/job-007-872-210.html", jobsLabel:"岗位直达", note:"天翼视联科技（中国电信系国企）：产品经理（福州），数字政府/智慧城市/视联基础设施，JD 要求硕士，投前确认学历门槛"},
+  {keys:["鑫锡"], site:"", jobs:"https://www.zhaopin.com/jobdetail/CCL1387109580J40888427805.htm", jobsLabel:"岗位直达", note:"鑫锡软件（朝阳）：大模型AI应用（福州）8/16 新发布，LLM/RAG 生产级落地，投前确认 base 与岗位性质"},
+  {keys:["航天信息"], site:"", jobs:"http://jm.jrzp.com/job2976088382.shtml", jobsLabel:"岗位直达", note:"安徽航天信息（航天科工系国企）：合肥蜀山政务业务部产品经理，8/16 刷新在招，页面标应届但要求 3 年+，投前确认"},
+  {keys:["思特奇"], site:"https://www.si-tech.com.cn/", jobs:"https://www.liepin.com/lptjob/79183939", jobsLabel:"岗位直达", note:"思特奇（300608.SZ）：ICT/政企数字化，合肥 26 届校招产品经理-主管（偏售前）10-16K，网申至 12/16"},
+  {keys:["安宸"], site:"", jobs:"http://www.chinaahrc.com/job497739247.shtml", jobsLabel:"岗位直达", note:"上海安宸（合肥蜀山）：项目经理/产品经理 8-12K，五险一金+周末双休，8/3 发布，页面标注信息待核验"},
+  {keys:["羚羊"], site:"", jobs:"https://www.nowcoder.com/jobs/detail/346524", jobsLabel:"岗位直达", note:"羚羊工业互联网（科大讯飞系）：合肥产品经理，要求 5 年+，远期目标岗"},
+  {keys:["国麒"], site:"", jobs:"https://m.liepin.com/job/1983556461.shtml", jobsLabel:"岗位直达", note:"合肥国麒新能源：大模型产品经理 15-30K（5-10 年），新能源+AI 双赛道，远期目标岗"}
+  ,
+  {keys:["朴朴"], site:"https://www.pupumall.com/", jobs:"https://jobs.pupumall.net/recruit-webapp/candidate/job", jobsLabel:"招聘官网", note:"朴朴（C轮生鲜电商）：福州总部，产品运营（办公数字化-ITBP）15-30K·14薪，办公数字化/流程提效方向；公众号「朴朴招聘」"},
+  {keys:["陆科光电"], site:"https://www.lookvision.com.cn/", jobs:"https://m.liepin.com/job/1984661509.shtml", jobsLabel:"岗位直达", note:"安徽陆科光电：中科院合肥物质院孵化，AOI 视觉检测+AI 智能制造，国家高新技术企业/安徽省专精特新；合肥高新区半导体 AOI 产品经理 10-18K，8/17 更新在招"},
+  {keys:["长鑫"], site:"https://www.cxmt.com/", jobs:"http://jobs.cxmt.com/", jobsLabel:"招聘官网", note:"长鑫存储：国产 DRAM 半导体龙头（国家战略产业），合肥；AI 产品经理（电路测试方向 J19883）30-50K·15薪，远期目标岗，官网搜 J19883 投递，公众号「长鑫存储招聘」"},
+  {keys:["中用"], site:"http://www.chinaatech.com/", jobs:"http://m.haolietou.com/c_168598", jobsLabel:"公司招聘页", note:"中用科技：AI+工业互联网，国家级高新技术企业/专精特新冠军（中科大校友团队），合肥经开区；AI 产品经理 25-50K（1-3 年）"},
+  {keys:["阳光智维"], site:"https://www.sungrowpower.com/", jobs:"https://m.liepin.com/city-hefei/zpaisjcpjlb53j/", jobsLabel:"岗位搜索页", note:"阳光智维：阳光电源全资子公司，新能源资产智慧运维（智能运维超 10GW），合肥高新区；AI 产品经理 15-25K（参考），原职位页已失效，需在搜索页手动确认在招"},
+  {keys:["恒瑞通"], site:"", jobs:"https://www.zhaopin.com/companydetail/CZ201505810.htm", jobsLabel:"智联公司页", note:"恒瑞通（福建）信息技术：福州行业数字化产品研发高新技术企业（2007 年成立），产品经理 15-20K，猎聘搜索在招"}
+  ,
+  {keys:["力高新能","力高新能源"], site:"", jobs:"https://www.liepin.com/job/1983644625.shtml", jobsLabel:"岗位直达", note:"力高新能（安徽力高新能源）：合肥高新区 BMS/储能系统企业（中科大核心团队、专精特新小巨人、冲刺 IPO），储能软件产品经理/助理 13-25K、招 2 人；储能+AI 双国家扶持赛道"},
+  {keys:["合滨智能"], site:"http://www.hebin-robots.com/", jobs:"http://www.hebin-robots.com/", jobsLabel:"官网", note:"合肥合滨智能机器人：国家级高新技术企业（AI+机器人+超声智慧医疗，红杉资本投资），机器人产品经理 15-40K·13/15薪，猎聘搜「合滨智能 机器人产品经理 合肥」"},
+  {keys:["机数量子","机数科技"], site:"https://www.mgbig.com/", jobs:"https://msearch.51job.com/jobs/hefei-ssq/172725924.html", jobsLabel:"岗位直达", note:"合肥机数量子科技：量子化学计算/材料数据库+AI（mgbig.com），软件产品经理 15-25K·14薪；量子/算力国家战略赛道"},
+  {keys:["工业视觉AI质检"], site:"", jobs:"https://www.zhaopin.com/jobdetail/CC604839930J40863483907.htm", jobsLabel:"岗位直达", note:"合肥某智能制造公司（智联匿名发布）：工业视觉/AI 质检+智能制造（3C/汽车/半导体/新能源场景），智能制造产品经理 15-40K·15薪（参考），要求 1 年+工业视觉经验，投前确认公司主体"},
+  {keys:["志邦"], site:"https://www.zbom.com/", jobs:"", jobsLabel:"官网", note:"志邦家居（上交所 603801）：合肥上市家居企业数智化 AI 产品经理 20-25K，猎聘搜「志邦家居 AI产品经理 合肥」"},
+  {keys:["瑞识"], site:"https://www.rayseen.com/", jobs:"https://msearch.51job.com/jobs/hefei-ssq/171475957.html", jobsLabel:"岗位直达", note:"合肥瑞识智能：激光/光电半导体（VCSEL 光芯片，合肥经开区智能科技园），高级产品经理（总监）18-25K、5 年+；半导体国家战略赛道，远期目标岗"}
+  ,
+  {keys:["数字福建云计算","福建云计算"], site:"", jobs:"https://www.liepin.com/job/1982580033.shtml", jobsLabel:"岗位直达", note:"福建省数字福建云计算运营有限公司：省电子信息集团全资子公司（国企，注册资本 7.84 亿），IDC/AIDC/云计算/算力，福州鼓楼；售前解决方案经理 15-25K（5 年+），51job 另有高级产品经理（IDC/AIDC 售前）18-25万/年；省电子信息集团 2026 专场招聘 https://campus.51job.com/fei/"},
+  {keys:["科大智能"], site:"https://www.csg.com.cn/", jobs:"", jobsLabel:"官网", note:"科大智能科技（创业板 300222）：数字能源+智能机器人应用上市企业，合肥；产品经理（硬件方向）10-18K·14薪（猎聘 8/18 在招），智联另有 8-12K·14薪 硬件/APP 岗"},
+  {keys:["巡鹰"], site:"https://www.ahxunying.com/", jobs:"https://www.ahxunying.com/Social_1.html", jobsLabel:"招聘官网", note:"安徽巡鹰新能源集团：合肥新站，动力电池/储能/材料循环全产业链，储能 EMS 产品经理 20-30K（猎聘 8/18 在招），公众号「巡鹰新能源招聘」"},
+  {keys:["讯飞医疗"], site:"https://www.xfy.cn/", jobs:"https://m.liepin.com/city-hefei/zpyldsjyscpjl4wqrr1wf/pn1/", jobsLabel:"猎聘搜索", note:"讯飞医疗（科大讯飞子公司、医疗 AI 国家队，港股 02506）：合肥高新区，产品经理（高潜）18-25K·14薪、电子病历 25-35K·14薪等 8/12 在招；公众号「讯飞医疗招聘」"},
+  {keys:["联宝"], site:"https://www.lcfc.com/", jobs:"https://campus.niuqizp.com/schedule-7rUkN5NLt.html", jobsLabel:"招聘批次页", note:"联宝科技（联想集团全球最大 PC 研发制造基地、合肥「灯塔工厂」）：DIT 数智化专项 AI产品经理，社招批次 8/19-9/16，智能制造+AI 双国家扶持赛道，重点投"},
+  {keys:["原力众合","原力能源"], site:"", jobs:"https://mhr.bjx.com.cn/jobs/1406726.html", jobsLabel:"岗位直达", note:"合肥原力众合能源科技（储能系统企业 50-150 人，合肥经开区）：电力交易产品经理 12-30K（虚拟电厂 SaaS），8/20 发布，要求 3 年+电力交易经验、简历处理率低，投前确认"},
+  {keys:["安徽省通信产业服务","安徽通服"], site:"https://www.chinaccs.com.cn/", jobs:"https://hunchunshi.jrzp.com/job1371967575.shtml", jobsLabel:"岗位直达", note:"安徽省通信产业服务（中国通服旗下国企）：产品经理（大模型应用方向）1-3 年，五险一金+多项补贴+带薪年假，合肥蜀山，重点投"},
+  {keys:["中科晶格"], site:"", jobs:"https://www.zhaopin.com/jobdetail/CCL1283733820J40884564805.htm", jobsLabel:"岗位直达", note:"安徽中科晶格技术有限公司（中科大系，区块链/数字经济）：中级产品经理（双休）面议，8/3 发布，合肥蜀山置地创新中心，LLM/RAG 应用方向"},
+  {keys:["永辉"], site:"https://www.yonghui.com.cn/", jobs:"https://bt.jrzp.com/job3023685.shtml", jobsLabel:"岗位直达", note:"永辉超市（上交所 601933）：B端产品经理（门店数字化）面议、8/13 发布、JD 明确可出差（页面标应届/JD 写 3 年+，投前确认）；数据产品经理（供应链）35-50K 为远期目标；公众号「永辉招聘」"},
+  {keys:["极智嘉","Geek+"], site:"https://www.geekplus.com/", jobs:"https://campus.niuqizp.com/schedule-7kYyN5ZaC.html", jobsLabel:"招聘批次页", note:"极智嘉（Geek+，2590.HK）：全球智能机器人领军企业，2027 届校招 8/22-9/19，产品经理岗含合肥，官网 geekplus.com/zh-cn/company/career 投递"},
+  {keys:["靠谱云"], site:"", jobs:"https://jobs.51job.com//fuzhou-glq/169110179.html", jobsLabel:"岗位直达", note:"福州靠谱云科技（厦门靠谱云旗下、总部福州）：一站式混合云/算力服务商，产品经理 6千-1.2万、福州鼓楼，51job 页面标 1 年+（JD 写 3 年+，投前确认）"},
+  {keys:["中国联通福建省公司","联通福建"], site:"https://www.chinaunicom.com.cn/", jobs:"https://shannan.jrzp.com/job3496652.shtml", jobsLabel:"岗位直达", note:"中国联合网络通信福建省分公司（国企，福州仓山）：高级产品经理（工业互联网）面议，10 年+经验，远期标杆；公众号「中国联通福建」"}
+  ,
+  {keys:["超星","超星集团"], site:"", jobs:"https://www.chaojijianli.com/xiaozhao/chaoxing-2027-campus-recruitment-12839-94b969/", jobsLabel:"校招信息", note:"超星集团：1993 年成立的教育信息化龙头（学习通），2027 届秋招产品经理含福州、产品运营/项目经理全国可选，本科可投，扫码报名至 10/20；公众号「学习通」"},
+  {keys:["联想"], site:"https://www.lenovo.com.cn/", jobs:"https://talent.lenovo.com.cn/home", jobsLabel:"校招官网", note:"联想集团 2027 届秋招：产品与项目/技术/市场与销售等六大方向，20+ 城市含合肥，网申 8/5-11/13（招满随时关停），内推码 2027XZLMXX"},
+  {keys:["阳光电源"], site:"https://www.sungrowpower.com/", jobs:"https://campus.niuqizp.com/job-vly5zMCLZ.html", jobsLabel:"校招信息", note:"阳光电源：全球光伏逆变器/储能龙头（合肥总部），2027 届全球校招产品与研发类覆盖合肥，8/10 起投、8/17 AI 面试、10/8 发 offer；投递入口「Join阳光电源」公众号"},
+  {keys:["合肥真知","真知人工智能"], site:"", jobs:"https://www.zhaopin.com/jobdetail/CCL1525100620J40916713212.htm", jobsLabel:"岗位直达", note:"合肥真知人工智能应用软件有限公司（蜀山区习友路复兴家园）：AI 应用软件公司，AI产品专家（本科 1-3 年、优秀新手也可考虑），智联招聘直接投递；另招 AI Agent 产品经理（3 年+）"},
+  {keys:["百得思维","安徽百得"], site:"", jobs:"https://msearch.51job.com/jobs/hefei/172678598.html", jobsLabel:"岗位直达", note:"安徽百得思维信息科技（合肥软件服务企业，主要服务科大讯飞体系）：产品经理（AI智能体方向）1.2-1.7万/月，3 年+，前程无忧直接投递"}
+  ,{keys:["三禾一"], site:"https://www.3h1china.com/", jobs:"https://www.zhaopin.com/jobdetail/CC341786830J40866925310.htm", jobsLabel:"岗位直达", note:"安徽三禾一信息科技：合肥蜀山 AI 工业软件（大模型/知识图谱/智能问答），AI 产品经理 1-1.8万·14薪、3-5 年，双休+五险一金，合肥新增首选"}
+  ,{keys:["中科星图测控","星图测控"], site:"", jobs:"https://aq.ahggzp.gov.cn/ww/b/c/wwbc_comdetails.html?acb200=ff808081838960c4018411df690451f6&acb330=ff808081859a805f0186005f05ed289b", jobsLabel:"公共招聘网", note:"中科星图测控（688568 中科星图系）：空天信息/太空态势感知国家队（总部合肥/北京/西安），招聘 AI 产品经理，国家空天信息战略赛道"}
+  ,{keys:["卓融"], site:"", jobs:"https://www.zhaopin.com/companydetail/CC468485538.htm", jobsLabel:"智联招聘", note:"福建卓融信息技术（福州鼓楼，瞪羚企业/科技小巨人）：AI 能力产品/行业解决方案，AI 产品经理 9-15K、3-5 年；智联搜「福建卓融 AI产品经理 福州」"}  ,{keys:["无比欢"], site:"", jobs:"https://www.zhaopin.com/jobdetail/CC831704270J40933075708.htm", jobsLabel:"岗位直达", note:"福州无比欢信息科技（国家级高新，专注数智化场景业务，政务/金融科技 ToB/G）：高级产品经理（AI/智能化方向）1.5-1.8万，福州鼓楼"}  ,{keys:["移远","移远通信"], site:"https://www.quectel.com/", jobs:"https://www.liepin.com/job/1985114975.shtml", jobsLabel:"岗位直达", note:"上海移远通信（Quectel，A股 603236，全球物联网整体解决方案龙头）：合肥高新区产品经理（IoT）20-35K，JD 明确可承受短期出差"}  ,{keys:["数据空间研究院","数据空间"], site:"", jobs:"https://www.gaoxiaojob.com/job/detail/1986287.html", jobsLabel:"岗位直达", note:"合肥综合性国家科学中心数据空间研究院（数据要素/数据空间国家战略）：产品经理 18-35万/年，招 22 人，硕士为主（投前确认学历门槛），邮件投递"}
+];
+
+function platformUrl(x){
+  const m = String(x.platform||"").match(/https?:\/\/[^\s「」,，;；]+/);
+  return m ? m[0] : "";
+}
+function linkEntries(x){
+  const name = (x.company||"");
+  const rec = COMPANY_LINKS.find(c=>c.keys.some(k=>name.includes(k)));
+  const out = [];
+  if(x.applyUrl){
+    const searchy = /liepin\.com\/city-|zhaopin\.com\/zhaopin\//.test(x.applyUrl);
+    const portal = /zhiye\.com|yl1001\.com\/company\//.test(x.applyUrl);
+    out.push({href:x.applyUrl, label: searchy ? "🚀 投简历（搜索页）" : portal ? "🚀 投简历（招聘门户）" : "🚀 投简历入口"});
+  }
+  if(rec && rec.site) out.push({href:rec.site, label:"🏠 官网"});
+  if(rec && rec.site2) out.push({href:rec.site2, label:"🏠 业务官网"});
+  if(rec && rec.jobs) out.push({href:rec.jobs, label:"📮 "+(rec.jobsLabel||"招聘渠道")});
+  const pu = platformUrl(x);
+  if(pu) out.push({href:pu, label:"📌 平台直达"});
+  const q = encodeURIComponent(shortCompany(x.company) + " " + (x.job||"").replace(/[（(].*?[)）]/g,""));
+  out.push({href:"https://www.zhipin.com/web/geek/job?query="+q+"&city="+(cityOf(x)==="合肥"?"101220100":"101230100"), label:"💼 平台搜同名岗"});
+  return out;
+}
+function companyLinkButtons(x, cls){
+  cls = cls || "btn-mini";
+  return linkEntries(x).map(b=>'<a class="'+cls+'" href="'+b.href+'" target="_blank" rel="noopener">'+b.label+'</a>').join("");
+}
+function companyLinksHTML(x){
+  const rec = COMPANY_LINKS.find(c=>c.keys.some(k=>(x.company||"").includes(k)));
+  const btns = companyLinkButtons(x, "btn small ghost");
+  return '<div class="btn-row" style="margin:0">'+btns+'</div>'+(rec&&rec.note?'<div class="small muted" style="margin-top:6px">'+esc(rec.note)+'</div>':"");
+}
+
+// 简历版本 → 已有 PDF/Word 文件（在 App 的「简历文件」文件夹里）
+const RESUME_FILES = {
+  "通用版": {pdf:"简历文件/范广钰-求职简历-AI产品经理.pdf", docx:"简历文件/范广钰-求职简历-AI产品经理.docx"},
+  "新大陆定制": {pdf:"简历文件/范广钰-求职简历-新大陆定制.pdf", docx:"简历文件/范广钰-求职简历-新大陆定制.docx"},
+  "瑞芯微定制": {pdf:"简历文件/范广钰-求职简历-瑞芯微定制.pdf", docx:"简历文件/范广钰-求职简历-瑞芯微定制.docx"},
+  "中电福富定制": {pdf:"简历文件/范广钰-求职简历-中电福富定制.pdf", docx:"简历文件/范广钰-求职简历-中电福富定制.docx"},
+  "中友金科定制": {pdf:"简历文件/范广钰-求职简历-中友金科定制.pdf", docx:"简历文件/范广钰-求职简历-中友金科定制.docx"},
+  "AIGC运营定制": {pdf:"简历文件/范广钰-求职简历-AIGC运营定制.pdf", docx:"简历文件/范广钰-求职简历-AIGC运营定制.docx"},
+  "智能客服定制": {pdf:"简历文件/范广钰-求职简历-智能客服定制.pdf", docx:"简历文件/范广钰-求职简历-智能客服定制.docx"},
+  "网龙定制": {pdf:"简历文件/范广钰-求职简历-网龙定制.pdf", docx:"简历文件/范广钰-求职简历-网龙定制.docx"},
+  "亚信定制": {pdf:"简历文件/范广钰-求职简历-亚信定制.pdf", docx:"简历文件/范广钰-求职简历-亚信定制.docx"},
+  "锐捷定制": {pdf:"简历文件/范广钰-求职简历-锐捷定制.pdf", docx:"简历文件/范广钰-求职简历-锐捷定制.docx"},
+  "摩尔元数定制": {pdf:"简历文件/范广钰-求职简历-摩尔元数定制.pdf", docx:"简历文件/范广钰-求职简历-摩尔元数定制.docx"},
+  "亿榕定制": {pdf:"简历文件/范广钰-求职简历-亿榕定制.pdf", docx:"简历文件/范广钰-求职简历-亿榕定制.docx"}
+};
+function resumeFilesFor(name){ return RESUME_FILES[name] || null; }
+
+// 一键定制模板库：点公司 → 基于通用版生成该企业专属版本
+const CUSTOM_TEMPLATES = {
+  "新大陆定制": {
+    intent:"求职意向：产品专员/助理（AI 方向）｜可接受短期出差",
+    positioning:"2 年+ 文旅/酒店行业业务负责人，服务过政企客户，熟悉 ToB/G 端交付；独立完成 AI 智能客服产品（PRD + 可运行 Demo），跑通需求梳理 → 功能规划 → 落地全流程。目标：产品岗（AI 应用、政企数字化方向）。",
+    strengths:["政企经验：服务高校团委、政府客户，熟悉政务场景与 ToB/G 端交付流程，可接受短期出差","AI 落地：独立完成 AI 智能客服产品（大模型 + 知识库，PRD + 可运行 Demo），属 AI 应用落地案例","产品文档：能独立输出 PRD、产品方案与调研报告","数据驱动：美团渠道从 0 起盘，竞争圈 21 家中销售额/订单量排名第 2"],
+    projectTitle:"AI 智能客服（文旅场景）Demo + PRD · 已完成",
+    projectItems:["独立完成需求梳理、功能规划与 PRD：基于大模型 + 知识库回答房型价格、入住政策、周边游玩等咨询，支持多轮对话与未知问题兜底","产出可运行 Demo（后端 + 聊天界面 + 25 组知识库问答），全程借助 AI 工具（Codex、deepseek）提效","价值：证明「识别业务需求 → 设计 AI 产品 → 推动落地」的完整能力"],
+    skills:["产品：需求分析、PRD 撰写、原型设计（Axure/Figma）、产品方案","AI：大模型应用、Prompt 工程、知识库/RAG、AI 提效工具（Codex / deepseek / WorkBuddy）","其他：数据分析（美团经营后台）、政企客户沟通、项目统筹、C1 驾照"]
+  },
+  "瑞芯微定制": {
+    intent:"求职意向：产品专员/助理｜可接受短期出差",
+    positioning:"2 年+ 项目操盘经验的业务型人才，擅长需求梳理、数据驱动与跨部门协作；熟练使用 AI 工具提升分析与文档效率，学习能力强（广告学转产品，CET-4）。希望进入 AIoT 芯片行业，从产品岗位起步快速成长。",
+    strengths:["项目操盘：2 年+ 从 0 到 1 项目经验，统筹品牌、内容、渠道与 3 人团队，可接受短期出差","数据驱动：搭建数据复盘体系，美团渠道从 0 起盘做到竞争圈 21 家中排名第 2","AI 提效：熟练使用 Codex、deepseek 等 AI 工具完成数据分析、文档与内容生产","快速学习：广告学科班转产品，独立完成 AI 产品 PRD 与 Demo，学习能力经过验证"],
+    projectTitle:"AI 智能客服（文旅场景）Demo + PRD · 已完成",
+    projectItems:["独立完成产品需求文档与可运行 Demo，覆盖需求分析、功能设计、文档输出全流程","熟练使用 AI 工具（Codex、deepseek）搭建工作流，大幅提升开发与文档效率","价值：证明「需求分析 → 产品设计 → 落地实现」的产品基本功"],
+    skills:["产品：需求分析、市场调研、PRD 撰写、原型设计（Axure/Figma）","数据：数据分析、经营复盘、Excel/后台数据体系","AI 工具：Codex、deepseek、WorkBuddy；办公：Office、PS、剪辑后期","软技能：跨部门沟通、项目统筹、团队管理（3 人）"]
+  },
+  "中电福富定制": {
+    intent:"求职意向：AI 产品经理（政务/行业数字化方向）｜可立即到岗，可实习 3 个月以上，可接受短期出差",
+    positioning:"身处福州、熟悉数字中国与政务数字化场景；2 年+ 文旅行业业务负责人，服务过政企客户；独立完成 AI 智能客服产品（大模型 + 知识库）PRD 与 Demo，与政务/行业智能客服场景直接相关。目标加入数字中国建设一线团队，从 AI 产品岗位做起。",
+    strengths:["政务数字化认知：熟悉数字中国战略与政务场景，长期在福建文旅数字化一线实践","政企交付经验：服务高校团委、政府客户，熟悉 ToB/G 端需求沟通与项目交付，可接受短期出差","AI 落地：独立完成 AI 智能客服（大模型 + 知识库），与政务智能问答/智能客服场景高度相关","项目操盘：从 0 到 1 项目负责人，直接向集团汇报，具备业务与项目双重视角"],
+    projectTitle:"AI 智能客服（文旅场景）Demo + PRD · 已完成",
+    projectItems:["独立完成需求梳理、功能规划与 PRD：大模型 + 知识库回答咨询、推荐行程，支持多轮对话与兜底转人工","产出可运行 Demo（后端 + 聊天界面 + 25 组知识库问答），验证大模型在行业场景的落地路径","价值：证明「行业需求识别 → AI 产品设计 → 落地验证」的完整能力"],
+    skills:["产品：需求分析、PRD 撰写、原型设计（Axure/Figma）、产品方案","AI：大模型应用、Prompt 工程、知识库/RAG、AI 提效工具（Codex / deepseek / WorkBuddy）","行业：政务/ToB 客户沟通、数字政务场景认知、文旅行业数字化","其他：项目统筹、数据分析、C1 驾照"]
+  },
+  "中友金科定制": {
+    intent:"求职意向：AI 产品经理（政务数字化/数字监督方向）｜Base 福州，可接受短期出差",
+    positioning:"2 年+ 文旅/酒店业务负责人，服务过政企客户，熟悉 B/G 端需求沟通与交付，可接受出差；独立完成 AI 智能客服（大模型 + 知识库）的需求调研、竞品分析、PRD 与可运行 Demo，跑通「调研 → 设计 → 落地 → 迭代」全流程。目标：数字监督/政务数字化 AI 产品岗。",
+    strengths:["B/G 端经验：服务政企客户 2 年+，熟悉需求沟通与交付，可接受短期出差","产品基本功：能独立完成需求调研、竞品分析、PRD 与原型（Axure/Figma）","AI 落地：独立完成 AI 智能客服（大模型 + 知识库）PRD + Demo，与政务智能问答场景相关","数据驱动：美团渠道从 0 起盘，竞争圈 21 家中排名第 2，有数据迭代思维"],
+    projectTitle:"AI 智能客服（文旅场景）Demo + PRD · 已完成",
+    projectItems:["独立完成需求调研与竞品分析：梳理酒店高频咨询场景，明确目标用户与边界","输出原型与 PRD：大模型 + 知识库实现多轮问答与未知问题兜底","产出可运行 Demo（后端 + 聊天界面 + 25 组知识库问答），验证 AI 行业落地与迭代闭环"],
+    skills:["产品：需求调研、竞品分析、PRD、原型（Axure/Figma）","AI：大模型应用、Prompt、知识库/RAG、AI 提效工具","行业：政务/ToB 客户沟通、数字监督场景认知、可出差","其他：数据分析、项目统筹、跨部门协作、C1 驾照"]
+  },
+  "AIGC运营定制": {
+    intent:"求职意向：AIGC 产品运营 / AI 内容运营｜可接受短期出差",
+    positioning:"广告学本科 + 2 年+ 品牌营销与新媒体操盘，日常用 AI 工具跑通内容生产工作流（AI 视频、数据分析、汇报 PPT）；独立完成过 AI 产品 Demo，懂产品也懂内容。目标：进入 AIGC 赛道，从运营岗切入产品。",
+    strengths:["内容专业：广告学本科，操盘品牌内容与新媒体，账号涨粉 1w+","AI 实操：用 AI 完成视频制作、数据分析表与上半年经济运行汇报 PPT","数据驱动：美团渠道从 0 起盘，竞争圈 21 家中销售额/订单量排名第 2","产品视角：独立完成 AI 智能客服 PRD + Demo，能听懂研发语言"],
+    projectTitle:"AI 文旅助手（智能客服）Demo + PRD · 已完成",
+    projectItems:["独立完成需求梳理、功能规划与 PRD，用大模型 + 知识库实现智能问答","产出可运行 Demo 与 25 组知识库问答，跑通「内容 → 产品 → 落地」","日常用 Codex/deepseek 完成 AI 视频、数据分析与汇报 PPT 等 AI 内容工作流"],
+    skills:["内容：文案/IP 策划、新媒体运营、摄影摄像、剪辑后期","AI：AI 视频、AI 绘图、大模型应用、AI 工作流（Codex/deepseek/WorkBuddy）","产品：需求分析、PRD、原型（Axure/Figma 学习中）","其他：数据分析、项目统筹、C1 驾照"]
+  },
+  "智能客服定制": {
+    intent:"求职意向：AI 产品经理（智能客服方向）｜可接受短期出差",
+    positioning:"2 年+ 酒店业务操盘，最懂客服高频场景（咨询/预订/投诉）；独立完成 AI 智能客服产品（大模型 + 知识库）PRD 与可运行 Demo，覆盖需求分析、对话设计、兜底策略与数据迭代。目标：AI 产品经理（智能客服/对话式 AI 方向）。",
+    strengths:["场景理解：酒店一线业务出身，清楚客服高频问题与用户真实痛点","AI 落地：独立完成智能客服 PRD + Demo（大模型 + 知识库 + 多轮对话 + 兜底）","数据驱动：美团渠道从 0 起盘，竞争圈 21 家中排名第 2，有迭代思维","快速学习：广告学转 AI 产品，自学完成产品全流程"],
+    projectTitle:"AI 智能客服（文旅场景）Demo + PRD · 已完成",
+    projectItems:["覆盖房型价格、入住政策、周边游玩等高频咨询，支持多轮对话与未知问题兜底","产出 PRD（需求/流程/原型说明）+ 可运行 Demo（后端 + 聊天界面 + 25 组知识库问答）","价值：直接证明智能客服从 0 到 1 的产品能力"],
+    skills:["产品：需求分析、竞品分析、PRD、原型（Axure/Figma）","AI：大模型应用、Prompt、知识库/RAG、AI 提效工具","行业：客服场景认知、ToB/G 客户沟通、可出差","其他：数据分析、项目统筹、跨部门协作、C1 驾照"]
+  },
+  "网龙定制": {
+    intent:"求职意向：AI 产品经理（教育/内容方向）｜可接受短期出差",
+    positioning:"广告学本科、内容与年轻用户敏感（青年通讯社影像部部长，运营新媒体涨粉 1w+）；2 年+ 项目操盘，独立完成 AI 产品 PRD 与 Demo，会用 AI 工具提效。目标：教育科技 + AI 方向，从产品岗快速成长。",
+    strengths:["内容与教育认知：懂内容生产与年轻用户，适合教育/学习类产品","AI 落地：独立完成 AI 智能客服 PRD + Demo，跑通产品全流程","数据驱动：美团渠道从 0 起盘，竞争圈 21 家中排名第 2","学习能力：广告学转产品，熟练用 AI 工具自学与提效"],
+    projectTitle:"AI 文旅助手（智能客服）Demo + PRD · 已完成",
+    projectItems:["独立完成需求梳理、功能规划与 PRD，用大模型 + 知识库实现智能问答","产出可运行 Demo 与 25 组知识库问答，验证「识别需求 → 设计 → 落地」","日常用 Codex/deepseek 搭建 AI 工作流，大幅提升内容与文档效率"],
+    skills:["产品：需求分析、PRD、原型（Axure/Figma）、数据分析","AI：大模型应用、Prompt、知识库/RAG、AI 工作流","内容：文案/IP 策划、新媒体运营、摄影摄像、剪辑后期","其他：项目统筹、跨部门协作、C1 驾照"]
+  },
+  "亚信定制": {
+    intent:"求职意向：AI 产品经理（运营商/政务数字化方向）｜可接受短期出差",
+    positioning:"身处福州、熟悉数字中国与政务数字化场景；2 年+ 业务负责人，服务过政企客户；独立完成 AI 智能客服 PRD + Demo。目标：运营商/政务 AI 方向，从产品岗切入行业数字化一线。",
+    strengths:["政企经验：服务高校团委、政府客户，熟悉 ToB/G 端需求沟通与交付","行业认知：熟悉数字中国战略与运营商/政务场景，长期在福建文旅数字化一线实践","AI 落地：独立完成 AI 智能客服（大模型 + 知识库）PRD + Demo","项目操盘：从 0 到 1 项目负责人，直接向集团汇报"],
+    projectTitle:"AI 智能客服（文旅场景）Demo + PRD · 已完成",
+    projectItems:["独立完成需求梳理、功能规划与 PRD：大模型 + 知识库回答咨询、推荐行程，支持多轮对话与兜底","产出可运行 Demo（后端 + 聊天界面 + 25 组知识库问答），验证 AI 在行业场景的落地路径","价值：证明「行业需求识别 → AI 产品设计 → 落地验证」的完整能力"],
+    skills:["产品：需求分析、PRD、原型（Axure/Figma）、产品方案","AI：大模型应用、Prompt、知识库/RAG、AI 提效工具","行业：政务/ToB 客户沟通、数字政务场景认知、运营商生态认知","其他：项目统筹、数据分析、C1 驾照"]
+  },
+  "锐捷定制": {
+    intent:"求职意向：产品经理 / 产品专员（ToB 数字化方向）｜可接受出差与全国工作地",
+    positioning:"2 年+ 项目操盘与跨部门协作经验，擅长需求梳理、方案设计与落地交付；独立完成 AI 产品 PRD + Demo；熟悉 ToB 交付流程，接受出差。目标：加入 ToB 数字化/网络设备头部企业，从产品岗起步。",
+    strengths:["ToB 交付：2 年+ 项目操盘，熟悉需求梳理、跨部门协作与落地交付","可出差：可接受短期出差与全国工作地，服从项目安排","AI 落地：独立完成 AI 产品 PRD + Demo，懂技术与业务语言","数据驱动：美团渠道从 0 起盘，竞争圈 21 家中排名第 2"],
+    projectTitle:"AI 智能客服（文旅场景）Demo + PRD · 已完成",
+    projectItems:["独立完成需求梳理、功能规划与 PRD，覆盖需求分析、功能设计、文档输出全流程","产出可运行 Demo（后端 + 聊天界面 + 25 组知识库问答），验证 AI 行业落地","价值：证明「需求分析 → 产品设计 → 落地实现」的产品基本功"],
+    skills:["产品：需求分析、市场调研、PRD、原型（Axure/Figma）","AI：大模型应用、Prompt、知识库/RAG、AI 工作流","软技能：跨部门协作、项目统筹、团队管理（3 人）、可出差","其他：数据分析、Office、PS、剪辑后期、C1 驾照"]
+  },
+  "摩尔元数定制": {
+    intent:"求职意向：产品经理 / 产品助理（工业互联网方向）｜可接受短期出差",
+    positioning:"关注制造业数字化，理解工厂/园区业务协作场景；2 年+ 业务操盘与 ToB 客户沟通经验；独立完成 AI 产品 PRD + Demo。目标：加入工业互联网平台团队，从产品岗学习行业 Know-how。",
+    strengths:["行业认知：关注工业互联网/智能制造，理解国家扶持方向与行业价值","ToB 沟通：2 年+ 服务政企客户，熟悉需求沟通与方案交付","AI 落地：独立完成 AI 智能客服 PRD + Demo","可出差：接受短期出差，配合项目实施"],
+    projectTitle:"AI 智能客服（文旅场景）Demo + PRD · 已完成",
+    projectItems:["独立完成需求梳理、功能规划与 PRD，用大模型 + 知识库实现行业场景问答","产出可运行 Demo（后端 + 聊天界面 + 25 组知识库问答）","价值：证明「行业需求识别 → AI 产品设计 → 落地验证」的完整能力"],
+    skills:["产品：需求分析、PRD、原型（Axure/Figma）、产品方案","AI：大模型应用、Prompt、知识库/RAG、AI 提效工具","行业：制造业数字化认知、ToB 客户沟通、可出差","其他：数据分析、项目统筹、跨部门协作、C1 驾照"]
+  },
+  "亿榕定制": {
+    intent:"求职意向：人工智能产品经理（电力/能源数字化方向）｜可接受短期出差",
+    positioning:"服务过政企客户、熟悉项目交付，可接受出差驻场；独立完成 AI 智能客服 PRD + Demo；学习能力强，愿快速补齐电力行业知识。目标：加入电力 AI 产品团队，从产品岗切入能源数字化。",
+    strengths:["政企交付：2 年+ 服务政企客户，熟悉需求沟通与项目交付","可出差：可接受短期出差与项目驻场，服从项目安排","AI 落地：独立完成 AI 智能客服（大模型 + 知识库）PRD + Demo","学习能力：广告学转 AI 产品，快速补齐行业知识"],
+    projectTitle:"AI 智能客服（文旅场景）Demo + PRD · 已完成",
+    projectItems:["独立完成需求梳理、功能规划与 PRD：大模型 + 知识库实现多轮问答与兜底","产出可运行 Demo（后端 + 聊天界面 + 25 组知识库问答）","价值：证明「行业需求识别 → AI 产品设计 → 落地验证」的完整能力"],
+    skills:["产品：需求分析、PRD、原型（Axure/Figma）、产品方案","AI：大模型应用、Prompt、知识库/RAG、AI 提效工具","行业：政企/ToB 客户沟通、能源数字化认知、可出差","其他：数据分析、项目统筹、跨部门协作、C1 驾照"]
+  }
+};
+
+// 作品集：所有定制简历都会自动带上这两个从 0 到 1 的作品
+const PORTFOLIO_PROJECTS = [
+  {title:"每日爆点灵感助手（AI 热点灵感工具）· 已上线运行", items:[
+    "独立完成需求分析与产品设计：本地 Node.js 应用，每天 08:00 自动抓取抖音/小红书热榜、按领域归类并展示每领域 Top 10",
+    "AI 视频拆解：粘贴视频链接自动分析拍摄逻辑 / 爆点逻辑 / 剪辑逻辑 / 预埋钩子，输出可直接拍摄的爆款话题灵感",
+    "包含数据持久化（SQLite）、自动备份、局域网手机访问、每日定时刷新等完整能力，证明能独立把 AI 想法做成可用产品"
+  ]},
+  {title:"求职作战台（AI 求职管理产品）· 从 0 到 1", items:[
+    "独立完成需求分析、功能规划与交付：岗位雷达、JD 拆解、简历一键定制、投递追踪、数据看板，形成求职全流程管理闭环",
+    "借助 AI 工具（Codex）搭建并持续迭代，已承载 55+ 真实岗位与多版本定制简历，本人负责需求定义与验收",
+    "价值：证明「发现痛点 → 定义需求 → 设计产品 → 落地迭代」的完整能力"
+  ]},
+  {title:"AI 岗位雷达自动化（Agent 工作流）· 已上线运行", items:[
+    "设计并部署每日自动更新：Windows 定时任务 + Codex CLI 联网搜索岗位、核对截止日期、更新数据并自动验证",
+    "加入「当天已更新自动跳过」「失败自动兜底」容错机制，开机登录即补跑，无需人工干预",
+    "价值：证明能用 AI Agent 搭建真实业务自动化，可复用到企业运营/数据更新场景"
+  ]}
+];
+
+function customApplyHref(name){
+  const key = String(name||"").replace(/定制$/,"");
+  if(!key) return null;
+  const cands = DB.positions.filter(p=>{
+    const n = p.company || "";
+    const short = n.replace(/[（(].*?[)）]/g,"");
+    return short.includes(key) || (key==="AIGC运营" && /AIGC/.test(n)) || (key==="智能客服" && /智能客服/.test(n));
+  });
+  const pick = cands.find(p=>p.applyUrl) || cands.find(p=>platformUrl(p)) || cands[0];
+  if(pick && pick.applyUrl) return {href:pick.applyUrl, label:"🚀 投简历"};
+  if(pick && platformUrl(pick)) return {href:platformUrl(pick), label:"📌 平台直达"};
+  const q = encodeURIComponent(key.replace(/运营.*/,""));
+  return {href:"https://www.zhipin.com/web/geek/job?query="+q+"&city="+(city==="合肥"?"101220100":"101230100"), label:"💼 平台搜同名岗"};
+}
+function renderCustom(){
+  document.getElementById("customList").innerHTML = Object.keys(CUSTOM_TEMPLATES).map(name=>{
+    const exists = DB.resumes.versions.some(v=>v.name===name);
+    const lnk = customApplyHref(name);
+    return '<div class="custom-item'+(exists?" done":"")+'" data-name="'+esc(name)+'">'+
+      '<div class="ci-main"><b>'+esc(name.replace("定制",""))+'</b><span>'+(exists?"✅ 已生成，点击打开":"点击生成专属版本")+'</span></div>'+
+      (lnk?'<a class="ci-apply" href="'+lnk.href+'" target="_blank" rel="noopener" onclick="event.stopPropagation()">'+lnk.label+'</a>':"")+
+      '</div>';
+  }).join("");
+}
+function findJobForResume(name){
+const vn = String(name||"").replace(/定制$/,"").trim();
+if(!vn) return null;
+return DB.positions.find(p=>{
+const short = (p.company||"").replace(/[（(].*?[)）]/g,"").trim();
+return short && (short===vn || short.includes(vn) || (vn.includes(short) && short.length>=2));
+}) || null;
+}
+function resumeApplyLinkFor(name){
+const job = findJobForResume(name);
+if(job && job.applyUrl) return {href:job.applyUrl, label:"🚀 投简历"};
+if(job && platformUrl(job)) return {href:platformUrl(job), label:"📌 平台直达"};
+return customApplyHref(name);
+}
+const JOB_PLATFORM_LINKS = [
+{label:"💼 BOSS直聘", href:"https://www.zhipin.com/web/geek/job?query="+encodeURIComponent("AI产品经理 福州")+"&city=101230100"},
+{label:"🦴 猎聘", href:"https://www.liepin.com/zhaopin/?key="+encodeURIComponent("AI产品经理")},
+{label:"🟦 智联招聘", href:"https://sou.zhaopin.com/?kw="+encodeURIComponent("AI产品经理")+"&jl="+encodeURIComponent("福州")},
+{label:"🟩 前程无忧", href:"https://we.51job.com/pc/search?keyword="+encodeURIComponent("AI产品经理")+"&jobArea=040000"},
+{label:"🎓 牛客网", href:"https://www.nowcoder.com/jobs/recommend?keyword="+encodeURIComponent("AI产品经理")},
+{label:"🌱 应届生求职", href:"https://www.yingjiesheng.com/jobs/fuzhou/"}
+];
+function renderApplyBar(){
+const bar = document.getElementById("resumeApplyBar");
+if(!bar) return;
+const name = currentVersion().name || "";
+const job = findJobForResume(name);
+bar.style.display = "flex";
+if(job){
+const btns = linkEntries(job).map(b=>'<a class="ci-apply ab-btn" href="'+b.href+'" target="_blank" rel="noopener">'+b.label+'</a>').join("");
+const jobTxt = esc(shortCompany(job.company)+" · "+(job.job||""));
+bar.innerHTML = '<span class="ab-txt">📄 当前「'+esc(name)+'」已定制好，对应岗位 '+jobTxt+'，改完直接投：</span><div class="ab-links">'+btns+'</div>';
+}else{
+const btns = JOB_PLATFORM_LINKS.map(l=>'<a class="ci-apply ab-btn" href="'+l.href+'" target="_blank" rel="noopener">'+l.label+'</a>').join("");
+bar.innerHTML = '<span class="ab-txt">💡 当前「'+esc(name)+'」为通用版：可点上方目标公司卡片一键定制获取专属投递入口，也可直接去主流平台搜「AI产品经理」：</span><div class="ab-links">'+btns+'</div>';
+}
+}
+function customResume(name){
+  const t = CUSTOM_TEMPLATES[name]; if(!t) return;
+  const existing = DB.resumes.versions.find(v=>v.name===name);
+  if(existing){
+    DB.resumes.current = existing.key; save(); renderResume(); expandEditor(true);
+    alert("「"+name+"」已存在，已为你打开，可直接修改；想重新生成请先删除该版本");
+    return;
+  }
+  const base = DB.resumes.versions.find(v=>v.key==="general") || currentVersion();
+  const fields = JSON.parse(JSON.stringify(base.fields));
+  fields.intent = t.intent; fields.positioning = t.positioning;
+  fields.strengths = t.strengths.slice();
+  fields.projects = [{title:t.projectTitle, items:t.projectItems.slice()}].concat(PORTFOLIO_PROJECTS);
+  fields.skills = t.skills.slice();
+  const key = "v"+Date.now();
+  DB.resumes.versions.push({key, name, updatedAt:today()+" "+nowHM(), starred:false, fields});
+  DB.resumes.current = key; save(); renderResume(); renderCustom(); expandEditor(true);
+  const lnk = customApplyHref(name);
+  alert("已生成「"+name+"」专属版本（针对该公司 JD 定制），可继续在上方大编辑器微调。\n🚀 投简历入口："+(lnk?lnk.href:"（该卡片下方可复制/打开招聘渠道）"));
+}
+
+// ---------- 岗位雷达：一键定制 + 打招呼话术 ----------
+function shortCompany(name){
+  return String(name||"").replace(/[（(].*?[)）]/g,"").trim();
+}
+function findTemplateFor(p){
+  if(p.custom) return p.custom;
+  const short = shortCompany(p.company);
+  for(const k in CUSTOM_TEMPLATES){
+    if(short && short.includes(k.replace("定制",""))) return CUSTOM_TEMPLATES[k];
+  }
+  return null;
+}
+function templateNameFor(p, t){
+  if(t) for(const k in CUSTOM_TEMPLATES){ if(CUSTOM_TEMPLATES[k]===t) return k; }
+  return shortCompany(p.company).slice(0,12)+"定制";
+}
+function customJobForRadar(i){
+  const p = DB.positions[i]; if(!p) return;
+  const t = findTemplateFor(p);
+  const name = templateNameFor(p, t);
+  const existing = DB.resumes.versions.find(v=>v.name===name);
+  if(existing){
+    DB.resumes.current = existing.key; save(); renderResume(); expandEditor(true);
+    alert("「"+name+"」已存在，已为你打开，可直接微调");
+    return;
+  }
+  const base = DB.resumes.versions.find(v=>v.key==="general") || currentVersion();
+  const fields = JSON.parse(JSON.stringify(base.fields));
+  if(t){
+    fields.intent = t.intent || fields.intent;
+    fields.positioning = t.positioning || fields.positioning;
+    fields.strengths = (t.strengths && t.strengths.slice()) || fields.strengths;
+    if(t.projectTitle) fields.projects = [{title:t.projectTitle, items:(t.projectItems||[]).slice()}].concat(PORTFOLIO_PROJECTS);
+    fields.skills = (t.skills && t.skills.slice()) || fields.skills;
+  } else {
+    fields.intent = "求职意向："+(p.job||"产品助理/初级产品经理")+"｜可接受短期出差";
+    fields.positioning = "2 年+ 文旅/酒店行业业务负责人，服务过政企客户，熟悉 ToB/G 端需求沟通与交付，可接受短期出差；独立完成 AI 智能客服产品（大模型 + 知识库）PRD 与可运行 Demo。目标：加入"+shortCompany(p.company)+"，从产品岗快速成长，边做边学行业 Know-how。";
+  }
+  const key = "v"+Date.now();
+  DB.resumes.versions.push({key, name, updatedAt:today()+" "+nowHM(), starred:false, fields});
+  DB.resumes.current = key; save(); renderResume(); renderRadar(); expandEditor(true);
+  alert("已生成「"+name+"」专属版本，可继续微调；💬 话术在岗位雷达卡片上可复制"+(p.applyUrl?"\n🚀 投简历入口："+p.applyUrl:""));
+}
+function talkForJob(p){
+  const job = (p&&p.job) || "AI 产品经理";
+  const company = p ? shortCompany(p.company) : "贵司";
+  if(p && p.pitch && /您好|你好|嗨|打扰|方便/.test(p.pitch)) return p.pitch;
+  return "您好！我是范广钰，2 年+ 文旅/酒店业务负责人，正在转行 AI 产品经理，独立完成过 AI 智能客服作品（PRD + 可运行 Demo），可接受短期出差。看到贵司在招"+job+"，方向和我很契合，方便聊聊吗？";
+}
+const TALK_TEMPLATES = [
+  {id:"std", label:"标准版（初次打招呼）", build:talkForJob},
+  {id:"works", label:"带作品版（发作品约看）", build:(p)=>{
+    const job=(p&&p.job)||"AI 产品经理";
+    const company=p?shortCompany(p.company):"贵司";
+    return "您好！我是范广钰，正在转行 AI 产品经理，独立完成过 4 个 AI 作品（文旅智能客服 PRD+Demo、求职作战台、岗位雷达自动化、每日爆点灵感助手），可接受短期出差。看到"+company+"在招"+job+"，方向很契合，想直接发您简历和作品，方便给您看看吗？";
+  }},
+  {id:"short", label:"简洁版（短平快）", build:(p)=>{
+    const job=(p&&p.job)||"AI 产品经理";
+    const company=p?shortCompany(p.company):"贵司";
+    return "您好，我是范广钰，正在转行 AI 产品经理，有 4 个从 0 到 1 的 AI 作品。看到贵司招"+job+"，希望有机会聊聊，可接受短期出差。";
+  }},
+  {id:"follow", label:"跟进版（已投 2-3 天）", build:(p)=>{
+    const job=(p&&p.job)||"产品岗";
+    const company=p?shortCompany(p.company):"贵司";
+    return "您好！我是范广钰，前几天投递了贵司的"+job+"，想跟进一下是否收到我的简历和作品（AI 智能客服 PRD+Demo 等 4 个作品）。如果方便，很希望能有机会聊聊，谢谢！";
+  }},
+  {id:"interview", label:"约面版（HR 回复后）", build:(p)=>{
+    const company=p?shortCompany(p.company):"贵司";
+    return "您好，谢谢您！我时间比较灵活，工作日都可以，也接受短期出差或线上面试。您方便约个时间吗？需要的话我可以先把作品集（4 个 AI 作品）发您看看。";
+  }},
+  {id:"keep", label:"留联系版（暂不合适/被拒）", build:(p)=>{
+    const company=p?shortCompany(p.company):"贵司";
+    return "您好，谢谢您的回复！虽然这次暂时不合适，但我对"+company+"的产品方向很感兴趣，方便加个微信保持联系吗？以后有初级产品岗或实习机会，希望第一时间想到我，谢谢！";
+  }}
+];
+let talkIdx = -1;
+let talkTplId = "std";
+function pickDefaultTalkJob(){
+  const cands = DB.positions.filter(p=>cityOf(p)===city && p.match!=="远期" && ["未投","已打招呼","已回复"].includes(p.status));
+  cands.sort((a,b)=>jobScore(b)-jobScore(a));
+  const p = cands[0] || DB.positions.find(x=>cityOf(x)===city);
+  return p ? DB.positions.indexOf(p) : -1;
+}
+function renderTalkJobSel(selIdx){
+  const sel = document.getElementById("talkJobSel");
+  if(!sel) return;
+  const jobs = DB.positions.filter(p=>cityOf(p)===city);
+  sel.innerHTML = '<option value="-1">（不关联，用通用话术）</option>' + jobs.map(p=>{
+    const idx = DB.positions.indexOf(p);
+    return '<option value="'+idx+'">'+esc(shortCompany(p.company))+" · "+esc(p.job)+" · "+esc(p.salary)+'</option>';
+  }).join("");
+  sel.value = String(selIdx >= 0 ? selIdx : pickDefaultTalkJob());
+}
+function buildTalkText(p, id){
+  const t = TALK_TEMPLATES.find(x=>x.id===id) || TALK_TEMPLATES[0];
+  return t.build(p);
+}
+function renderTalkTpl(){
+  const row = document.getElementById("talkTpls");
+  if(!row) return;
+  row.innerHTML = TALK_TEMPLATES.map(t=>
+    '<button type="button" class="talk-tpl'+(t.id===talkTplId?" active":"")+'" data-tpl="'+t.id+'">'+t.label+'</button>'
+  ).join("");
+}
+function renderTalkJobInfo(p){
+  const el = document.getElementById("talkJobInfo");
+  if(!el) return;
+  el.innerHTML = p
+    ? "✅ 已关联：" + esc(shortCompany(p.company)) + " · " + esc(p.job) + " · " + esc(p.salary) + "（切换岗位后话术自动更新）"
+    : "未关联具体岗位，使用通用话术";
+}
+function openTalk(i){
+  const p = DB.positions[i]; if(!p) return;
+  talkIdx = i;
+  document.getElementById("talkTitle").textContent = "打招呼话术 · "+p.company;
+  talkTplId = "std";
+  renderTalkJobSel(i);
+  renderTalkTpl();
+  renderTalkJobInfo(p);
+  document.getElementById("talkText").value = buildTalkText(p, talkTplId);
+  document.getElementById("talkModal").classList.add("show");
+}
+function openTalkGeneric(){
+  const idx = pickDefaultTalkJob();
+  talkIdx = idx;
+  const p = idx >= 0 ? DB.positions[idx] : null;
+  document.getElementById("talkTitle").textContent = p ? "打招呼话术 · "+p.company : "打招呼话术 · 通用";
+  talkTplId = "std";
+  renderTalkJobSel(idx);
+  renderTalkTpl();
+  renderTalkJobInfo(p);
+  document.getElementById("talkText").value = buildTalkText(p, talkTplId);
+  document.getElementById("talkModal").classList.add("show");
+}
+function closeTalk(){ document.getElementById("talkModal").classList.remove("show"); }
+
+// 预置 JD 拆解（按公司名匹配，仅当该岗位还没拆解时填充）
+const PREBUILT_JD = {
+  "中友金科": {
+    duties:"协助 AI 产品需求调研、用户访谈与竞品分析；输出原型、交互与 PRD；支持上线后反馈收集、数据跟踪与迭代；按项目需要出差至客户现场做需求沟通与产品演示",
+    reqs:"本科及以上；1-3 年 B 端或 G 端产品设计经验；会用 Axure/Figma/Sketch 至少一款；能适应短期出差",
+    must:"统招本科；Base 福州或北京；可短期出差",
+    plus:"政务/审计/财务行业背景；大模型、智能客服、AIGC 项目经验；计算机/设计相关专业",
+    myMatch:"智能客服作品完全对口（PRD+Demo）；2 年+ 政企客户沟通；可接受短期出差；Base 福州",
+    prep:"准备政务智能问答/数字监督场景案例；讲作品 30 秒版；问清项目制出差频率与带教安排"
+  },
+  "新大陆自动识别": {
+    duties:"协助产品经理完成需求分析、竞品调研与 PRD 输出；跟进产品迭代与跨部门沟通；参与项目方案整理",
+    reqs:"本科及以上；逻辑清晰、文档能力强；对 AIoT/物联网方向有兴趣",
+    must:"本科；福州办公",
+    plus:"政企项目经验；物联网/支付/识别行业认知；会用原型工具",
+    myMatch:"助理岗门槛匹配；2 年+ 政企客户经验；AI 产品作品证明学习能力",
+    prep:"讲美团从 0 起盘的数据故事；表达对 AIoT 的学习意愿；准备 1 个对新大陆产品的理解（识别/支付/IoT）"
+  },
+  "瑞芯微": {
+    duties:"协助芯片/硬件产品线需求梳理、竞品分析、规格文档整理；跟进项目进度与跨部门协作",
+    reqs:"本科及以上；逻辑与数据分析能力；学习能力强；文档与沟通能力",
+    must:"本科；福州办公",
+    plus:"理工科背景；半导体行业认知；数据分析经验",
+    myMatch:"数据驱动（美团竞争圈第 2）；AI 工具提效；快速学习（广告学转产品）；16 薪吸引力",
+    prep:"补半导体基础知识（产业链/芯片类型/RK 系列产品）；用数据能力弥补理工背景；表达长期深耕意愿"
+  },
+  "AIGC 产品运营": {
+    duties:"用 AI 工具生产内容（视频/图文/PPT）；策划运营活动；数据分析与复盘；跟进用户反馈",
+    reqs:"内容创作能力；AI 工具实操；数据敏感；结果导向",
+    must:"本科；福州办公",
+    plus:"AI 视频/绘图作品；新媒体涨粉数据；产品思维",
+    myMatch:"广告学本科+2 年内容操盘；AI 视频/PPT 实操；账号涨粉 1w+；独立做过 AI 产品 Demo",
+    prep:"带 2-3 个 AI 内容作品案例；讲清一条内容从策划到数据复盘的全流程；说明想从运营转产品的规划"
+  },
+  "智能客服": {
+    duties:"AI 智能客服产品需求分析、对话流程设计、PRD 撰写；跟进模型效果与数据迭代；跨部门协调",
+    reqs:"2 年+ 产品经验（可谈）；有客服/AI 产品理解；原型与文档能力",
+    must:"本科；福州办公",
+    plus:"智能客服/大模型项目经验；客服行业背景",
+    myMatch:"作品就是智能客服（大模型+知识库+兜底）；酒店客服场景经验；数据迭代思维",
+    prep:"把作品讲成业务价值（降本、提效、满意度）；准备客服场景坏例处理案例；说明兜底策略设计"
+  },
+  "网龙": {
+    duties:"教育类 AI 产品规划、需求分析、功能设计与迭代；跟踪行业趋势与竞品；推动产品落地",
+    reqs:"产品经验（岗位偏高）；教育/内容理解；AI 认知；文档与沟通",
+    must:"本科；福州办公",
+    plus:"教育行业经验；内容/年轻用户理解；AI 产品项目",
+    myMatch:"内容与年轻用户敏感（青年通讯社涨粉 1w+）；AI 作品证明转型；广告学理解教育内容",
+    prep:"了解网龙教育业务（华渔教育/101 教育 PPT 等）；讲 AI 在教育场景的应用想法；被拒也加微信攒人脉"
+  },
+  "亚信科技": {
+    duties:"运营商/政务 AI 产品方案、需求分析、PRD 与交付支持；对接客户与内部研发",
+    reqs:"产品经验（岗位偏高）；ToB/G 交付理解；AI 认知",
+    must:"本科；福州办公",
+    plus:"运营商/政务行业经验；大模型项目经验",
+    myMatch:"政企客户经验；行业分析报告证明赛道认知；AI 智能客服作品；可出差",
+    prep:"补运营商/政务云知识（5G、智慧城市、数字政府）；讲清一个 AI 在政务场景的落地闭环；强调可出差"
+  },
+  "锐捷网络": {
+    duties:"网络设备产品需求调研、竞品分析、规格定义与文档输出；配合售前与交付",
+    reqs:"本科（专业不限校招）；逻辑与分析能力；可接受出差/全国工作地",
+    must:"本科；可出差与全国工作地",
+    plus:"ToB 项目经验；网络/IT 认知；数据分析",
+    myMatch:"ToB 交付经验；接受出差；数据分析；项目操盘",
+    prep:"补网络设备基础（交换机/路由器/Wi-Fi/信创）；讲项目操盘与跨部门协作案例；强调出差意愿"
+  },
+  "摩尔元数": {
+    duties:"工业互联网/工业软件产品需求分析、方案设计、PRD 与项目交付支持",
+    reqs:"产品经验（初级可谈）；ToB 理解；文档与沟通",
+    must:"本科；福州办公",
+    plus:"制造业/工业互联网认知；MES/ERP 经验",
+    myMatch:"行业认知+国家扶持赛道；政企沟通经验；AI 作品；可出差；假期制度好",
+    prep:"补工业互联网基础（设备联网/MES/标识解析/工信部政策）；表达从 0 学行业 Know-how 的决心"
+  },
+  "亿榕信息": {
+    duties:"电力行业 AI 产品（安监/现场作业）需求分析、方案设计与交付；出差驻场支持",
+    reqs:"产品经验；AI 认知；可接受出差",
+    must:"本科；可出差驻场",
+    plus:"电力/能源行业经验；安监/作业场景认知",
+    myMatch:"政企交付经验；可出差；AI 智能客服作品；快速学习（愿补电力知识）",
+    prep:"补电力行业知识（国网体系/安监/作业票）；讲 AI 在行业场景的落地；强调出差与学习意愿"
+  }
+};
+
+function seedDB(){
+  const base = [
+    {batch:"第一批",company:"新大陆自动识别",job:"产品专员/助理",salary:"8-12K",match:"高",platform:"猎聘/Boss直聘 搜「新大陆自动识别 产品专员」",resume:"范广钰-求职简历-新大陆定制.pdf",works:"AI文旅助手",reason:"上市集团、AIoT，助理岗门槛匹配；有政企项目经验加分",status:"未投",date:"",next:"今天投，优先用 Boss直聘打招呼",note:""},
+    {batch:"第一批",company:"瑞芯微",job:"产品专员/助理",salary:"8-15K·16薪",match:"高",platform:"猎聘/Boss直聘 搜「瑞芯微 产品专员」",resume:"范广钰-求职简历-瑞芯微定制.pdf",works:"AI文旅助手 + 数据分析",reason:"AI 芯片龙头、16 薪、国家扶持半导体行业；突出学习能力和数据分析",status:"未投",date:"",next:"要求可能偏理工科，用作品和数据补",note:""},
+    {batch:"第一批",company:"福州 AIGC 产品运营",job:"AIGC 产品运营",salary:"8-15K·13薪",match:"高",platform:"猎聘 搜「AIGC 产品运营 福州」",resume:"范广钰-求职简历-AIGC运营定制.pdf",works:"数据分析 + AI文旅助手",reason:"内容创作 + AI 工具实操直接匹配，最容易进的方向",status:"未投",date:"",next:"吃内容老本，先拿 offer 再转产品",note:""},
+    {batch:"第一批",company:"51job 福州鼓楼区（智能客服）",job:"AI 产品经理（智能客服）",salary:"9-14K",match:"中高",platform:"jobs.51job.com/fuzhou-glq/169669363.html",resume:"范广钰-求职简历-智能客服定制.pdf",works:"AI文旅助手",reason:"智能客服 = 真 AI 岗，作品正好是智能客服，重点投",status:"未投",date:"",next:"作品和岗位完全对口，今天投",note:""},
+    {batch:"第二批",company:"网龙网络",job:"产品经理（AI 方向）",salary:"15-30K·16薪",match:"中",platform:"猎聘/Boss直聘 搜「网龙 产品经理 AI」",resume:"范广钰-求职简历-网龙定制.pdf",works:"AI文旅助手",reason:"上市教育 + AI、16 薪；岗位要求较高，作为冲刺目标",status:"未投",date:"",next:"被拒也礼貌加微信攒人脉",note:""},
+    {batch:"第二批",company:"亚信科技",job:"AI 产品经理",salary:"12-15K·13薪",match:"中",platform:"猎聘 搜「亚信科技 AI产品经理 福州」",resume:"范广钰-求职简历-亚信定制.pdf",works:"AI文旅助手 + 行业分析",reason:"上市运营商 IT/AI、政务基因，和职业规划契合",status:"未投",date:"",next:"强调政企经验和 AI 作品",note:""},
+    {batch:"第二批",company:"锐捷网络（星网锐捷系）",job:"产品经理 / 产品专员",salary:"8-15K（年薪10万+）",match:"中高",platform:"猎聘/Boss直聘 搜「锐捷网络 产品经理 福州」",resume:"范广钰-求职简历-锐捷定制.pdf",works:"数据分析 + AI文旅助手",reason:"上市网络设备 ToB 龙头、接受出差/全国工作地；数字经济/信创国家扶持",status:"未投",date:"",next:"社招初级产品岗可投，突出接受出差",note:""},
+    {batch:"第二批",company:"摩尔元数（福建摩尔软件）",job:"产品经理 / 产品助理",salary:"面议（高级岗20-35K）",match:"中高",platform:"智联/官网 搜「摩尔 产品经理 福州」",resume:"范广钰-求职简历-摩尔元数定制.pdf",works:"数据分析 + AI文旅助手",reason:"工业互联网平台、国家扶持（工信部优秀方案）、明确法定节假日+带薪年假",status:"未投",date:"",next:"假期制度好，重点了解初级岗",note:""},
+    {batch:"第二批",company:"亿榕信息",job:"人工智能产品经理",salary:"面议",match:"中",platform:"智联/前程无忧 搜「亿榕 产品经理 福州」",resume:"范广钰-求职简历-亿榕定制.pdf",works:"AI文旅助手 + 行业分析",reason:"国网系背景、电力 AI 产品（安监/现场作业）、出差多、国企假期正常",status:"未投",date:"",next:"电力行业知识面试前补",note:""},
+    {batch:"第二批",company:"中友金科（博思软件系）",job:"AI 产品经理",salary:"11-25K",match:"中高",platform:"猎聘：liepin.com/job/1983677437.shtml",resume:"范广钰-求职简历-中友金科定制.pdf",works:"AI文旅助手 + 行业分析",reason:"政务数字化/数字监督赛道，带薪年假+股票期权，JD 明确短期出差；作品正好是智能客服",status:"未投",date:"",next:"今天重点投！JD 7月27日更新，HR 在线，先发作品再约面",note:""},
+    {batch:"第三批",company:"新大陆（福建）公共服务",job:"AI 产品经理（政企 AI）",salary:"12-23K",match:"远期",platform:"猎聘/51job 搜「新大陆 AI产品经理」",resume:"暂不投",works:"—",reason:"要求 5 年+ 产品经验，作为 1-2 年后跳槽目标",status:"盯梢",date:"",next:"先盯招聘动向",note:""},
+    {batch:"第三批",company:"新大陆软件",job:"AI 产品经理（大模型/AIGC）",salary:"15-30K",match:"远期",platform:"猎聘 搜「新大陆软件 AI产品经理」",resume:"暂不投",works:"—",reason:"要求 5-10 年经验，作为长期目标",status:"盯梢",date:"",next:"先盯招聘动向",note:""},
+    {batch:"第三批",company:"中电福富",job:"AI 产品经理（社招关注）",salary:"面议",match:"远期",platform:"官网/公众号 关注社招",resume:"中电福富定制.pdf（实习可投）",works:"AI文旅助手",reason:"中国电信旗下、数字中国主力，政务 AI 最对口；当前挂的是实习生岗",status:"盯梢",date:"",next:"先盯社招",note:""},
+    {batch:"第三批",company:"星云股份",job:"产品经理（新能源/储能）",salary:"面议",match:"远期",platform:"前程无忧/智联 搜「星云 产品经理 福州」",resume:"暂不投",works:"—",reason:"上市、新能源储能充电（国家双碳扶持），需 3 年+ 新能源经验",status:"盯梢",date:"",next:"先盯招聘动向",note:""},
+    {batch:"第三批",company:"福建移动等运营商",job:"政企客户经理 / 解决方案经理",salary:"面议",match:"远期",platform:"福建移动人才招聘公众号",resume:"暂不投",works:"—",reason:"国企、假期正常、出差；产品经理岗需 5 年+ 经验，政企岗可作跳板",status:"盯梢",date:"",next:"先了解招聘节奏",note:""},
+    {batch:"第三批",company:"科大讯飞（福州）",job:"运营商-AI产品经理 / 解决方案产品经理",salary:"15-25K·14薪",match:"中",platform:"Boss直聘/猎聘 搜「科大讯飞 产品经理 福州」",resume:"暂不投",works:"—",reason:"AI 国家队、国家扶持 AI 产业，福州有运营商/政务 AI 岗；要求较高，作冲刺目标",status:"盯梢",date:"",next:"先攒经验+盯岗",note:""},
+    {batch:"第三批",company:"博思软件",job:"产品经理（G端）",salary:"14-25K·13薪",match:"远期",platform:"猎聘/Boss直聘 搜「博思软件 产品经理」",resume:"暂不投",works:"—",reason:"上市、财政信息化/电子政务 SaaS 龙头；G 端岗需 3 年+ 经验，作跳槽目标",status:"盯梢",date:"",next:"先盯招聘动向；和中友金科同系，可先入再内转",note:""},
+    {batch:"第三批",company:"南威软件",job:"产品经理（数字政府/公安大数据）",salary:"面议",match:"远期",platform:"Boss直聘/智联 搜「南威软件 产品经理 福州」",resume:"暂不投",works:"—",reason:"上市、数字政府/智慧城市，福州软件园有岗；需 3 年+ 政务大数据产品经验",status:"盯梢",date:"",next:"重点盯社招初级岗",note:""},
+    {batch:"第三批",company:"福建省大数据集团（数字福建）",job:"产品经理 / 解决方案工程师",salary:"面议",match:"远期",platform:"福建省大数据集团官网/公众号 关注社招",resume:"暂不投",works:"—",reason:"省属国企、数字中国/数据要素国家战略，假期正常；产品经理校招要求硕士，社招初级岗可关注",status:"盯梢",date:"",next:"先了解招聘节奏",note:""}
+  ];
+  base.forEach(p=>normalizePos(p));
+  return { requirements: defaultRequirements(), lastExport:null, meta:{seenJobs:[], seedVersion:0}, positions:base, dailyLogs:[], interviews:[
+    {q:"请做个 30 秒自我介绍",a:"姓名 + 转型动机（文旅转 AI 产品）+ 核心成果（美团渠道竞争圈第 2、独立完成 AI 智能客服 PRD+Demo）+ 可接受短期出差",f:"",status:"待练"},
+    {q:"为什么从文旅行业转行 AI 产品经理？",a:"行业数字化趋势 + 2 年业务操盘验证了产品思维（需求梳理、数据复盘、跨部门协作）+ 用 AI 作品证明转型决心",f:"",status:"待练"},
+    {q:"讲讲你的 AI 智能客服作品",a:"为什么做（酒店咨询高频、人工成本高）→ 怎么设计（大模型+知识库，多轮对话+兜底）→ 结果（25 组问答可运行 Demo）→ 学到什么（需求要先于技术）",f:"",status:"待练"},
+    {q:"讲讲你的求职作战台和岗位雷达自动化作品",a:"为什么做（转行没有产品作品、求职信息分散难管理）→ 怎么设计（岗位雷达/JD 拆解/一键定制简历/投递追踪/每日自动更新）→ 结果（55+ 岗位自动同步、多版本简历）→ 学到什么（AI 是杠杆，产品思维决定价值；能独立把需求变成可用产品）",f:"",status:"待练"},
+    {q:"你最大的短板是什么？",a:"没有互联网大厂产品经验，原型/PRD 深度还在补；但用作品证明入门能力，学习速度有数据支撑",f:"",status:"待练"},
+    {q:"期望薪资多少？",a:"8-10K 起步，更看重成长和项目机会；一年后目标 1.5w，愿意用业绩说话",f:"",status:"待练"},
+    {q:"能接受出差吗？",a:"可以，可接受短期出差，频率视项目而定；之前外派过项目，适应异地工作",f:"",status:"待练"},
+    {q:"你对我们公司和行业了解多少？",a:"面试前按公司定制：查官网/年报/新闻，说 1 个业务 + 1 个产品 + 1 个问题",f:"",status:"待练"},
+    {q:"3-5 年职业规划？",a:"第 1 年产品助理/初级 PM 打基本功 → 2 年独立负责模块 → 3-5 年带小团队/垂直行业专家，未来可创业做行业 AI 服务",f:"",status:"待练"}
+  ], weeklyReviews:[] };
+}
+
+function normalizePos(p){
+  p.jd = p.jd || {raw:"",duties:"",reqs:"",must:"",plus:"",myMatch:"",prep:""};
+  p.steps = p.steps || [];
+  if(!p.date) p.date="";
+  if(!p.note) p.note="";
+  if(!p.recDate) p.recDate="";
+  if(!p.appStart) p.appStart="";
+  if(!p.appEnd) p.appEnd="";
+  if(!p.appEndChecked) p.appEndChecked="";
+  // 预置拆解：仅当该公司在 PREBUILT_JD 且拆解全空时填充
+  for(const k in PREBUILT_JD){
+    if(p.company.includes(k) && !p.jd.duties && !p.jd.reqs){
+      p.jd = Object.assign({raw:p.jd.raw||""}, PREBUILT_JD[k]);
+      break;
+    }
+  }
+  return p;
+}
+
+// 通用版模板版本：新增 AI 作品时 +1，App 打开时自动把新内容合并进已保存的通用版（不覆盖手动改动）
+const GENERAL_TPL_VER = 3;
+let DB = load();
+function load(){
+  try{ const raw = localStorage.getItem(STORE_KEY); if(raw){ const d = JSON.parse(raw); if(d && Array.isArray(d.positions)){ d.positions.forEach(normalizePos); d.meta = d.meta || {seenJobs:[], seedVersion:0}; ensureResumes(d); ensureRequirements(d); mergeSeedJobs(d); return d; } } }catch(e){}
+  const db = seedDB();
+  ensureResumes(db);
+  ensureRequirements(db);
+  mergeSeedJobs(db);
+  return db;
+}
+
+// ---------- 简历 ----------
+function defaultResumes(){
+  const general = {
+    key:"general", name:"通用版", updatedAt:"", starred:true,
+    fields:{
+      intent:"求职意向：转行 AI 产品经理（可接受产品助理/初级产品经理岗）｜可接受短期出差",
+      positioning:"2 年+ 文旅/酒店行业业务负责人，从 0 到 1 操盘项目运营与品牌数字化，服务过政企客户；独立完成 AI 产品（文旅智能客服）PRD 与可运行 Demo，目标转型 AI 产品经理（政务/行业数字化、大模型应用方向）。",
+      strengths:[
+        "业务操盘：2 年+ 文旅/酒店行业，从 0 到 1 操盘 2 个项目整体运营",
+        "数据驱动：美团渠道从 0 起盘，竞争圈 21 家中销售额/订单量排名第 2；新媒体涨粉 1w+",
+        "AI 落地：独立完成 AI 文旅助手 PRD 与可运行 Demo",
+        "AI 产品实操：从 0 到 1 完成 AI 求职产品与 Agent 自动化工作流（55+ 岗位自动更新）",
+        "AI 热点工具：独立完成每日爆点灵感助手（抖音/小红书热榜 + AI 视频拆解），从 0 到 1 交付可用产品",
+        "AI 内容生产：用 AI 工具完成 AI 视频、经营数据分析与上半年经济运行汇报 PPT",
+        "政企经验：服务高校团委、政府客户，熟悉 ToB/G 端沟通与交付，可接受短期出差"
+      ],
+      jobs:[
+        {title:"鼓岭书香闽江 · 营销总监", time:"2026.06 - 至今", items:[
+          "负责酒店线上业务整体规划，统筹品牌、内容与渠道（美团/抖音/小红书/公众号）",
+          "搭建「内容 → 分发 → 复盘」流程，管理 3 人团队",
+          "美团渠道从 0 起盘：首月销售额 2.1 万、订单 47 单、曝光 7681 次，竞争圈 21 家中排名第 2"
+        ]},
+        {title:"留云心谷项目 · 项目负责人（中旅集团外派）", time:"2025.08 - 2026.06", items:[
+          "从 0 到 1 统筹项目整体运营与品牌建设，直接向集团汇报"
+        ]},
+        {title:"福建中旅饭店管理集团 · 管培生", time:"2024 - 至今", items:[
+          "负责品牌广告与新媒体内容，先后外派两个项目"
+        ]}
+      ],
+      internship:"福州文雀文化传媒（摄影/直播导播，2022）｜闽侯鹏宵网络科技（摄影/修图，2023）｜亳州卡尔美（销售导购，2020）",
+      projects:[
+        {title:"AI 文旅助手（智能客服 Demo + PRD）· 已完成", items:[
+          "大模型 + 知识库回答房型价格、入住政策、周边游玩，支持多轮对话与兜底",
+          "证明「识别需求 → 设计 AI 产品 → 推动落地」的完整能力"
+        ]},
+        {title:"求职作战台（AI 求职管理产品）· 从 0 到 1", items:[
+          "独立完成需求分析、功能规划与交付：岗位雷达、JD 拆解、简历一键定制、投递追踪、数据看板",
+          "借助 AI 工具（Codex）搭建并持续迭代，已承载 55+ 真实岗位与多版本定制简历",
+          "证明「发现痛点 → 定义需求 → 设计产品 → 落地迭代」的完整能力"
+        ]},
+        {title:"AI 岗位雷达自动化（Agent 工作流）· 已上线运行", items:[
+          "设计并部署每日自动更新：定时任务 + Codex CLI 联网搜索岗位、核对截止日期、更新数据并自动验证",
+          "加入「当天已更新自动跳过」「失败自动兜底」容错机制，开机登录即补跑，无需人工干预",
+          "证明能用 AI Agent 搭建真实业务自动化，可复用到企业运营/数据更新场景"
+        ]},
+        {title:"每日爆点灵感助手（AI 热点灵感工具）· 已上线运行", items:[
+          "独立完成需求分析与产品设计：本地 Node.js 应用，每天 08:00 自动抓取抖音/小红书热榜、按领域归类并展示每领域 Top 10",
+          "AI 视频拆解：粘贴视频链接自动分析拍摄逻辑 / 爆点逻辑 / 剪辑逻辑 / 预埋钩子，输出可直接拍摄的爆款话题灵感",
+          "包含数据持久化（SQLite）、自动备份、局域网手机访问、每日定时刷新等完整能力，证明能独立把 AI 想法做成可用产品"
+        ]},
+        {title:"AI 内容生产工作流（视频 / 数据分析 / 汇报 PPT）· 落地应用", items:[
+          "用 AI 工具完成民宿宣传视频制作，以及经营数据分析表（美团渠道复盘）",
+          "用 Codex 做具体分析表，产出上半年经济运行汇报 PPT，跑通「数据 → 分析 → 汇报」全流程",
+          "证明能把 AI 内容生产嵌入真实业务场景，直接提升团队产出效率"
+        ]}
+      ],
+      skills:[
+        "产品：需求分析、PRD、原型（Axure/Figma 学习中）、数据分析",
+        "AI：大模型应用、Prompt 工程、知识库/RAG、AI Agent 自动化（Codex 定时任务/工作流）、AI 视频/PPT/数据分析内容生产、deepseek/WorkBuddy",
+        "内容营销：摄影摄像、新媒体运营、品牌营销；其他：项目统筹、C1 驾照"
+      ],
+      edu:"福建农林大学金山学院 · 广告学 · 本科 · 学士（2020.09 - 2024.06）· CET-4",
+      honors:["中国大学生广告艺术节学院奖 优秀奖（2023）/ 入围奖（2022、2021）；青年通讯社影像部部长，涨粉 1w+"]
+    }
+  };
+  return {current:"general", versions:[general]};
+}
+
+function syncGeneralFromTemplate(v){
+  if(!v || v.key !== "general") return;
+  const tpl = defaultResumes().versions[0].fields;
+  const f = v.fields || (v.fields = {});
+  const have = new Set((f.projects || []).map(p => p.title));
+  (tpl.projects || []).forEach(p => {
+    if(!have.has(p.title)){
+      f.projects = f.projects || [];
+      f.projects.push(JSON.parse(JSON.stringify(p)));
+    }
+  });
+  ["strengths", "skills"].forEach(k => {
+    const have2 = new Set((f[k] || []).map(s => String(s).trim()));
+    (tpl[k] || []).forEach(s => {
+      if(!have2.has(String(s).trim())){
+        f[k] = f[k] || [];
+        f[k].push(s);
+      }
+    });
+  });
+  v.tplVer = GENERAL_TPL_VER;
+  v.needsUpdate = false;
+  if(!v.updatedAt) v.updatedAt = today() + " " + nowHM();
+}
+
+function ensureResumes(d){
+  if(!d.resumes || !d.resumes.versions || !d.resumes.versions.length) d.resumes = defaultResumes();
+  // 只保留通用版为预置版本；旧的预置「中友金科定制」移除（可随时用一键定制重新生成）
+  d.resumes.versions = d.resumes.versions.filter(v=>v.key!=="zhongyou");
+  d.resumes.versions.forEach(v=>{
+    if(v.starred===undefined) v.starred = (v.name==="通用版"||v.name==="中友金科定制");
+    if(v.needsUpdate===undefined) v.needsUpdate = false;
+    syncGeneralFromTemplate(v);
+  });
+}
+
+// ---------- 我的求职需求（顶部需求栏 + 岗位自动匹配） ----------
+function defaultRequirements(){
+  return { lines:[
+    "意向城市：福州",
+    "起步薪资 8-10K，一年后目标 1.5W",
+    "要有法定假期/正常双休",
+    "国家大力发展的行业方向（AI、数字政府/数字中国、信创、新能源等）",
+    "有成长空间：能带团队、技能资源可带走、未来可创业",
+    "可接受短期出差",
+    "ToB 项目优先"
+  ]};
+}
+function ensureRequirements(d){
+  if(!d.requirements || !Array.isArray(d.requirements.lines) || !d.requirements.lines.length) d.requirements = defaultRequirements();
+}
+const REQ_RULES = [
+  {id:"city",    label:"福州",     test:()=>true}, // 岗位库本身就是福州范围，默认满足
+  {id:"salary",  label:"起步8-10K", test:(t)=>/(8-10|8-12|8-15|9-14|10-15|11-25|12-15|12-23|15-30|15-25|18-24|20-35)/i.test(t)},
+  {id:"y15",     label:"1年后1.5W", test:(t)=>/(1\.5w|15-30|15-25|18-24|11-25|12-15|12-23|20-35|15k|18k|20k|25k|30k|15-|18-|20-|25-)/i.test(t)||t.includes("高薪")},
+  {id:"holiday", label:"假期/双休", test:(t)=>/(假期|双休|周末|年假|五险一金|法定)/.test(t)},
+  {id:"national",label:"国家方向", test:(t)=>/(数字中国|数字政府|信创|人工智能|智慧城市|智慧教育|新能源|金融科技|数字经济|大数据|工业互联网|半导体|芯片|政务|双碳|数字监管)/i.test(t)},
+  {id:"growth",  label:"成长/带队", test:(t)=>/(晋升|成长|带队|带团队|创业|管理|股权|培养|发展|跳槽|上市)/.test(t)},
+  {id:"travel",  label:"可出差",   test:(t)=>t.includes("出差")},
+  {id:"tob",     label:"ToB",      test:(t)=>/(tob|to b|政企|解决方案|saas|b端|运营商家|企业级)/i.test(t)}
+];
+function reqText(p){
+  return (((p.company||"")+" "+(p.job||"")+" "+(p.salary||"")+" "+(p.reason||"")+" "+(p.platform||"")+" "+(p.works||"")+" "+((p.jd&&p.jd.raw)||"")+" "+(p.note||""))).toLowerCase();
+}
+function reqMatch(p){
+  const t = reqText(p);
+  return REQ_RULES.map(r=>({id:r.id, label:r.label, ok:r.test(t)}));
+}
+function reqChipsHTML(p){
+  return '<div class="req-match">'+reqMatch(p).map(m=>'<span class="m '+(m.ok?"ok":"no")+'">'+(m.ok?"✅":"⚪")+' '+m.label+'</span>').join("")+'</div>';
+}
+// ---------- 推荐评分（自动） ----------
+function jobScore(x){
+  const base = {高:90, 中高:82, 中:68, 远期:40}[x.match] || 60;
+  let s = base + reqMatch(x).filter(m=>m.ok).length * 2;
+  if(x.status==="拿到Offer" || x.status==="不合适") s = Math.min(s, 30);
+  if(x.status==="面试中") s += 5;
+  return Math.max(5, Math.min(99, Math.round(s)));
+}
+function jobStars(x){ return Math.max(1, Math.min(5, Math.round(jobScore(x)/20))); }
+function starsHTML(x){ const n=jobStars(x); return "★".repeat(n)+"☆".repeat(5-n); }
+function recBadgeHTML(x){
+  const s = jobScore(x);
+  const cls = s>=85 ? "hot" : (s>=70 ? "mid" : "low");
+  return '<span class="rec-badge '+cls+'">'+starsHTML(x)+' '+s+'%</span>';
+}
+function jobRecDate(x){
+  if(x.recDate) return x.recDate;
+  if(x.appEnd) return x.appEnd;
+  return (x.status==="未投" || x.status==="已打招呼") ? today() : "";
+}
+function jobDeadline(x){
+  if(!x.appEnd) return {tag:"", cls:"", days:null};
+  const now = new Date(); now.setHours(0,0,0,0);
+  const d = new Date(x.appEnd.replace(/-/g,"/"));
+  if(isNaN(d)) return {tag:"", cls:"", days:null};
+  const days = Math.round((d.getTime() - now.getTime())/86400000);
+  if(days < 0) return {tag:"已截止", cls:"dlg", days};
+  if(days <= 3) return {tag:"⏰"+days+"天截止", cls:"dls", days};
+  return {tag:"", cls:"", days};
+}
+function deadlineTag(x){
+  const d = jobDeadline(x);
+  return d.tag ? '<span class="tag '+d.cls+'">'+d.tag+'</span>' : "";
+}
+function isActive(x){ return x.status==="未投" || x.status==="已打招呼" || x.status==="已回复"; }
+function appEndText(x){ return x.appEnd ? '<span class="rec-date">⏱ 截止 '+esc(x.appEnd)+'</span>' : ""; }
+function checkedTag(x){
+  if(!x.appEnd) return "";
+  // 每天 9:00 自动任务跑完后 updatedAt 就是当天，App 据此显示"已核对"
+  if(SEED.updatedAt && SEED.updatedAt >= today()) return '<span class="tag cok">✅ 已核对</span>';
+  return '<span class="tag cwt">⚠️ 待核对</span>';
+}
+function deadlineText(x){ return appEndText(x)+deadlineTag(x)+checkedTag(x); }
+function renderReqBar(){
+  const lines = (DB.requirements && DB.requirements.lines) || [];
+  document.getElementById("reqChips").innerHTML = lines.map(x=>'<span class="rchip">'+esc(x)+'</span>').join("");
+}
+function currentVersion(){ return DB.resumes.versions.find(v=>v.key===DB.resumes.current) || DB.resumes.versions[0]; }
+function val(id, v){ const el=document.getElementById(id); if(v!==undefined) el.value=v; return el.value; }
+function lines(id){ return val(id).split("\n").map(s=>s.trim()).filter(Boolean); }
+
+function jobBlock(j, idx){
+  return '<div class="sub-sec" data-job="'+idx+'">'+
+    '<div class="grid2"><div><label>职位 / 公司</label><input class="j-title" value="'+esc(j.title)+'"></div>'+
+    '<div><label>时间</label><input class="j-time" value="'+esc(j.time)+'"></div></div>'+
+    '<label>工作内容（每行一条）</label><textarea class="j-items">'+esc((j.items||[]).join("\n"))+'</textarea>'+
+    '<div class="btn-row"><button class="btn-mini" data-act="delJob">删除这份</button></div></div>';
+}
+function projectBlock(p, idx){
+  return '<div class="sub-sec" data-project="'+idx+'">'+
+    '<div><label>项目名称</label><input class="p-title" value="'+esc(p.title)+'"></div>'+
+    '<label>项目内容（每行一条）</label><textarea class="p-items">'+esc((p.items||[]).join("\n"))+'</textarea>'+
+    '<div class="btn-row"><button class="btn-mini" data-act="delProject">删除这个</button></div></div>';
+}
+
+function renderResume(){
+  const list = DB.resumes.versions.slice().sort((a,b)=>(b.starred?1:0)-(a.starred?1:0));
+  document.getElementById("resumeSeries").innerHTML = list.map(v=>{
+    const i = DB.resumes.versions.indexOf(v);
+    const active = v.key===DB.resumes.current;
+    return '<div class="series-card '+(v.starred?"star":"")+' '+(active?"active":"")+'" data-i="'+i+'">'+
+      '<button class="star-btn" data-act="star" data-i="'+i+'" title="标星置顶">'+(v.starred?"★":"☆")+'</button>'+
+      '<div class="name">'+esc(v.name)+'</div>'+
+      '<div class="intent">'+esc((v.fields&&v.fields.intent)||"")+'</div>'+
+      '<div class="meta">更新：'+(v.updatedAt||"未改动")+'</div>'+
+      (v.needsUpdate?'<div class="up-tag">🔄 待更新（有新 AI 作品记得更新）</div>':"")+
+      '<div class="acts">'+
+      '<button class="btn-mini'+(v.needsUpdate?" up-on":"")+'" data-act="toggleUpd" data-i="'+i+'">'+(v.needsUpdate?"✅ 已更新":"🔄 标为待更新")+'</button>'+
+      '<button class="btn-mini" data-act="preview" data-i="'+i+'">👁 预览</button>'+
+      '<button class="btn-mini" data-act="edit" data-i="'+i+'">✏️ 编辑</button>'+
+      '<button class="btn-mini" data-act="print" data-i="'+i+'">打印/PDF</button>'+
+      '<button class="btn-mini" data-act="md" data-i="'+i+'">MD</button>'+
+      '<button class="btn-mini" data-act="delVersion" data-i="'+i+'" style="color:var(--danger);border-color:var(--danger)">🗑 删除</button>'+
+      '</div></div>';
+  }).join("");
+  document.getElementById("resumeEditingName").textContent = currentVersion().name;
+  loadVersionToEditor();
+  renderCustom();
+  renderApplyBar();
+}
+function toggleStar(i){
+  const v = DB.resumes.versions[i]; if(!v) return;
+  v.starred = !v.starred; save(); renderResume();
+}
+function delVersion(i){
+  const v = DB.resumes.versions[i]; if(!v) return;
+  if(DB.resumes.versions.length<=1){ alert("至少保留一个版本"); return; }
+  if(!confirm("删除版本「"+v.name+"」？此操作不可恢复。")) return;
+  DB.resumes.versions = DB.resumes.versions.filter(x=>x.key!==v.key);
+  if(DB.resumes.current===v.key) DB.resumes.current = DB.resumes.versions[0].key;
+  save(); renderResume();
+}
+function selectVersion(i){
+  const v = DB.resumes.versions[i]; if(!v) return;
+  collectResume();
+  DB.resumes.current = v.key; save(); renderResume();
+  expandEditor(true);
+}
+function expandEditor(scroll){
+  const w = document.getElementById("resumeEditorWrap");
+  w.style.display = "block";
+  const t = document.getElementById("rvToggle");
+  if(t) t.textContent = "收起编辑器";
+  renderApplyBar();
+  if(scroll && w.scrollIntoView) w.scrollIntoView({behavior:"smooth", block:"start"});
+}
+function loadVersionToEditor(){
+  const f = currentVersion().fields;
+  val("rIntent", f.intent||""); val("rPositioning", f.positioning||"");
+  val("rStrengths", (f.strengths||[]).join("\n"));
+  document.getElementById("rJobs").innerHTML = (f.jobs||[]).map(jobBlock).join("");
+  val("rInternship", f.internship||"");
+  document.getElementById("rProjects").innerHTML = (f.projects||[]).map(projectBlock).join("");
+  val("rSkills", (f.skills||[]).join("\n"));
+  val("rEdu", f.edu||""); val("rHonors", (f.honors||[]).join("\n"));
+}
+function collectResume(){
+  const v = currentVersion();
+  const f = v.fields;
+  f.intent = val("rIntent").trim(); f.positioning = val("rPositioning").trim();
+  f.strengths = lines("rStrengths");
+  f.jobs = Array.from(document.querySelectorAll("#rJobs .sub-sec")).map(el=>({
+    title: el.querySelector(".j-title").value.trim(),
+    time: el.querySelector(".j-time").value.trim(),
+    items: el.querySelector(".j-items").value.split("\n").map(s=>s.trim()).filter(Boolean)
+  }));
+  f.internship = val("rInternship").trim();
+  f.projects = Array.from(document.querySelectorAll("#rProjects .sub-sec")).map(el=>({
+    title: el.querySelector(".p-title").value.trim(),
+    items: el.querySelector(".p-items").value.split("\n").map(s=>s.trim()).filter(Boolean)
+  }));
+  f.skills = lines("rSkills");
+  f.edu = val("rEdu").trim(); f.honors = lines("rHonors");
+  v.updatedAt = today()+" "+nowHM();
+}
+
+function buildPrintHTML(){
+  const f = currentVersion().fields;
+  document.getElementById("printResume").innerHTML = resumeHTML(f);
+}
+function resumeHTML(f){
+  const b = (arr)=>'<ul class="pr-bullets">'+(arr||[]).map(x=>'<li>'+esc(x)+'</li>').join("")+'</ul>';
+  const jobs = (f.jobs||[]).map(j=>'<div class="pr-job">'+esc(j.title)+'<span class="pr-time">'+esc(j.time)+'</span></div>'+b(j.items)).join("");
+  const projects = (f.projects||[]).map(p=>'<div class="pr-job">'+esc(p.title)+'</div>'+b(p.items)).join("");
+  return '<div class="pr-name">范广钰</div>'+
+    '<div class="pr-intent">'+esc(f.intent||"")+'</div>'+
+    '<div class="pr-contact">现居福州 · 172 8116 2119 · Guanyuoto · 2317383228@qq.com</div>'+
+    '<div class="pr-sec">个人定位</div><div class="pr-line">'+esc(f.positioning||"")+'</div>'+
+    '<div class="pr-sec">核心优势</div>'+b(f.strengths)+
+    '<div class="pr-sec">工作经历</div>'+jobs+
+    '<div class="pr-sec">实习经历</div><div class="pr-line">'+esc(f.internship||"")+'</div>'+
+    '<div class="pr-sec">项目作品</div>'+projects+
+    '<div class="pr-sec">技能</div>'+b(f.skills)+
+    '<div class="pr-sec">教育背景</div><div class="pr-line">'+esc(f.edu||"")+'</div>'+
+    '<div class="pr-sec">荣誉</div>'+b(f.honors);
+}
+
+// ---------- 简历预览中心 ----------
+let pvIdx = -1;
+function openPreview(i){
+  pvIdx = i;
+  const v = DB.resumes.versions[i]; if(!v) return;
+  document.getElementById("pvTitle").textContent = "简历预览 · "+v.name;
+  const applyRow = document.getElementById("pvApplyRow");
+  const lnk = resumeApplyLinkFor(v.name);
+  if(applyRow){
+    applyRow.innerHTML = lnk
+      ? '<a class="btn ok" href="'+lnk.href+'" target="_blank" rel="noopener">'+lnk.label+'</a>'
+      : '<span class="muted small">通用版：先一键定制目标公司版本，即可获得专属投递入口</span>';
+  }
+  document.querySelectorAll("#pvTabs button").forEach((x,idx)=>x.classList.toggle("active", idx===0));
+  renderPV("web");
+  document.getElementById("pvModal").classList.add("show");
+}
+function closePV(){ document.getElementById("pvModal").classList.remove("show"); pvIdx = -1; }
+function renderPV(tab){
+  const v = DB.resumes.versions[pvIdx]; if(!v) return;
+  const f = v.fields;
+  const body = document.getElementById("pvBody");
+  if(tab==="web"){
+    body.innerHTML = '<div class="pv-resume">'+resumeHTML(f)+'</div>'+
+      '<div class="btn-row"><button class="btn small ghost" id="pvCopyAll">复制全文</button></div>';
+    const c = document.getElementById("pvCopyAll");
+    if(c) c.onclick = ()=>copyText(stripTags(document.getElementById("pvBody").querySelector(".pv-resume").innerHTML));
+  } else if(tab==="pdf"){
+    const files = resumeFilesFor(v.name);
+    body.innerHTML = '<div class="tip">PDF 预览：推荐点「⬇️ 下载无水印 PDF」一键生成（无页眉页脚水印）；'+(files?'也可直接打开桌面已有的 PDF 简历文件；':'')+'用「打印 / 存为 PDF」时记得在预览里取消勾选「页眉和页脚」。</div>'+
+      '<div class="btn-row"><button class="btn ok" id="pvCleanPdf">⬇️ 下载无水印 PDF</button>'+(files?'<a class="btn ok" href="'+files.pdf+'" target="_blank">打开 PDF 文件</a>':"")+'<button class="btn" id="pvPrint">打印 / 存为 PDF</button></div>'+
+      '<div class="pv-resume" style="margin-top:12px">'+resumeHTML(f)+'</div>';
+    const p = document.getElementById("pvPrint");
+    if(p) p.onclick = ()=>{ buildPrintHTML(); printResumeClean(); };
+    const c = document.getElementById("pvCleanPdf");
+    if(c) c.onclick = downloadCleanPdf;
+  } else if(tab==="word"){
+    const files = resumeFilesFor(v.name);
+    body.innerHTML = '<div class="tip">Word 版：'+(files?'可直接打开桌面已有的 Word 文件；也可':'可')+'一键导出 Word 兼容版（.doc，用 Word/WPS 打开即可编辑）。</div>'+
+      '<div class="btn-row">'+(files?'<a class="btn ok" href="'+files.docx+'" target="_blank">打开 Word 文件</a>':"")+'<button class="btn" id="pvWord">导出 Word 兼容版</button></div>';
+    const w = document.getElementById("pvWord");
+    if(w) w.onclick = exportWordDoc;
+  }
+}
+function stripTags(html){
+  const d = document.createElement("div");
+  d.innerHTML = html;
+  return (d.textContent||"").replace(/\n{3,}/g,"\n\n").trim();
+}
+function copyText(txt){
+  const ta = document.createElement("textarea");
+  ta.value = txt; ta.style.position="fixed"; ta.style.opacity="0";
+  document.body.appendChild(ta); ta.select();
+  let ok = false;
+  try{ ok = document.execCommand("copy"); }catch(e){}
+  document.body.removeChild(ta);
+  alert(ok ? "已复制，可直接粘贴到平台表单" : "复制失败，请手动选中文本复制");
+}
+function printResumeClean(){
+  const v = currentVersion();
+  const old = document.title;
+  document.title = "范广钰-求职简历" + (v && v.name && v.name !== "通用版" ? "-" + v.name : "");
+  try { window.print(); } finally { document.title = old; }
+}
+async function downloadCleanPdf(){
+  let btn = document.getElementById("rvCleanPdf") || document.getElementById("pvCleanPdf");
+  if(!btn && document.getElementById("pvCleanPdf")) btn = document.getElementById("pvCleanPdf");
+  const old = btn ? btn.textContent : "";
+  if(btn){ btn.disabled = true; btn.textContent = "生成中…"; }
+  try{
+    const v = (pvIdx >= 0 && DB.resumes.versions[pvIdx]) || currentVersion();
+    if(pvIdx < 0){ collectResume(); save(); }
+    const r = await fetch(REFRESH_URL + "/resume-pdf", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name: v.name || "通用版", fields: v.fields || {} })
+    });
+    if(!r.ok){ const j = await r.json().catch(()=>({})); throw new Error(j.error || "生成失败"); }
+    const blob = await r.blob();
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "范广钰-求职简历-" + (v.name || "通用版") + ".pdf";
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(()=>URL.revokeObjectURL(a.href), 5000);
+  }catch(e){
+    alert("无水印 PDF 生成失败：" + e.message + "。请先双击「求职作战台」目录里的「启动刷新服务.bat」启动本地服务，再点一次。");
+  }finally{
+    if(btn){ btn.disabled = false; btn.textContent = old; }
+  }
+}
+function exportWordDoc(){
+  const v = DB.resumes.versions[pvIdx] || currentVersion();
+  const f = v.fields;
+  const docStyles = '<style>body{font-family:微软雅黑,Arial,sans-serif;font-size:11pt;color:#262626}.pr-name{font-size:22pt;font-weight:700;color:#1F3A5F}.pr-intent{font-size:12pt;font-weight:700;margin:3px 0}.pr-contact{font-size:9pt;color:#595959}.pr-sec{font-size:13pt;font-weight:700;color:#1F3A5F;border-bottom:1px solid #C9D4E4;margin:14px 0 5px}.pr-line{font-size:11pt;margin:2px 0}.pr-job{font-size:11pt;font-weight:700;margin:8px 0 2px}.pr-time{float:right;color:#595959;font-size:9pt}.pr-bullets li{font-size:10.5pt;margin:2px 0}</style>';
+  const html = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word"><head><meta charset="utf-8"><title>'+esc(v.name)+'</title>'+docStyles+'</head><body>'+resumeHTML(f)+'</body></html>';
+  const blob = new Blob(["\ufeff", html], {type:"application/msword"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "范广钰-求职简历-"+v.name+".doc";
+  a.click(); URL.revokeObjectURL(a.href);
+}
+
+function exportResumeMD(){
+  const f = currentVersion().fields;
+  const md = [
+    "# 范广钰", "", "**"+f.intent+"**", "",
+    "现居福州 · 电话 172 8116 2119 · 微信 Guanyuoto · 邮箱 2317383228@qq.com", "",
+    "## 个人定位", f.positioning, "",
+    "## 核心优势", ...(f.strengths||[]).map(x=>"- "+x), "",
+    "## 工作经历",
+    ...(f.jobs||[]).flatMap(j=>["**"+j.title+"**（"+j.time+"）", ...(j.items||[]).map(x=>"- "+x), ""]),
+    "## 实习经历", f.internship, "",
+    "## 项目作品",
+    ...(f.projects||[]).flatMap(p=>["**"+p.title+"**", ...(p.items||[]).map(x=>"- "+x), ""]),
+    "## 技能", ...(f.skills||[]).map(x=>"- "+x), "",
+    "## 教育背景", f.edu, "",
+    "## 荣誉", ...(f.honors||[]).map(x=>"- "+x), ""
+  ].join("\n");
+  const blob = new Blob([md],{type:"text/markdown;charset=utf-8"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "范广钰-求职简历-"+currentVersion().name+".md";
+  a.click(); URL.revokeObjectURL(a.href);
+}
+// 把 data.js 里的新岗位自动合并进岗位追踪（只合并一次，已见过的不会重复加）
+function mergeSeedJobs(d){
+  if(!SEED.jobs.length) return;
+  const seen = d.meta.seenJobs || (d.meta.seenJobs = []);
+  let changed = false;
+  SEED.jobs.forEach(j=>{
+    const id = (j.company||"")+"|"+(j.job||"");
+    if(seen.includes(id)) return;
+    if(d.positions.some(p=>((p.company||"")+"|"+(p.job||""))===id)){ seen.push(id); changed=true; return; }
+    const np = Object.assign({}, j, {batch:"雷达新岗", status:j.status||"未投", date:"", addedAt:today(), next:j.next||"新岗位：先看 JD 拆解，再打招呼", handled:false});
+    if(j.jdRaw) np.jd = {raw:j.jdRaw, duties:"", reqs:"", must:"", plus:"", myMatch:"", prep:""};
+    normalizePos(np);
+    d.positions.push(np);
+    seen.push(id);
+    changed = true;
+  });
+  if(changed){ try{ localStorage.setItem(STORE_KEY, JSON.stringify(d)); }catch(e){} }
+}
+function save(){
+  try{ localStorage.setItem(STORE_KEY, JSON.stringify(DB)); }catch(e){ alert("保存失败："+e.message+"（浏览器存储已满？请导出备份）"); }
+  document.getElementById("saveInfo").textContent = "已保存 "+nowHM();
+}
+// 跨标签实时同步
+window.addEventListener("storage", e=>{
+  if(e.key===STORE_KEY && e.newValue){ DB = load(); renderAll(); }
+});
+
+// ---------- 渲染 ----------
+function renderUpdateBanner(){
+  const el = document.getElementById("updateBanner");
+  if(!el) return;
+  const t = SEED.updatedAt || "";
+  const todayS = today();
+  if(t && t >= todayS){
+    el.className = "upd-strip upd-ok";
+    el.innerHTML = "✅ 今日已更新（"+esc(t)+" · 数据版本 v"+(SEED.version||0)+" · 岗位 "+DB.positions.length+" 家 · 截止日期已核对）";
+  } else if(t){
+    el.className = "upd-strip upd-warn";
+    el.innerHTML = "⏳ 今天还没更新：每天 9:00 自动任务核对后会变绿 ✅（现在看到的是 "+esc(t)+" 的数据）";
+  } else {
+    el.className = "upd-strip upd-none";
+    el.innerHTML = "⚪ 暂无岗位数据";
+  }
+}
+function renderCitySwitch(){
+  const b1 = document.getElementById("cityFZ");
+  const b2 = document.getElementById("cityHF");
+  if(b1){ if(city==="福州"){ b1.classList.add("active"); } else { b1.classList.remove("active"); } }
+  if(b2){ if(city==="合肥"){ b2.classList.add("active"); } else { b2.classList.remove("active"); } }
+}
+function showTab(tab){
+  document.querySelectorAll("#tabs button").forEach(x=>x.classList.toggle("active", x.dataset.tab===tab));
+  document.querySelectorAll(".view").forEach(v=>v.classList.toggle("active", v.id==="view-"+tab));
+  if(tab==="jobs") renderJobs();
+  if(tab==="jd") renderJD();
+  if(tab==="radar") renderRadar();
+}
+function setCity(c){
+  city = c;
+  try{ localStorage.setItem(CITY_KEY, c); }catch(e){}
+  renderAll();
+  showTab("jobs");
+}
+function renderAll(){ renderCitySwitch(); renderUpdateBanner(); renderReqBar(); renderStats(); renderRadar(); renderJobs(); renderJD(); renderDaily(); renderQA(); renderWeekly(); renderData(); renderDashboard(); }
+function renderStats(){
+  const p = DB.positions.filter(x=>cityOf(x)===city);
+  const applied = p.filter(x=>["已打招呼","已投递","已回复","面试中","拿到Offer"].includes(x.status)).length;
+  const replied = p.filter(x=>["已回复","面试中"].includes(x.status)).length;
+  const interview = p.filter(x=>x.status==="面试中").length;
+  const offer = p.filter(x=>x.status==="拿到Offer").length;
+  const steps = p.reduce((s,x)=>s+x.steps.length,0);
+  const todayApplied = DB.dailyLogs.filter(x=>x.date===today()).reduce((s,x)=>s+(+x.applied||0),0);
+  const rec = p.filter(x=>jobScore(x)>=80 && ["未投","已打招呼","已回复"].includes(x.status)).length;
+  // 每日 9:00 自动任务跑完后 updatedAt 即当天，代表全部截止日期已核对
+  const checkedN = p.filter(x=>x.appEnd && SEED.updatedAt && SEED.updatedAt>=today()).length;
+  const pendingN = p.filter(x=>x.appEnd && !(SEED.updatedAt && SEED.updatedAt>=today())).length;
+  document.getElementById("statsRow").innerHTML =
+    chip(p.length, city+"岗位")+chip(rec,"推荐≥80%","warn")+chip(checkedN,"截止已核对")+chip(pendingN,"待核对","warn")+chip(applied,"已投递/沟通")+chip(replied,"回复/面试中",true)+chip(interview,"面试",true)+chip(offer,"Offer","offer")+chip(steps,"已记步骤")+chip(todayApplied,"今日投递","warn");
+}
+function chip(n,label,kind){ return '<div class="chip '+(kind||"")+'"><b>'+n+'</b><span>'+label+'</span></div>'; }
+
+function renderDashboard(){
+  const p = DB.positions.filter(x=>cityOf(x)===city);
+  const pending = p.filter(x=>x.status==="已回复"||x.status==="已打招呼");
+  const unapplied = p.filter(x=>x.status==="未投");
+  const todo = [];
+  pending.forEach(x=>todo.push({i:DB.positions.indexOf(x), t:"跟进 · "+x.company+"（"+x.status+"）",d:"发作品/约面试："+(x.next||"—")}));
+  unapplied.slice(0,4).forEach(x=>todo.push({i:DB.positions.indexOf(x), t:"投递 · "+x.company+"（"+x.job+"）",d:"用 "+x.resume+"，发作品："+x.works}));
+  document.getElementById("todoList").innerHTML = todo.length
+    ? todo.map(x=>'<div class="todo-item" data-i="'+x.i+'"><div><b>'+esc(x.t)+'</b><br><span class="muted">'+esc(x.d)+'</span></div></div>').join("")
+    : '<div class="empty">今天没有待办，去岗位追踪里新增或标记状态吧 🎉</div>';
+
+  // ⏰ 即将截止（3 天内且还没投）
+  const expiring = p.filter(x=>isActive(x)).map(x=>({x, dl:jobDeadline(x)})).filter(o=>o.dl.days!==null && o.dl.days>=0 && o.dl.days<=3).sort((a,b)=>a.dl.days-b.dl.days);
+  document.getElementById("expiringList").innerHTML = expiring.length
+    ? expiring.map(o=>{
+        const i = DB.positions.indexOf(o.x);
+        return '<div class="todo-item" data-i="'+i+'"><div><b>'+esc(o.x.company)+' · '+esc(o.x.job)+'</b> '+deadlineTag(o.x)+'<br><span class="muted">截止 '+esc(o.x.appEnd)+' · '+esc(o.x.platform||"")+'</span></div></div>';
+      }).join("")
+    : '<div class="empty">3 天内没有要截止的岗位 🎉</div>';
+
+  // 全部岗位：点击行打开详情
+  document.getElementById("allJobsCount").textContent = "共 "+p.length+" 家（"+city+"）";
+  const sorted = p.slice().sort((a,b)=>{
+    const au = isActive(a), bu = isActive(b);
+    if(au!==bu) return au ? -1 : 1;
+    return jobScore(b)-jobScore(a);
+  });
+  document.getElementById("allJobsList").innerHTML = sorted.length
+    ? sorted.map(x=>{
+        const i = DB.positions.indexOf(x);
+        const last = x.steps[x.steps.length-1];
+        const stt = x.status==="拿到Offer"?'offer':(x.status==="不合适"?"nope":(x.status==="盯梢"?"st":""));
+        return '<div class="alljob" data-i="'+i+'">'+
+          '<div class="al-main"><b>'+esc(x.company)+'</b> <span class="muted">'+esc(x.job)+' · '+esc(x.salary)+'</span> '+recBadgeHTML(x)+'</div>'+
+          '<div class="al-side"><span class="tag '+stt+'">'+esc(x.status)+'</span>'+(x.applyUrl?' <a class="btn-mini" href="'+x.applyUrl+'" target="_blank" rel="noopener" onclick="event.stopPropagation()">🚀 投简历</a>':"")+deadlineText(x)+(jobRecDate(x)?'<span class="rec-date">📅 '+esc(jobRecDate(x))+'</span>':"")+(last?'<span class="muted">'+esc(last.type)+' · '+esc(last.date)+'</span>':'')+'</div>'+
+          '</div>';
+      }).join("")
+    : '<div class="empty">还没有岗位，点「+ 新增岗位」或去岗位雷达合并新岗位</div>';
+
+  // 最近动态：所有岗位步骤按日期倒序
+  const feed = [];
+  p.forEach(x=>x.steps.forEach(s=>feed.push({date:s.date||"", company:x.company, type:s.type, note:s.note||""})));
+  feed.sort((a,b)=>b.date.localeCompare(a.date));
+  document.getElementById("feedList").innerHTML = feed.length
+    ? feed.slice(0,10).map(x=>'<div class="feed-item"><span class="d">'+esc(x.date)+'</span><span class="t"><b>'+esc(x.company)+'</b> · '+esc(x.type)+'</span><span class="n muted">'+esc(x.note)+'</span></div>').join("")
+    : '<div class="empty">还没有投递记录，去岗位详情里记第一步（打招呼/投递）吧</div>';
+
+  const w = isoWeek();
+  const logs = DB.dailyLogs.filter(x=>x.week===w);
+  const sum = k => logs.reduce((s,x)=>s+(+x[k]||0),0);
+  document.getElementById("weekSummary").innerHTML =
+    '<div class="card" style="margin:0"><h2>本周（'+w+'）</h2><div class="small">投递 '+sum("applied")+' 家 · 回复 '+sum("replied")+' 家 · 面试 '+sum("interview")+' 场 · 加微信 '+sum("contacts")+' 人</div></div>'+
+    '<div class="card" style="margin:0"><h2>目标</h2><div class="small">本周目标：每天 10-15 个打招呼，至少 2 家约面。写周复盘时对照检查。</div></div>';
+}
+
+function renderRadar(){
+  const arrivals = DB.positions.filter(p=>p.batch==="雷达新岗" && !p.handled && cityOf(p)===city);
+  const badge = document.getElementById("radarCount");
+  if(badge) badge.textContent = arrivals.length ? "("+arrivals.length+")" : "";
+  document.getElementById("radarInfo").innerHTML =
+    "当前城市："+city+"（"+(city==="合肥"?"科大讯飞总部/中国声谷 · 量子·半导体·新能源产业带":"数字中国/政务数字化 · AI 产业带")+"）· 岗位数据由 Codex 定期更新（最近更新："+(SEED.updatedAt||"—")+" · 数据版本 v"+(SEED.version||0)+"）。打开 App 时新岗位会自动合并进岗位追踪。截止日期已核对："+(SEED.updatedAt||"—")+"（每日 9 点定时核对官网）。";
+  document.getElementById("radarList").innerHTML = arrivals.length ? arrivals.map(x=>{
+    const i = DB.positions.indexOf(x);
+    return '<div class="jdcard" data-i="'+i+'">'+
+      '<div class="hd"><b>🆕 '+esc(x.company)+'</b> <span class="muted">'+esc(x.job)+' · '+esc(x.salary)+' · '+esc(x.match)+'匹配</span> '+recBadgeHTML(x)+deadlineText(x)+(jobRecDate(x)?'<span class="rec-date">📅 '+esc(jobRecDate(x))+'</span>':"")+'</div>'+
+      '<div class="small" style="margin-top:4px">平台：'+esc(x.platform||"—")+'</div>'+
+      '<div class="small">为什么适合：'+esc(x.reason||"—")+'</div>'+
+      reqChipsHTML(x)+
+      '<div class="btn-row" style="margin-top:8px">'+
+      companyLinkButtons(x)+
+      '<button class="btn-mini" data-act="customJob">🎯 一键定制简历</button>'+
+      '<button class="btn-mini talk-mini" data-act="talk">💬 打招呼模板</button>'+
+      '<button class="btn-mini" data-act="openRadar">详情</button>'+
+      '<button class="btn-mini" data-act="doneRadar">标为已处理</button>'+
+      '</div>'+
+      '</div>';
+  }).join("") : '<div class="empty">当前城市（'+city+'）暂无新岗位。想让我更新时，直接说"更新岗位"即可。</div>';
+
+  document.getElementById("radarCompanies").innerHTML = RADAR_COMPANIES.filter(c=>!c.city || c.city===city).map(c=>{
+    const q = encodeURIComponent(c.name.replace(/（.*）/,""));
+    const zhipin = "https://www.zhipin.com/web/geek/job?query="+q+"&city="+(c.city==="合肥"?"101220100":"101230100");
+    const rec = COMPANY_LINKS.find(l=>l.keys.some(k=>c.name.includes(k)));
+    const site = c.site || (rec&&rec.site) || "";
+    const jobs = (rec&&rec.jobs) || "";
+    return '<div class="card" style="margin:0">'+
+      '<b>'+esc(c.name)+'</b><div class="btn-row" style="margin-top:6px">'+
+      (site?'<a class="btn small ghost" href="'+site+'" target="_blank">官网</a>':"")+
+      (jobs?'<a class="btn small ghost" href="'+jobs+'" target="_blank">'+(rec.jobsLabel||"招聘")+'</a>':"")+
+      '<a class="btn small ghost" href="'+zhipin+'" target="_blank">Boss直聘搜</a>'+
+      '</div></div>';
+  }).join("");
+}
+
+function esc(s){ return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
+
+// ---------- 全局搜索（顶部搜索框，覆盖全部岗位） ----------
+function hideSearchResults(){ const p = document.getElementById("searchResults"); if(p) p.style.display = "none"; }
+function layoutNav(){
+  const h = document.querySelector("header");
+  const n = document.getElementById("tabs");
+  if(h && n) n.style.top = (h.offsetHeight + 8) + "px";
+}
+window.addEventListener("load", layoutNav);
+window.addEventListener("resize", layoutNav);
+setTimeout(layoutNav, 300);
+function globalSearchNow(){
+  const inp = document.getElementById("globalSearch");
+  const panel = document.getElementById("searchResults");
+  if(!inp || !panel) return;
+  const q = (inp.value||"").trim();
+  if(!q){ hideSearchResults(); return; }
+  const ql = q.toLowerCase();
+  const seen = new Set();
+  const hits = [];
+  const consider = (x, src)=>{
+    if(!x || !x.company) return;
+    const id = String(x.company)+"|"+String(x.job||"");
+    if(seen.has(id)) return;
+    const s = (String(x.company||"")+" "+String(x.job||"")+" "+String(x.salary||"")+" "+String(x.city||"")+" "+String(x.reason||"")+" "+String(x.pitch||"")+" "+String(x.platform||"")+" "+String(x.works||"")).toLowerCase();
+    if(s.includes(ql)){ seen.add(id); hits.push({x, src}); }
+  };
+  DB.positions.forEach(x=>consider(x,"db"));
+  if(SEED && SEED.jobs) SEED.jobs.forEach(j=>consider(j,"seed"));
+  if(!hits.length){
+    const ccode = city==="合肥" ? "101220100" : "101230100";
+    const zhipin = "https://www.zhipin.com/web/geek/job?query="+encodeURIComponent(q)+"&city="+ccode;
+    const liepin = "https://www.liepin.com/zhaopin/?key="+encodeURIComponent(q);
+    const zhaopin = "https://www.zhaopin.com/sou/jl"+ccode+"/kw"+encodeURIComponent(q);
+    panel.innerHTML = '<div class="sr-empty">没搜到「'+esc(q)+'」——换个关键词试试，比如公司简称（瑞芯微、新大陆）、岗位名（AI产品经理、产品助理）、城市+方向。也可以直接去招聘平台搜：<div class="btn-row" style="margin-top:8px"><a class="btn-mini" href="'+zhipin+'" target="_blank" rel="noopener">Boss直聘搜</a><a class="btn-mini" href="'+liepin+'" target="_blank" rel="noopener">猎聘搜</a><a class="btn-mini" href="'+zhaopin+'" target="_blank" rel="noopener">智联搜</a></div><div class="small" style="margin-top:8px">或者直接跟我说「帮我找 XX 岗位」，我会更新进雷达。</div></div>';
+    panel.style.display = "block";
+    return;
+  }
+  panel.innerHTML = '<div class="sr-head">找到 '+hits.length+' 个相关岗位 · 点「查看」打开详情（可定制简历 / 复制打招呼 / 直达投递）</div>' +
+    hits.slice(0,30).map(h=>{
+      const x = h.x;
+      const dbIdx = h.src==="db" ? DB.positions.indexOf(x) : -1;
+      const cityTxt = cityOf(x)==="合肥" ? "合肥" : "福州";
+      const rec = jobRecDate(x);
+      const apply = x.applyUrl ? '<a class="btn-mini" href="'+esc(x.applyUrl)+'" target="_blank" rel="noopener" onclick="event.stopPropagation()">🚀 投简历</a>' : "";
+      return '<div class="sr-item" data-i="'+dbIdx+'">'+
+        '<div class="sr-main"><b>'+esc(x.company)+' · '+esc(x.job||"—")+'</b>'+
+        '<div class="sr-sub">'+cityTxt+' · '+esc(x.salary||"薪资面议")+' · '+esc(x.match||"")+(rec?' · 📅 推荐投 '+esc(rec):"")+'</div></div>'+
+        '<div class="sr-actions">'+apply+'<button class="btn-mini" data-go="detail">查看</button></div>'+
+        '</div>';
+    }).join("");
+  panel.style.display = "block";
+}
+function searchGoDetail(i){
+  hideSearchResults();
+  if(i>=0){ openJobDetail(i); return; }
+  // data.js 刚更新、新岗位还没合并进追踪时：先合并再打开
+  mergeSeedJobs(DB);
+  save();
+  const q = (document.getElementById("globalSearch").value||"").trim().toLowerCase();
+  const hit = DB.positions.findIndex(x=>(String(x.company||"")+" "+String(x.job||"")).toLowerCase().includes(q));
+  if(hit>=0) openJobDetail(hit); else showTab("jobs");
+}
+
+function renderJobs(){
+  const q = (document.getElementById("jobSearch").value||"").trim().toLowerCase();
+  const st = document.getElementById("statusFilter").value;
+  const recOnly = !!document.getElementById("jobRecOnly") && document.getElementById("jobRecOnly").checked;
+  const rows = DB.positions.filter(x=>{
+    if(cityOf(x)!==city) return false;
+    if(st && x.status!==st) return false;
+    if(recOnly && jobScore(x) < 80) return false;
+    if(q){ const s=(x.company+x.job+x.next+x.resume).toLowerCase(); if(!s.includes(q)) return false; }
+    return true;
+  });
+  const tb = document.querySelector("#jobTable tbody");
+  if(!rows.length){ tb.innerHTML='<tr><td colspan="13" class="empty">没有匹配的岗位</td></tr>'; return; }
+  tb.innerHTML = rows.map(x=>{
+    const tag = {第一批:"b1",第二批:"b2",第三批:"b3"}[x.batch]||"b3";
+    const stt = x.status==="拿到Offer"?'offer':(x.status==="不合适"?"nope":(x.status==="盯梢"?"st":""));
+    const done = x.jd && (x.jd.duties||x.jd.reqs||x.jd.must) ? "已拆解" : "未拆解";
+    return '<tr class="jrow" data-i="'+DB.positions.indexOf(x)+'">'+
+      '<td><span class="tag '+tag+'">'+esc(x.batch)+'</span></td>'+
+      '<td><b>'+esc(x.company)+'</b>'+(x.applyUrl?' <a class="btn-mini" style="margin-left:4px" href="'+x.applyUrl+'" target="_blank" rel="noopener" onclick="event.stopPropagation()">🚀 投简历</a>':"")+'</td><td>'+esc(x.job)+'</td><td>'+esc(x.salary)+'</td><td>'+esc(x.match)+'</td>'+
+      '<td class="small">'+recBadgeHTML(x)+appEndText(x)+checkedTag(x)+(jobRecDate(x)?'<span class="rec-date">📅 '+esc(jobRecDate(x))+'</span>':"")+'</td>'+
+      '<td class="small">'+esc(x.resume)+'</td><td class="small">'+esc(x.works)+'</td>'+
+      '<td><span class="tag '+stt+'">'+esc(x.status)+'</span></td><td class="small">'+esc(x.date)+' '+deadlineTag(x)+'</td>'+
+      '<td><span class="tag '+(done==="已拆解"?"b1":"st")+'">'+done+'</span></td>'+
+      '<td class="small">'+x.steps.length+' 步</td>'+
+      '<td class="small">'+reqChipsHTML(x)+'</td>'+
+      '</tr>';
+  }).join("");
+}
+
+function renderJD(){
+  const q = (document.getElementById("jdSearch").value||"").trim().toLowerCase();
+  const f = document.getElementById("jdFilter").value;
+  const list = DB.positions.filter(x=>{
+    if(cityOf(x)!==city) return false;
+    if(q && !x.company.toLowerCase().includes(q)) return false;
+    const done = x.jd && (x.jd.duties||x.jd.reqs||x.jd.must);
+    if(f==="已拆解" && !done) return false;
+    if(f==="未拆解" && done) return false;
+    return true;
+  });
+  document.getElementById("jdList").innerHTML = list.length ? list.map(x=>{
+    const done = x.jd && (x.jd.duties||x.jd.reqs||x.jd.must);
+    const j = x.jd || {};
+    return '<div class="jdcard" data-i="'+DB.positions.indexOf(x)+'">'+
+      '<div class="hd"><b>'+esc(x.company)+'</b> <span class="muted">'+esc(x.job)+' · '+esc(x.status)+'</span></div>'+
+      (deadlineText(x)?'<div class="small" style="margin-top:4px">'+deadlineText(x)+'</div>':"")+
+      '<div class="kv">'+
+        (j.must?'<b>硬性条件</b><span>'+esc(j.must)+'</span>':"")+
+        (j.plus?'<b>加分项</b><span>'+esc(j.plus)+'</span>':"")+
+        (j.myMatch?'<b>我的匹配</b><span>'+esc(j.myMatch)+'</span>':"")+
+        (j.prep?'<b>面试要点</b><span>'+esc(j.prep)+'</span>':"")+
+        (!done?'<b>状态</b><span>未拆解，点击进入详情粘贴 JD 拆解</span>':"")+
+      '</div></div>';
+  }).join("") : '<div class="empty">没有符合条件的岗位</div>';
+}
+
+function renderDaily(){
+  const list = DB.dailyLogs.slice().sort((a,b)=>b.date.localeCompare(a.date));
+  document.getElementById("dlList").innerHTML = list.length ? list.map((x,i)=>{
+    return '<div class="log-item"><div class="date">'+esc(x.date)+'</div>'+
+      '<div class="nums">投递 '+x.applied+' · 回复 '+x.replied+' · 面试 '+x.interview+' · 加微信 '+x.contacts+'</div>'+
+      '<div class="small">'+esc(x.note||"")+'</div>'+
+      (x.tomorrow?'<div class="small" style="color:var(--ink);margin-top:4px">明天：'+esc(x.tomorrow)+'</div>':"")+
+      '<div style="margin-top:6px"><button class="btn-mini" data-act="delDaily" data-i="'+i+'">删除</button></div></div>';
+  }).join("") : '<div class="empty">还没有复盘记录，今天开始记第一笔吧</div>';
+}
+
+function renderQA(){
+  const list = DB.interviews;
+  document.getElementById("qaList").innerHTML = list.length ? list.map((x,i)=>{
+    return '<div class="qa-item"><b>'+esc(x.q)+'</b> <span class="tag '+(x.status==="待练"?"st":"b1")+'">'+esc(x.status)+'</span>'+
+      '<div class="small" style="margin-top:5px">回答：'+esc(x.a||"—")+'</div>'+
+      (x.f?'<div class="small" style="color:var(--danger);margin-top:3px">反馈：'+esc(x.f)+'</div>':"")+
+      '<div style="margin-top:6px"><button class="btn-mini" data-act="editQA" data-i="'+i+'">编辑</button> <button class="btn-mini" data-act="delQA" data-i="'+i+'">删除</button></div></div>';
+  }).join("") : '<div class="empty">题库空的，先加一个问题</div>';
+}
+
+function renderWeekly(){
+  const list = DB.weeklyReviews.slice().sort((a,b)=>b.week.localeCompare(a.week));
+  document.getElementById("wkList").innerHTML = list.length ? list.map((x,i)=>{
+    return '<div class="wk-item"><b>'+esc(x.week)+'</b> <span class="tag '+(x.status==="已完成"?"b1":"st")+'">'+esc(x.status)+'</span>'+
+      '<div class="small" style="margin-top:5px">成果：'+esc(x.done||"—")+'</div>'+
+      (x.problem?'<div class="small" style="margin-top:3px">不足：'+esc(x.problem)+'</div>':"")+
+      (x.next?'<div class="small" style="color:var(--ink);margin-top:3px">下周：'+esc(x.next)+'</div>':"")+
+      '<div style="margin-top:6px"><button class="btn-mini" data-act="delWk" data-i="'+i+'">删除</button></div></div>';
+  }).join("") : '<div class="empty">还没有周复盘，周日写一篇</div>';
+}
+
+function renderData(){
+  const last = DB.lastExport ? new Date(DB.lastExport).toLocaleString("zh-CN") : "未导出过";
+  const lastT = DB.lastExport ? new Date(DB.lastExport).getTime() : 0;
+  const days = lastT ? Math.floor((Date.now()-lastT)/86400000) : 999;
+  const badge = days > 7 ? '<span class="tag dls">⚠️ 该备份了</span>' : '<span class="tag cok">✅ 最近已备份</span>';
+  document.getElementById("backupTip").innerHTML = "上次导出："+last+"。"+badge+(days > 7
+    ? " 打开 App 已自动为你导出最新备份（文件在浏览器「下载」文件夹）。建议把下载位置设为 D 盘备份文件夹，并开启百度网盘自动备份。"
+    : " 建议每周日导出一次。");
+}
+function exportBackup(){
+  DB.lastExport = new Date().toISOString(); save();
+  const blob = new Blob([JSON.stringify(DB,null,2)],{type:"application/json"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "求职作战台备份-"+today()+".json";
+  a.click(); URL.revokeObjectURL(a.href);
+  renderData();
+}
+function autoBackupIfDue(){
+  try{
+    if(sessionStorage.getItem("autoBakDone")==="1") return;
+    const lastT = DB.lastExport ? new Date(DB.lastExport).getTime() : 0;
+    const due = !lastT || (Date.now()-lastT) >= 7*86400000;
+    if(!due) return;
+    sessionStorage.setItem("autoBakDone","1");
+    exportBackup();
+  }catch(e){}
+}
+
+// ---------- 岗位详情 ----------
+let currentIdx = -1;
+function openJobDetail(i){
+  currentIdx = i;
+  const isNew = i < 0;
+  const x = isNew ? {batch:"第一批",company:"",job:"",salary:"",platform:"",resume:"",works:"",reason:"",status:"未投",date:today(),next:"",jd:{raw:"",duties:"",reqs:"",must:"",plus:"",myMatch:"",prep:""}} : DB.positions[i];
+  document.getElementById("jobModalTitle").textContent = isNew ? "新增岗位" : "岗位详情 · "+x.company;
+  document.getElementById("jobModalSub").textContent = x.job+" · "+x.salary+" · "+x.match+"匹配";
+  document.getElementById("jBatch").value=x.batch; document.getElementById("jMatch").value=x.match;
+  document.getElementById("jCompany").value=x.company; document.getElementById("jJob").value=x.job;
+  document.getElementById("jSalary").value=x.salary; document.getElementById("jPlatform").value=x.platform;
+  document.getElementById("jResume").value=x.resume; document.getElementById("jWorks").value=x.works;
+  document.getElementById("jReason").value=x.reason; document.getElementById("jStatus").value=x.status;
+  document.getElementById("jDate").value=x.date; document.getElementById("jNext").value=x.next;
+document.getElementById("jobLinks").innerHTML = isNew
+? '<div class="muted">保存岗位后自动匹配官网 / 公众号 / 招聘渠道</div>'
+: companyLinksHTML(x);
+const talkSec = document.getElementById("jobTalkSec");
+const talkTxt = document.getElementById("jobTalkText");
+if(talkSec && talkTxt){
+talkSec.style.display = isNew ? "none" : "block";
+talkTxt.textContent = isNew ? "" : (buildTalkText(x, "std") || "");
+}
+document.getElementById("jRecDate").value = x.recDate || "";
+  document.getElementById("jAppStart").value = x.appStart || "";
+  document.getElementById("jAppEnd").value = x.appEnd || "";
+  document.getElementById("jRecScore").innerHTML = isNew
+    ? '<span class="muted" style="font-size:12px">保存后自动计算</span>'
+    : recBadgeHTML(x)+' '+deadlineText(x)+' <span class="muted" style="font-size:12px">推荐投递：'+(jobRecDate(x)||"—")+'</span>';
+  const j = x.jd||{};
+  document.getElementById("jdRaw").value=j.raw||""; document.getElementById("jdDuties").value=j.duties||"";
+  document.getElementById("jdReqs").value=j.reqs||""; document.getElementById("jdMust").value=j.must||"";
+  document.getElementById("jdPlus").value=j.plus||""; document.getElementById("jdMyMatch").value=j.myMatch||"";
+  document.getElementById("jdPrep").value=j.prep||"";
+  document.getElementById("stDate").value = today();
+  renderSteps();
+  document.getElementById("jobModal").classList.add("show");
+}
+function closeJobModal(){ document.getElementById("jobModal").classList.remove("show"); currentIdx=-1; }
+
+function renderSteps(){
+  const x = DB.positions[currentIdx];
+  if(!x) return;
+  const list = x.steps.slice().sort((a,b)=>b.date.localeCompare(a.date));
+  document.getElementById("stList").innerHTML = list.length ? list.map((s,idx)=>{
+    return '<div class="step-item"><span class="d">'+esc(s.date)+'</span><span class="t"><b>'+esc(s.type)+'</b></span><span class="n">'+esc(s.note||"")+'</span><button class="btn-mini" data-s="'+idx+'">删</button></div>';
+  }).join("") : '<div class="empty">还没有记录，从「打招呼」开始记第一步吧</div>';
+}
+
+function readJDFields(){
+  return {raw:document.getElementById("jdRaw").value.trim(), duties:document.getElementById("jdDuties").value.trim(), reqs:document.getElementById("jdReqs").value.trim(), must:document.getElementById("jdMust").value.trim(), plus:document.getElementById("jdPlus").value.trim(), myMatch:document.getElementById("jdMyMatch").value.trim(), prep:document.getElementById("jdPrep").value.trim()};
+}
+
+// JD 自动拆解（启发式粗分，手动精修）
+function autoJD(){
+  const raw = document.getElementById("jdRaw").value || "";
+  const lines = raw.split(/\n+/).map(s=>s.trim()).filter(Boolean);
+  const duties=[], reqs=[], must=[], plus=[];
+  let inDuty=false, inReq=false;
+  lines.forEach(line=>{
+    if(/岗位职责|工作职责|职责描述|职责/.test(line)) inDuty=true, inReq=false;
+    else if(/任职要求|岗位要求|职位要求|任职资格|要求/.test(line)) inReq=true, inDuty=false;
+    else if(/加分|优先/.test(line)) plus.push(line);
+    else if(inDuty) duties.push(line);
+    else if(inReq) reqs.push(line);
+  });
+  reqs.forEach(l=>{ if(/本科|硕士|学历|年以上|经验|出差|专业/.test(l)) must.push(l); });
+  document.getElementById("jdDuties").value = duties.join("；");
+  document.getElementById("jdReqs").value = reqs.join("；");
+  document.getElementById("jdMust").value = must.join("；");
+  document.getElementById("jdPlus").value = plus.join("；");
+  if(!document.getElementById("jdMyMatch").value){
+    document.getElementById("jdMyMatch").value = "（对照上面的硬性条件逐条写：哪条满足、哪条怎么补）";
+  }
+  if(!document.getElementById("jdPrep").value){
+    document.getElementById("jdPrep").value = "（根据职责列 3 个面试可能深挖的点，逐个准备案例）";
+  }
+}
+
+// ---------- 事件 ----------
+document.getElementById("tabs").addEventListener("click", e=>{
+  const b = e.target.closest("button"); if(!b) return;
+  document.querySelectorAll("#tabs button").forEach(x=>x.classList.remove("active"));
+  b.classList.add("active");
+  document.querySelectorAll(".view").forEach(v=>v.classList.remove("active"));
+  document.getElementById("view-"+b.dataset.tab).classList.add("active");
+  if(b.dataset.tab==="jobs") renderJobs();
+  if(b.dataset.tab==="jd") renderJD();
+  if(b.dataset.tab==="radar") renderRadar();
+});
+
+document.getElementById("cityFZ").addEventListener("click", ()=>setCity("福州"));
+document.getElementById("cityHF").addEventListener("click", ()=>setCity("合肥"));
+
+document.getElementById("searchForm").addEventListener("submit", e=>{ e.preventDefault(); globalSearchNow(); });
+document.getElementById("globalSearch").addEventListener("input", ()=>{
+  const q = (document.getElementById("globalSearch").value||"").trim();
+  if(q) globalSearchNow(); else hideSearchResults();
+});
+document.getElementById("globalSearch").addEventListener("keydown", e=>{
+  if(e.key==="Escape") hideSearchResults();
+});
+document.getElementById("searchResults").addEventListener("click", e=>{
+  if(e.target.closest("a")) return;
+  const item = e.target.closest(".sr-item");
+  if(!item) return;
+  searchGoDetail(parseInt(item.dataset.i,10));
+});
+window.addEventListener("click", e=>{
+  if(!e.target.closest(".search-row")) hideSearchResults();
+});
+
+document.getElementById("jobSearch").addEventListener("input", renderJobs);
+document.getElementById("statusFilter").addEventListener("change", renderJobs);
+document.getElementById("jobRecOnly").addEventListener("change", renderJobs);
+document.getElementById("jdSearch").addEventListener("input", renderJD);
+document.getElementById("jdFilter").addEventListener("change", renderJD);
+
+document.getElementById("addJobBtn").addEventListener("click", ()=>openJobDetail(-1));
+document.getElementById("jobClose").addEventListener("click", closeJobModal);
+document.getElementById("jCancel").addEventListener("click", closeJobModal);
+document.getElementById("jobTalkCopy").addEventListener("click", ()=>{
+const x = DB.positions[currentIdx]; if(!x) return;
+copyText(buildTalkText(x, "std"));
+alert("已复制「"+shortCompany(x.company)+"」的打招呼话术 ✅ 去 Boss直聘/猎聘发给 HR 吧！");
+});
+document.getElementById("jobTalkMore").addEventListener("click", ()=>{
+if(currentIdx >= 0) openTalk(currentIdx);
+});
+
+// 行点击打开详情
+document.querySelector("#jobTable tbody").addEventListener("click", e=>{
+  const row = e.target.closest("tr.jrow"); if(!row) return;
+  openJobDetail(+row.dataset.i);
+});
+// 总览页：待办/全部岗位 点行打开详情
+document.getElementById("view-dashboard").addEventListener("click", e=>{
+  const row = e.target.closest("[data-i]"); if(!row) return;
+  const i = +row.dataset.i;
+  if(!isNaN(i) && DB.positions[i]) openJobDetail(i);
+});
+document.getElementById("jdList").addEventListener("click", e=>{
+  const c = e.target.closest(".jdcard"); if(!c) return;
+  openJobDetail(+c.dataset.i);
+});
+document.getElementById("radarList").addEventListener("click", e=>{
+  const b = e.target.closest("button"); if(!b) return;
+  const c = b.closest(".jdcard"); if(!c) return;
+  const i = +c.dataset.i;
+  if(b.dataset.act==="customJob") customJobForRadar(i);
+  if(b.dataset.act==="talk") openTalk(i);
+  if(b.dataset.act==="openRadar") openJobDetail(i);
+  if(b.dataset.act==="doneRadar"){
+    DB.positions[i].handled = true;
+    save(); renderAll();
+  }
+});
+document.getElementById("talkClose").addEventListener("click", closeTalk);
+document.getElementById("talkClose2").addEventListener("click", closeTalk);
+document.getElementById("talkModal").addEventListener("click", e=>{
+  if(e.target === document.getElementById("talkModal")) closeTalk();
+});
+document.getElementById("talkCopy").addEventListener("click", ()=>copyText(document.getElementById("talkText").value));
+const talkTplRow = document.getElementById("talkTpls");
+if(talkTplRow) talkTplRow.addEventListener("click", e=>{
+  const b = e.target.closest("button[data-tpl]"); if(!b) return;
+  talkTplId = b.dataset.tpl;
+  renderTalkTpl();
+  const p = DB.positions[talkIdx];
+  document.getElementById("talkText").value = buildTalkText(p || null, talkTplId);
+});
+const talkJobSel = document.getElementById("talkJobSel");
+if(talkJobSel) talkJobSel.addEventListener("change", e=>{
+  talkIdx = +e.target.value;
+  const p = DB.positions[talkIdx];
+  document.getElementById("talkTitle").textContent = p ? "打招呼话术 · "+p.company : "打招呼话术 · 通用";
+  renderTalkJobInfo(p);
+  document.getElementById("talkText").value = buildTalkText(p || null, talkTplId);
+});
+document.getElementById("btnTalkTpl").addEventListener("click", openTalkGeneric);
+
+// ---------- 简历（置顶专区） ----------
+document.getElementById("resumeEditorWrap").addEventListener("input", ()=>{ collectResume(); save(); });
+document.getElementById("rJobs").addEventListener("click", e=>{
+  const b=e.target.closest("button"); if(!b) return;
+  if(b.dataset.act==="delJob"){ collectResume(); const f=currentVersion().fields; f.jobs.splice(+b.closest(".sub-sec").dataset.job,1); save(); loadVersionToEditor(); }
+});
+document.getElementById("rProjects").addEventListener("click", e=>{
+  const b=e.target.closest("button"); if(!b) return;
+  if(b.dataset.act==="delProject"){ collectResume(); const f=currentVersion().fields; f.projects.splice(+b.closest(".sub-sec").dataset.project,1); save(); loadVersionToEditor(); }
+});
+document.getElementById("rAddJob").addEventListener("click", ()=>{
+  collectResume(); currentVersion().fields.jobs.push({title:"", time:"", items:[]}); save(); loadVersionToEditor();
+});
+document.getElementById("rAddProject").addEventListener("click", ()=>{
+  collectResume(); currentVersion().fields.projects.push({title:"", items:[]}); save(); loadVersionToEditor();
+});
+document.getElementById("resumeSeries").addEventListener("click", e=>{
+  const b=e.target.closest("button"); if(!b) return;
+  const i=+b.dataset.i;
+  if(b.dataset.act==="toggleUpd"){ const v=DB.resumes.versions[i]; if(v){ v.needsUpdate=!v.needsUpdate; save(); renderResume(); } return; }
+  if(b.dataset.act==="preview") openPreview(i);
+  if(b.dataset.act==="star") toggleStar(i);
+  if(b.dataset.act==="edit") selectVersion(i);
+  if(b.dataset.act==="print"){ selectVersion(i); buildPrintHTML(); printResumeClean(); }
+  if(b.dataset.act==="md"){ selectVersion(i); exportResumeMD(); }
+  if(b.dataset.act==="delVersion") delVersion(i);
+});
+document.getElementById("customList").addEventListener("click", e=>{
+  const b=e.target.closest(".custom-item"); if(!b) return;
+  customResume(b.dataset.name);
+});
+document.getElementById("pvClose").addEventListener("click", closePV);
+document.getElementById("pvModal").addEventListener("click", e=>{
+  if(e.target === document.getElementById("pvModal")) closePV();
+});
+document.getElementById("pvTabs").addEventListener("click", e=>{
+  const b=e.target.closest("button"); if(!b) return;
+  document.querySelectorAll("#pvTabs button").forEach(x=>x.classList.remove("active"));
+  b.classList.add("active");
+  renderPV(b.dataset.pv);
+});
+document.getElementById("rvNew").addEventListener("click", ()=>{
+  const name = prompt("给新版本起个名字（例：中友金科定制、锐捷定制）：");
+  if(!name || !name.trim()) return;
+  collectResume();
+  const key = "v"+Date.now();
+  DB.resumes.versions.push({key, name:name.trim(), updatedAt:"", starred:false, fields:JSON.parse(JSON.stringify(currentVersion().fields))});
+  DB.resumes.current = key; save(); renderResume(); expandEditor(true);
+});
+document.getElementById("rvToggle").addEventListener("click", ()=>{
+  const w = document.getElementById("resumeEditorWrap");
+  const show = w.style.display !== "block";
+  w.style.display = show ? "block" : "none";
+  document.getElementById("rvToggle").textContent = show ? "收起编辑器" : "展开编辑器";
+  if(show){ collectResume(); loadVersionToEditor(); }
+});
+document.getElementById("rvDel").addEventListener("click", ()=>{
+  if(DB.resumes.versions.length<=1){ alert("至少保留一个版本"); return; }
+  const v = currentVersion();
+  if(confirm("删除版本「"+v.name+"」？")){
+    DB.resumes.versions = DB.resumes.versions.filter(x=>x.key!==v.key);
+    DB.resumes.current = DB.resumes.versions[0].key; save(); renderResume();
+  }
+});
+document.getElementById("rvReset").addEventListener("click", ()=>{
+  if(confirm("把当前版本重置为默认内容？当前改动会丢失。")){
+    const def = defaultResumes();
+    const v = currentVersion();
+    v.fields = JSON.parse(JSON.stringify(def.versions[0].fields));
+    v.updatedAt = ""; save(); loadVersionToEditor();
+  }
+});
+document.getElementById("rvPrint").addEventListener("click", ()=>{
+  collectResume(); save(); buildPrintHTML(); printResumeClean();
+});
+document.getElementById("rvCleanPdf").addEventListener("click", downloadCleanPdf);
+document.getElementById("rvMd").addEventListener("click", ()=>{
+  collectResume(); save(); exportResumeMD();
+});
+
+document.getElementById("jSave").addEventListener("click", ()=>{
+  const i = currentIdx;
+  const obj = {
+    batch: document.getElementById("jBatch").value,
+    company: document.getElementById("jCompany").value.trim(),
+    job: document.getElementById("jJob").value.trim(),
+    salary: document.getElementById("jSalary").value.trim(),
+    match: document.getElementById("jMatch").value,
+    platform: document.getElementById("jPlatform").value.trim(),
+    resume: document.getElementById("jResume").value.trim(),
+    works: document.getElementById("jWorks").value.trim(),
+    reason: document.getElementById("jReason").value.trim(),
+    status: document.getElementById("jStatus").value,
+    date: document.getElementById("jDate").value,
+    next: document.getElementById("jNext").value.trim(),
+    recDate: document.getElementById("jRecDate").value,
+    appStart: document.getElementById("jAppStart").value,
+    appEnd: document.getElementById("jAppEnd").value,
+    jd: readJDFields()
+  };
+  if(!obj.company || !obj.job){ alert("公司和岗位不能为空"); return; }
+  if(i<0){
+    obj.note=""; obj.steps=[];
+    normalizePos(obj);
+    DB.positions.push(obj);
+  } else {
+    const old = DB.positions[i];
+    obj.note = old.note||""; obj.steps = old.steps||[];
+    DB.positions[i] = obj;
+  }
+  save(); renderAll();
+  if(i<0){ openJobDetail(DB.positions.length-1); } else { openJobDetail(i); }
+});
+document.getElementById("jDelete").addEventListener("click", ()=>{
+  if(currentIdx<0) return;
+  if(confirm("删除「"+DB.positions[currentIdx].company+"」？此操作不可恢复。")){
+    DB.positions.splice(currentIdx,1); save(); renderAll(); closeJobModal();
+  }
+});
+
+// 时间线
+document.getElementById("stSave").addEventListener("click", ()=>{
+  if(currentIdx<0) return;
+  const date = document.getElementById("stDate").value || today();
+  const type = document.getElementById("stType").value;
+  const note = document.getElementById("stNote").value.trim();
+  DB.positions[currentIdx].steps.push({date,type,note});
+  if(DB.positions[currentIdx].status==="未投" && (type==="打招呼"||type==="投递")){
+    DB.positions[currentIdx].status = type==="投递" ? "已投递" : "已打招呼";
+    if(!DB.positions[currentIdx].date) DB.positions[currentIdx].date = date;
+  }
+  if(type==="约面试" && DB.positions[currentIdx].status!=="面试中" && DB.positions[currentIdx].status!=="拿到Offer") DB.positions[currentIdx].status="已回复";
+  if(type==="面试一轮"||type==="面试二轮") DB.positions[currentIdx].status="面试中";
+  if(type==="Offer") DB.positions[currentIdx].status="拿到Offer";
+  if(type==="不合适") DB.positions[currentIdx].status="不合适";
+  save(); renderAll(); renderSteps();
+  document.getElementById("stNote").value="";
+});
+document.getElementById("stList").addEventListener("click", e=>{
+  const b=e.target.closest("button"); if(!b) return;
+  const x=DB.positions[currentIdx]; if(!x) return;
+  const s=+b.dataset.s;
+  const sorted = x.steps.slice().sort((a,b)=>b.date.localeCompare(a.date));
+  const target = sorted[s];
+  if(confirm("删除这一步（"+target.date+" "+target.type+"）？")){
+    const i = x.steps.indexOf(target);
+    x.steps.splice(i,1);
+    save(); renderAll(); renderSteps();
+  }
+});
+document.getElementById("jdAuto").addEventListener("click", autoJD);
+document.getElementById("jdClear").addEventListener("click", ()=>{
+  ["jdDuties","jdReqs","jdMust","jdPlus","jdMyMatch","jdPrep"].forEach(id=>document.getElementById(id).value="");
+});
+
+// 每日复盘
+document.getElementById("dlSave").addEventListener("click", ()=>{
+  const d = document.getElementById("dlDate").value || today();
+  const obj = {date:d, week:isoWeek(new Date(d+"T00:00:00")), applied:document.getElementById("dlApplied").value||0, replied:document.getElementById("dlReplied").value||0, interview:document.getElementById("dlInterview").value||0, contacts:document.getElementById("dlContacts").value||0, note:document.getElementById("dlNote").value.trim(), tomorrow:document.getElementById("dlTomorrow").value.trim()};
+  const idx = DB.dailyLogs.findIndex(x=>x.date===d);
+  if(idx>=0) DB.dailyLogs[idx]=obj; else DB.dailyLogs.push(obj);
+  save(); renderAll();
+  document.getElementById("dlNote").value=""; document.getElementById("dlTomorrow").value="";
+  document.getElementById("dlApplied").value=0; document.getElementById("dlReplied").value=0;
+  document.getElementById("dlInterview").value=0; document.getElementById("dlContacts").value=0;
+  alert("已保存 "+d+" 的复盘");
+});
+document.getElementById("dlList").addEventListener("click", e=>{
+  const b=e.target.closest("button"); if(!b) return;
+  if(b.dataset.act==="delDaily"){ if(confirm("删除这条复盘？")){ DB.dailyLogs.splice(+b.dataset.i,1); save(); renderAll(); } }
+});
+document.getElementById("dlDate").value = today();
+
+// 面试题库
+document.getElementById("qaSave").addEventListener("click", ()=>{
+  const q = document.getElementById("qaQ").value.trim();
+  if(!q){ alert("问题不能为空"); return; }
+  const obj = {q, a:document.getElementById("qaA").value.trim(), f:document.getElementById("qaF").value.trim(), status:document.getElementById("qaStatus").value};
+  const idx = DB.interviews.findIndex(x=>x.q===q);
+  if(idx>=0) DB.interviews[idx]=obj; else DB.interviews.push(obj);
+  save(); renderQA(); renderStats();
+  document.getElementById("qaQ").value=""; document.getElementById("qaA").value=""; document.getElementById("qaF").value="";
+});
+document.getElementById("qaList").addEventListener("click", e=>{
+  const b=e.target.closest("button"); if(!b) return;
+  const i=+b.dataset.i;
+  if(b.dataset.act==="editQA"){ const x=DB.interviews[i]; document.getElementById("qaQ").value=x.q; document.getElementById("qaA").value=x.a; document.getElementById("qaF").value=x.f; document.getElementById("qaStatus").value=x.status; window.scrollTo({top:0,behavior:"smooth"}); }
+  if(b.dataset.act==="delQA"){ if(confirm("删除这道题？")){ DB.interviews.splice(i,1); save(); renderQA(); } }
+});
+
+// 周复盘
+document.getElementById("wkWeek").value = isoWeek();
+document.getElementById("wkSave").addEventListener("click", ()=>{
+  const w = document.getElementById("wkWeek").value.trim();
+  if(!w){ alert("周次不能为空"); return; }
+  const obj = {week:w, status:document.getElementById("wkStatus").value, done:document.getElementById("wkDone").value.trim(), problem:document.getElementById("wkProblem").value.trim(), next:document.getElementById("wkNext").value.trim()};
+  const idx = DB.weeklyReviews.findIndex(x=>x.week===w);
+  if(idx>=0) DB.weeklyReviews[idx]=obj; else DB.weeklyReviews.push(obj);
+  save(); renderWeekly(); renderStats(); renderDashboard();
+  document.getElementById("wkDone").value=""; document.getElementById("wkProblem").value=""; document.getElementById("wkNext").value="";
+  alert("已保存周复盘 "+w);
+});
+document.getElementById("wkList").addEventListener("click", e=>{
+  const b=e.target.closest("button"); if(!b) return;
+  if(b.dataset.act==="delWk"){ if(confirm("删除这篇周复盘？")){ DB.weeklyReviews.splice(+b.dataset.i,1); save(); renderWeekly(); } }
+});
+
+// 数据管理
+document.getElementById("exportBtn").addEventListener("click", exportBackup);
+document.getElementById("importBtn").addEventListener("click", ()=>document.getElementById("importFile").click());
+document.getElementById("importFile").addEventListener("change", e=>{
+  const f = e.target.files[0]; if(!f) return;
+  const rd = new FileReader();
+  rd.onload = ()=>{
+    try{
+      const d = JSON.parse(rd.result);
+      if(!d || !Array.isArray(d.positions)) throw new Error("格式不对");
+      if(confirm("导入会覆盖当前所有数据，确认？")){ d.positions.forEach(normalizePos); DB=d; save(); renderAll(); }
+    }catch(err){ alert("导入失败："+err.message); }
+  };
+  rd.readAsText(f);
+  e.target.value="";
+});
+document.getElementById("resetBtn").addEventListener("click", ()=>{
+  if(confirm("确定重置为示例数据？当前所有记录会被清空（建议先导出备份）。")){
+    localStorage.removeItem(STORE_KEY);
+    DB = load(); save(); renderAll();
+  }
+});
+
+document.getElementById("reqEdit").addEventListener("click", ()=>{
+  const f = document.getElementById("reqForm");
+  const show = f.style.display !== "block";
+  f.style.display = show ? "block" : "none";
+  if(show) document.getElementById("reqText").value = (DB.requirements.lines||[]).join("\n");
+});
+document.getElementById("reqCancel").addEventListener("click", ()=>{
+  document.getElementById("reqForm").style.display = "none";
+});
+document.getElementById("reqSave").addEventListener("click", ()=>{
+  const lines = document.getElementById("reqText").value.split("\n").map(s=>s.trim()).filter(Boolean);
+  if(!lines.length){ alert("请至少写一条需求"); return; }
+  DB.requirements.lines = lines;
+  save(); renderReqBar(); renderJobs(); renderRadar();
+  document.getElementById("reqForm").style.display = "none";
+  alert("需求已保存，岗位列表和雷达已按新需求重新打勾 ✅");
+});
+
+document.getElementById("todayLine").textContent = today()+" · 目标：先拿 offer，1 年薪资到 1.5w";
+renderAll();
+renderResume();
+renderTalkTpl();
+setTimeout(autoBackupIfDue, 2500);
+
+// ===== 手动刷新岗位（本地桥接服务 127.0.0.1:8765）=====
+const REFRESH_URL = "http://127.0.0.1:8765";
+let refreshBusy = false;
+let refreshSeenRunning = false;
+function refreshServerStatus(){
+  return fetch(REFRESH_URL+"/status", {cache:"no-store"}).then(r=>r.json()).catch(()=>null);
+}
+function setRefreshLine(txt, cls){
+  const el = document.getElementById("refreshLine");
+  if(el){ el.textContent = txt; el.className = "refresh-line"+(cls?" "+cls:""); }
+}
+function setRefreshBtn(txt, disabled){
+  const b = document.getElementById("btnRefresh");
+  if(b){ b.textContent = txt; b.disabled = !!disabled; }
+}
+async function pollRefresh(){
+  if(typeof window === "undefined" || typeof window.fetch !== "function") return;
+  const st = await refreshServerStatus();
+  if(!st){
+    setRefreshLine("刷新服务未连接：正在自动修复，稍等重试即可（或双击「启动刷新服务.bat」）", "upd-warn");
+    return;
+  }
+  if(st.running){
+    refreshSeenRunning = true;
+    setRefreshBtn("刷新中…（约 5-15 分钟）", true);
+    setRefreshLine("正在联网搜索最新岗位并更新匹配，请稍候…（跑完本页会自动刷新）", "upd-ok");
+    setTimeout(pollRefresh, 6000);
+    return;
+  }
+  if(refreshSeenRunning){
+    refreshSeenRunning = false;
+    setRefreshLine("刷新完成，正在载入最新数据…", "upd-ok");
+    location.reload();
+    return;
+  }
+  setRefreshLine("上次更新："+(st.updatedAt||"?")+" · 版本 v"+(st.version||"?")+" · 点击上方按钮可立即重新搜索", "");
+  setTimeout(pollRefresh, 20000);
+}
+document.getElementById("btnRefresh").addEventListener("click", async ()=>{
+  if(refreshBusy) return;
+  refreshBusy = true;
+  setRefreshBtn("正在启动刷新…", true);
+  try{
+    const r = await fetch(REFRESH_URL+"/refresh", {cache:"no-store"});
+    const j = await r.json().catch(()=>({ok:false}));
+    if(j.ok || j.reason === "already-running"){
+      refreshSeenRunning = true;
+      setRefreshLine("已开始联网搜索，约 5-15 分钟完成，期间可正常使用本页…", "upd-ok");
+      setTimeout(pollRefresh, 2500);
+    }else{
+      setRefreshLine("刷新启动失败："+(j.reason||"未知原因")+"，可稍后再试", "upd-warn");
+      setRefreshBtn("手动刷新岗位", false);
+      refreshBusy = false;
+    }
+  }catch(e){
+    setRefreshLine("刷新服务未启动：请双击「求职作战台」目录里的「启动刷新服务.bat」，或重启电脑自动拉起", "upd-warn");
+    setRefreshBtn("手动刷新岗位", false);
+    refreshBusy = false;
+  }
+});
+if(typeof window !== "undefined" && typeof window.fetch === "function") pollRefresh();
+</script>
+</body>
+</html>
