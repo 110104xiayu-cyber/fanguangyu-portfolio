@@ -1,1438 +1,238 @@
-<!doctype html>
-<html lang="zh-CN">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>范广钰 · 作品集 | AI 出海产品经理（B2B 硬科技）</title>
+<!doctype html><html lang="zh-CN"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>范广钰 · 作品集 | AI 出海产品经理（B2B）</title>
 <style>
-:root{
-  --bg:#ffffff; --bg-alt:#f7f7f8;
-  --ink:#000000; --ink-2:#333333; --ink-3:#7a7a7a;
-  --line:#e8e8e8; --line-2:#d0d0d0;
-  --gold:#3a3a40; --gold-2:#5a5a62; --gold-deep:#2a2a30; --gold-dk:#1a1a1e; --gold-soft:rgba(0,0,0,.06);
-  --radius:22px; --radius-sm:16px; --maxw:1040px;
-  --bar-h:60px;
-  --shadow:0 24px 70px rgba(0,0,0,.09);
-  --shadow-soft:0 12px 34px rgba(0,0,0,.07);
-  --ease:cubic-bezier(.32,.72,0,1);
-  --font:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","PingFang SC","Microsoft YaHei",system-ui,"Segoe UI",sans-serif;
-}
+:root{--bg:#101216;--panel:#1a1e26;--ink:#f2f4f8;--muted:#9aa3b0;--line:#2a313c;--gold:#e0b45c;--blue:#5aa9ff;--r:16px}
 *{box-sizing:border-box;margin:0;padding:0}
-html,body{height:100%}
-body{font-family:var(--font);color:var(--ink);background:var(--bg);line-height:1.55;
-  -webkit-font-smoothing:antialiased;overflow:hidden}
+body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.65}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+header{position:sticky;top:0;z-index:10;background:rgba(16,18,22,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+nav{display:flex;gap:22px;padding:14px 0;overflow-x:auto}
+nav a{color:var(--muted);text-decoration:none;font-size:14px;white-space:nowrap}
+nav a:hover{color:var(--gold)}
+.hero{padding:56px 0 30px}
+.hero h1{font-size:34px;letter-spacing:1px}
+.hero .tag{margin-top:8px;color:var(--gold);font-size:16px}
+.hero p{max-width:720px;color:var(--muted);margin-top:12px;font-size:15px}
+.chips{margin-top:18px;display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:1px solid var(--line);border-radius:999px;padding:5px 12px;font-size:13px;color:#cfd6e0}
+.sec{padding:44px 0;border-top:1px solid var(--line)}
+.sec h2{font-size:24px;margin-bottom:6px}
+.sec .intro{color:var(--muted);font-size:14px;margin-bottom:24px}
+.cat{margin-bottom:28px}
+.cat-head{display:flex;align-items:baseline;gap:12px;margin-bottom:12px}
+.cat-head h3{font-size:18px;color:var(--gold)}
+.cat-head span{color:var(--muted);font-size:13px}
+.vpad{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:18px}
+.vcard{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;transition:.2s}
+.vcard:hover{border-color:var(--gold)}
+.vwrap{position:relative;background:#000}
+.vwrap video{width:100%;aspect-ratio:16/10;object-fit:cover;display:block}
+.dur{position:absolute;right:8px;bottom:8px;background:rgba(0,0,0,.72);color:#fff;padding:2px 8px;border-radius:999px;font-size:12px}
+.vmeta{padding:12px 14px}
+.vmeta h4{font-size:15px;margin-bottom:4px}
+.vmeta p{color:var(--muted);font-size:13px}
+.pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:18px}
+.pcard{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;display:flex;flex-direction:column;transition:.2s}
+.pcard:hover{border-color:var(--gold)}
+.pthumb{aspect-ratio:16/10;background:#0b0d11;overflow:hidden}
+.pthumb img{width:100%;height:100%;object-fit:cover;object-position:top}
+.pcover{width:100%;height:100%;display:flex;align-items:center;justify-content:center}
+.pcover span{font-size:44px;font-weight:800;color:rgba(255,255,255,.92);text-shadow:0 2px 12px rgba(0,0,0,.3)}
+.pbody{padding:14px;flex:1;display:flex;flex-direction:column}
+.pbody h4{font-size:16px;margin-bottom:4px}
+.tech{margin:6px 0;color:var(--blue);font-size:12px}
+.pbody p{color:var(--muted);font-size:13px;flex:1}
+.plink{margin-top:10px;color:var(--gold);text-decoration:none;font-size:14px;font-weight:600}
+.plink:hover{text-decoration:underline}
+footer{padding:30px 0 50px;border-top:1px solid var(--line);color:var(--muted);font-size:14px}
+@media(max-width:640px){.hero h1{font-size:26px}.vpad{grid-template-columns:1fr}}
+</style></head><body>
+<header><div class="wrap"><nav>
+<a href="#home">首页</a><a href="#videos">视频作品</a><a href="#projects">网页 · APP 项目</a><a href="#about">能力背景</a>
+</nav></div></header>
 
-/* ===== 背景：金色星点 + 流星 ===== */
-.bg-art{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
-/* 闪烁的小星星（替代流星拖尾，柔和融入页面） */
-.star-gold{position:absolute;border-radius:50%;
-  background:radial-gradient(circle,#fffdf6 0%,#fbeec2 58%,rgba(230,185,74,0) 100%);
-  box-shadow:0 0 6px rgba(255,250,235,.9),0 0 13px rgba(230,185,74,.35);
-  animation:twinkle var(--tw,3.4s) ease-in-out infinite;opacity:.7}
-.star-gold.big{background:radial-gradient(circle,#ffffff 0%,#fdf2cc 55%,rgba(230,185,74,0) 100%);
-  box-shadow:0 0 8px rgba(255,255,255,.95),0 0 17px rgba(230,185,74,.45)}
-@keyframes twinkle{0%,100%{opacity:.15;transform:scale(.55)}50%{opacity:1;transform:scale(1.35)}}
-
-/* ===== 顶部栏 ===== */
-.bar{position:fixed;top:0;left:0;right:0;height:var(--bar-h);z-index:60;display:flex;align-items:center;
-  padding:0 18px;gap:8px;background:rgba(255,255,255,.88);
-  backdrop-filter:saturate(180%) blur(16px);-webkit-backdrop-filter:saturate(180%) blur(16px);
-  border-bottom:1px solid var(--line)}
-.bar .back{display:none;align-items:center;justify-content:center;width:34px;height:34px;border-radius:50%;
-  border:none;background:transparent;color:var(--ink);font-size:28px;line-height:1;cursor:pointer;transition:.18s}
-.bar .back:hover{background:var(--bg-alt)}
-.bar .brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:15px;letter-spacing:-.2px;cursor:pointer}
-.bar .brand .mark{width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,var(--gold-2),var(--gold-deep));color:#fff;display:grid;place-items:center;font-size:12px;font-weight:900}
-.bar .title{display:none;font-weight:600;font-size:15px;letter-spacing:-.2px}
-body.sub-open .bar .back{display:flex}
-body.sub-open .bar .brand{display:none}
-body.sub-open .bar .title{display:block}
-
-/* ===== 视图容器 ===== */
-.view{position:fixed;top:var(--bar-h);left:0;right:0;bottom:0;overflow-y:auto;-webkit-overflow-scrolling:touch;
-  background:var(--bg);opacity:0;visibility:hidden;transform:translateX(100%);
-  transition:transform .52s var(--ease),opacity .4s ease,visibility .52s;z-index:10}
-.view.active{opacity:1;visibility:visible;transform:translateX(0)}
-#home.view{transform:translateX(0);z-index:5;background:transparent}
-#home.view.behind{transform:translateX(-6%);opacity:.2}
-.wrap{position:relative;z-index:2;max-width:var(--maxw);margin:0 auto;padding:0 26px 80px}
-
-/* ===== 首页左右分栏 ===== */
-.hero{display:grid;grid-template-columns:1.05fr 1fr;gap:50px;align-items:center;
-  padding:56px 0 48px;min-height:calc(100vh - var(--bar-h) - 40px)}
-.hero-left{text-align:left;position:relative;z-index:3}
-.avatar-wrap{width:108px;height:108px;border-radius:50%;overflow:hidden;background:var(--bg-alt);
-  border:3px solid var(--ink-3);box-shadow:0 0 22px rgba(0,0,0,.12),var(--shadow);
-  display:grid;place-items:center;margin-bottom:20px}
-.avatar-wrap img{width:100%;height:100%;object-fit:cover;display:block}
-.avatar-fallback{width:100%;height:100%;display:none;place-items:center;font-size:38px;font-weight:800;color:var(--ink-3);background:var(--bg-alt)}
-.hero-left h1{font-size:38px;font-weight:800;letter-spacing:-1.2px;line-height:1.1}
-.hero-left .wish{display:inline-flex;align-items:center;gap:8px;margin-top:13px;font-size:12.5px;font-weight:600;color:var(--ink-2);
-  padding:8px 16px;border:1px solid var(--line-2);border-radius:999px;background:rgba(0,0,0,.04)}
-.hero-left .wish::before{content:'';width:7px;height:7px;border-radius:50%;background:var(--gold-2);
-  box-shadow:0 0 10px rgba(212,160,23,.6)}
-.hero-left .intro{margin-top:17px;font-size:15px;color:var(--ink-2);max-width:460px;line-height:1.8}
-.hero-left .tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
-.hero-left .tags span{font-size:12px;padding:6px 13px;border:1px solid var(--line-2);border-radius:999px;color:var(--ink-2);background:#fff}
-.hero-left .contacts{display:flex;flex-wrap:wrap;gap:10px 22px;margin-top:20px}
-.contact{display:inline-flex;align-items:center;gap:8px;font-size:13px;color:var(--ink-2)}
-.contact svg{color:var(--gold);flex:0 0 auto}
-.contact b{color:var(--ink);font-weight:600}
-
-/* ===== 右侧 3D 键盘（黑白灰 · 鼠标联动旋转） ===== */
-.hero-right{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:420px;z-index:3}
-/* 右侧 3D 数字小键盘（内联版：无独立背景·融入页面·左键拖动·纯装饰） */
-.np-embed{--k-text:#1d1d1f;--k-bg1:#ffffff;--k-bg2:#f4f4f7;--k-bg3:#e7e7ec;--k-shadow:#d6d8df;--plate-bg1:#fcfcfe;--plate-bg2:#e4e5ea;--plate-border:#d3d6dd;--k-radius:30px;position:relative;width:min(420px,100%);display:flex;align-items:center;justify-content:center}
-.np-stage{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;gap:16px;width:100%}
-.np-scene{position:relative;perspective:1300px;width:min(300px,80%);display:flex;justify-content:center;cursor:grab;user-select:none;
-  animation:npfloaty 5.5s ease-in-out infinite}
-@keyframes npfloaty{0%,100%{transform:translateY(-5px)}50%{transform:translateY(5px)}}
-.np-ground{position:absolute;left:50%;bottom:8%;width:82%;height:54px;transform:translateX(-50%);
-  background:radial-gradient(50% 50% at 50% 50%,rgba(38,50,76,.30),rgba(38,50,76,0) 72%);filter:blur(5px);pointer-events:none;z-index:1}
-.np-pad{position:relative;z-index:2;width:100%;transform-style:preserve-3d;transform:rotateX(54deg) rotateY(0deg);will-change:transform}
-.np-pad .layer{position:absolute;inset:0;border-radius:86px;box-shadow:0 1px 0 rgba(255,255,255,.55) inset}
-.np-pad .plate{position:relative;transform-style:preserve-3d;background:linear-gradient(160deg,var(--plate-bg1),var(--plate-bg2));
-  border:1px solid var(--plate-border);border-radius:86px;padding:24px;box-shadow:0 20px 44px rgba(40,52,80,.20),inset 0 2px 3px rgba(255,255,255,.85)}
-.np-pad .grid{display:flex;flex-direction:column;gap:14px}
-.np-pad .krow{display:flex;gap:14px}
-.np-pad .k{flex:1;min-width:0;height:64px;border:none;cursor:default;user-select:none;outline:none;border-radius:var(--k-radius);
-  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC",sans-serif;font-size:20px;font-weight:600;color:var(--k-text);letter-spacing:.01em;
-  background:linear-gradient(180deg,var(--k-bg1) 0%,var(--k-bg2) 52%,var(--k-bg3) 100%);transform:translateZ(26px);
-  box-shadow:0 7px 0 var(--k-shadow),0 11px 16px rgba(30,42,66,.18),inset 0 1px 1px rgba(255,255,255,1),inset 0 -2px 3px rgba(150,158,174,.22);
-  display:grid;place-items:center;position:relative;overflow:hidden;transition:transform .2s cubic-bezier(.34,1.56,.64,1),box-shadow .2s ease,filter .2s ease}
-.np-pad .k::after{content:"";position:absolute;left:16%;right:16%;top:12%;height:42%;border-radius:22px;
-  background:linear-gradient(180deg,rgba(255,255,255,.92),rgba(255,255,255,0));pointer-events:none}
-.np-pad .k:hover{transform:translateZ(26px) translateY(3px) scale(.975);filter:brightness(1.03);
-  box-shadow:0 3px 0 #d6d8df,0 5px 9px rgba(30,42,66,.2),inset 0 1px 1px rgba(255,255,255,1),inset 0 -1px 2px rgba(150,158,174,.2)}
-.np-pad .k.op{color:#6b7079;filter:saturate(.82) brightness(.99);
-  box-shadow:0 7px 0 var(--k-shadow),0 11px 16px rgba(30,42,66,.16),inset 0 1px 1px rgba(255,255,255,.9),inset 0 -2px 3px rgba(120,128,146,.22)}
-.np-pad .k.back{color:#9a6a12}
-.np-cap{font-size:12px;color:#5a5f6a;letter-spacing:.02em;text-align:center}
-.np-cap b{color:#b8860b;font-weight:700}
-@media (max-width:480px){.np-pad .k{height:56px;font-size:18px;border-radius:24px}}
-@media (max-width:880px){ .np-embed{width:min(380px,92%);margin:0 auto} }
-
-/* ===== 首页四个作品集大按钮（2×2） ===== */
-.modules{margin:14px auto 0;display:grid;grid-template-columns:repeat(2,1fr);gap:18px;max-width:760px;width:100%}
-.module{position:relative;background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:24px 26px 26px;
-  cursor:pointer;text-align:left;transition:.28s var(--ease);display:flex;flex-direction:column;gap:9px;overflow:hidden}
-.module:hover{transform:translateY(-4px);border-color:var(--ink);box-shadow:var(--shadow-soft)}
-.module:active{transform:scale(.99)}
-.m-num{font-size:12px;font-weight:700;color:var(--ink-3);letter-spacing:.14em;font-feature-settings:"tnum"}
-.m-icon{position:absolute;top:22px;right:22px;width:44px;height:44px;border-radius:13px;background:var(--bg-alt);
-  display:grid;place-items:center;color:var(--ink);transition:.26s var(--ease)}
-.module:hover .m-icon{background:var(--ink);color:#fff}
-.m-icon svg{display:block}
-.m-title{font-size:19px;font-weight:800;letter-spacing:-.3px;margin-top:2px}
-.m-sub{font-size:13px;color:var(--ink-2);line-height:1.55;padding-right:40px}
-
-/* ===== 子页面 ===== */
-.sub-head{display:flex;align-items:baseline;gap:12px;border-bottom:1px solid var(--line);padding:36px 0 18px;margin-bottom:28px}
-.sub-num{font-size:12px;font-weight:700;color:#fff;background:var(--ink);width:28px;height:28px;border-radius:8px;
-  display:grid;place-items:center;flex:0 0 auto;align-self:center}
-.sub-title{font-size:24px;font-weight:800;letter-spacing:-.5px}
-.sub-sub{color:var(--ink-3);font-size:14px;margin-top:12px;line-height:1.6}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:18px}
-.card{background:#fff;border:1px solid var(--line);border-radius:var(--radius-sm);overflow:hidden;transition:.22s;cursor:pointer}
-.card:hover{border-color:var(--ink);transform:translateY(-3px);box-shadow:var(--shadow-soft)}
-.card:focus{outline:2px solid var(--ink);outline-offset:2px}
-.card-body{padding:18px 20px 20px}
-.card-body h3{font-size:17px;font-weight:700;letter-spacing:-.2px}
-.card-body p{color:var(--ink-2);font-size:13.5px;margin-top:8px;line-height:1.65}
-.card-meta{display:inline-block;margin-top:14px;font-size:12px;color:var(--ink-3)}
-.card-actions{display:flex;gap:10px;margin-top:16px}
-.btn{border:1px solid var(--ink);background:var(--ink);color:#fff;padding:9px 17px;border-radius:10px;font-size:13px;
-  font-weight:600;cursor:pointer;font-family:var(--font);transition:.18s;text-decoration:none;display:inline-flex;align-items:center}
-.btn:hover{opacity:.88}
-.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line-2)}
-.btn.ghost:hover{background:var(--bg-alt);border-color:var(--ink)}
-.vid-thumb,.web-thumb{height:160px;background:var(--bg-alt);position:relative;display:grid;place-items:center}
-.web-thumb{background:linear-gradient(135deg,#f0f0f2,#e6e6e8)}
-.play{width:52px;height:52px;border-radius:50%;background:var(--ink);color:#fff;display:grid;place-items:center;font-size:17px}
-.badge{position:absolute;top:14px;left:14px;background:var(--ink);color:#fff;font-size:11px;padding:5px 11px;border-radius:8px;font-weight:700}
-
-.more-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px}
-.more-col{border:1px solid var(--line);border-radius:var(--radius-sm);padding:24px;background:#fff}
-.more-col h4{font-size:12px;text-transform:uppercase;letter-spacing:.16em;color:var(--ink-3);margin-bottom:16px;font-weight:800}
-.more-item{padding:13px 0;border-top:1px solid var(--line)}
-.more-item:first-of-type{border-top:none;padding-top:0}
-.more-title{font-weight:700;font-size:15px;color:var(--ink)}
-.more-desc{color:var(--ink-2);font-size:13.5px;margin-top:4px;line-height:1.55}
-.about-contact{margin-top:32px;border-top:1px solid var(--line);padding-top:24px;font-size:14px;color:var(--ink-2);line-height:2}
-.about-contact b{color:var(--ink);font-weight:700}
-
-.modal{position:fixed;inset:0;z-index:100;display:none;align-items:flex-start;justify-content:center;padding:56px 18px;background:rgba(255,255,255,.72);backdrop-filter:blur(8px)}
-.modal.open{display:flex;animation:fade .22s ease}
-@keyframes fade{from{opacity:0}to{opacity:1}}
-.modal-card{background:#fff;border-radius:20px;width:min(880px,100%);max-height:86vh;display:flex;flex-direction:column;
-  box-shadow:0 40px 100px rgba(0,0,0,.18);overflow:hidden;animation:pop .32s var(--ease);border:1px solid var(--line)}
-@keyframes pop{from{opacity:0;transform:translateY(16px) scale(.98)}to{opacity:1;transform:none}}
-.modal-head{display:flex;align-items:center;justify-content:space-between;padding:16px 24px;border-bottom:1px solid var(--line);
-  position:sticky;top:0;background:#fff;z-index:2}
-.modal-head h3{font-size:17px;font-weight:800}
-.x{border:1px solid var(--line-2);background:#fff;width:34px;height:34px;border-radius:50%;font-size:16px;cursor:pointer;color:var(--ink);transition:.15s}
-.x:hover{border-color:var(--ink)}
-.modal-body{padding:10px 28px 34px;overflow:auto}
-#videoFrame,#webFrame{min-height:360px;display:grid;place-items:center}
-#videoFrame video,#webFrame iframe{width:100%;height:62vh;border:none;border-radius:14px}
-.ph{color:var(--ink-2);font-size:14px;text-align:center;padding:48px;line-height:1.9}
-
-.doc-body{max-width:780px;margin:0 auto;padding-top:14px}
-.doc-body h1{font-size:24px;margin:18px 0 10px;letter-spacing:-.3px;font-weight:800}
-.doc-body h2{font-size:18px;margin:22px 0 10px;padding-bottom:7px;border-bottom:1px solid var(--line);font-weight:800}
-.doc-body h3{font-size:15.5px;margin:16px 0 7px;font-weight:800}
-.doc-body p{margin:10px 0;font-size:15px;color:var(--ink-2);line-height:1.75}
-.doc-body ul,.doc-body ol{margin:10px 0 10px 24px;font-size:15px}
-.doc-body li{margin:5px 0}
-.doc-body strong{color:var(--ink)}
-.doc-body code{background:var(--bg-alt);padding:2px 7px;border-radius:6px;font-size:13px;font-family:ui-monospace,Menlo,monospace}
-.doc-body pre{background:var(--ink);color:#f5f5f5;padding:16px;border-radius:14px;overflow:auto;margin:12px 0;font-size:13px}
-.doc-body pre code{background:none;color:inherit;padding:0}
-.doc-body blockquote{margin:12px 0;padding:12px 18px;border-left:3px solid var(--ink);background:var(--bg-alt);border-radius:0 10px 10px 0;color:var(--ink-2)}
-.doc-body table{border-collapse:collapse;width:100%;margin:14px 0;font-size:13.5px}
-.doc-body th,.doc-body td{border:1px solid var(--line);padding:9px 12px;text-align:left}
-.doc-body th{background:var(--bg-alt);font-weight:800}
-.doc-body a{color:var(--ink);text-decoration:underline}
-
-@keyframes rise{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
-.hero-left .avatar-wrap{animation:rise .8s .05s var(--ease) both}
-.hero-left h1{animation:rise .7s .12s var(--ease) both}
-.hero-left .wish{animation:rise .7s .17s var(--ease) both}
-.hero-left .intro{animation:rise .7s .22s var(--ease) both}
-.hero-left .tags{animation:rise .7s .26s var(--ease) both}
-.hero-left .contacts{animation:rise .7s .30s var(--ease) both}
-.np-display{animation:rise .8s .12s var(--ease) both}
-.np-scene{animation:rise 1s .18s var(--ease) both}
-.module:nth-child(1){animation:rise .65s .32s var(--ease) both}
-.module:nth-child(2){animation:rise .65s .37s var(--ease) both}
-.module:nth-child(3){animation:rise .65s .42s var(--ease) both}
-.module:nth-child(4){animation:rise .65s .47s var(--ease) both}
-
-@media (max-width:880px){
-  .hero{grid-template-columns:1fr;gap:30px;padding:40px 0 38px;min-height:auto}
-  .hero-left{text-align:center;display:flex;flex-direction:column;align-items:center}
-  .hero-left .intro{max-width:100%}
-  .hero-left .tags,.hero-left .contacts{justify-content:center}
-  .hero-right{min-height:auto}
-  .modules{grid-template-columns:1fr;gap:14px}
-  .module{padding:22px 20px}
-  .wrap{padding:0 18px 60px}
-  .modal{padding:24px 12px}
-  .sub-head{padding-top:26px}
-}
-
-/* ===== 隐藏式键盘编辑器（仅你能开） ===== */
-.np-edit-btn{position:fixed;right:18px;bottom:18px;z-index:80;width:42px;height:42px;border-radius:50%;
-  display:grid;place-items:center;cursor:pointer;color:#9aa0aa;background:rgba(255,255,255,.72);
-  border:1px solid var(--line);box-shadow:0 4px 14px rgba(0,0,0,.10);opacity:.16;transition:.2s var(--ease)}
-.np-edit-btn:hover{opacity:1;color:var(--ink);transform:rotate(35deg)}
-.np-scrim{position:fixed;inset:0;z-index:90;background:rgba(20,22,28,.30);-webkit-backdrop-filter:blur(2px);backdrop-filter:blur(2px);display:none}
-.np-scrim.open{display:block}
-.np-panel{position:fixed;top:0;right:0;bottom:0;width:min(340px,92vw);z-index:95;background:#fff;
-  border-left:1px solid var(--line);box-shadow:-20px 0 60px rgba(0,0,0,.14);transform:translateX(106%);
-  transition:transform .34s var(--ease);display:flex;flex-direction:column}
-.np-panel.open{transform:translateX(0)}
-.np-panel-head{display:flex;align-items:center;justify-content:space-between;padding:18px 20px;border-bottom:1px solid var(--line)}
-.np-ph-title{font-weight:800;font-size:16px;letter-spacing:-.3px}
-.np-ph-sub{font-size:12px;color:var(--ink-3);margin-top:3px}
-.np-x{border:1px solid var(--line-2);background:#fff;width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:15px;color:var(--ink);transition:.15s}
-.np-x:hover{border-color:var(--ink)}
-.np-panel-body{overflow:auto;padding:6px 20px 28px}
-.np-sec{padding:18px 0;border-top:1px solid var(--line)}
-.np-sec:first-child{border-top:none}
-.np-sec-t{font-size:12px;text-transform:uppercase;letter-spacing:.14em;color:var(--ink-3);font-weight:800;margin-bottom:12px}
-.np-hint{font-size:12px;color:var(--ink-2);line-height:1.6;margin-bottom:12px}
-.np-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:7px 0}
-.np-row label{font-size:13px;color:var(--ink-2)}
-.np-row input[type=color]{width:44px;height:30px;border:1px solid var(--line-2);border-radius:8px;background:#fff;cursor:pointer;padding:2px}
-.np-row input[type=range]{flex:1;max-width:170px;accent-color:var(--ink)}
-.np-val{font-size:12px;color:var(--ink-3);min-width:44px;text-align:right;font-feature-settings:"tnum"}
-.np-btn{border:1px solid var(--ink);background:var(--ink);color:#fff;padding:10px 14px;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;font-family:var(--font);width:100%;transition:.15s}
-.np-btn:hover{opacity:.88}
-.np-btn.ghost{background:#fff;color:var(--ink);border-color:var(--line-2);width:auto;padding:8px 14px}
-.np-btn.danger{background:#fff;color:#c0392b;border-color:#e6b3ad;margin-top:12px}
-.np-btns{display:flex;gap:10px}
-.np-btns .np-btn{width:auto;flex:1}
-body.np-editing .np-pad .k{cursor:pointer}
-body.np-editing .np-pad .k:hover{filter:brightness(1.06)}
-.np-pad .k.sel{outline:3px solid #2563eb;outline-offset:2px;box-shadow:0 0 0 4px rgba(37,99,235,.20),0 7px 0 var(--k-shadow)}
-.np-pad .k.editing{cursor:text;outline:3px solid #b8860b;outline-offset:2px}
-@media (max-width:880px){ .np-edit-btn{opacity:.34} .np-panel{width:min(360px,100vw)} }
-</style>
-</head>
-<body>
-
-<div class="bg-art" aria-hidden="true"><div class="star-gold" style="top:31%;left:50%;width:2px;height:2px;--tw:4.39s;animation-delay:4.37s"></div><div class="star-gold big" style="top:52%;left:97%;width:3px;height:3px;--tw:4.41s;animation-delay:3.93s"></div><div class="star-gold big" style="top:19%;left:81%;width:3px;height:3px;--tw:3.05s;animation-delay:1.25s"></div><div class="star-gold" style="top:43%;left:11%;width:2px;height:2px;--tw:4.54s;animation-delay:0.91s"></div><div class="star-gold" style="top:94%;left:74%;width:2px;height:2px;--tw:3.06s;animation-delay:0.95s"></div><div class="star-gold big" style="top:86%;left:23%;width:4px;height:4px;--tw:2.49s;animation-delay:2.34s"></div><div class="star-gold big" style="top:83%;left:100%;width:3px;height:3px;--tw:4.1s;animation-delay:1.4s"></div><div class="star-gold big" style="top:75%;left:5%;width:3px;height:3px;--tw:5.15s;animation-delay:3.08s"></div><div class="star-gold big" style="top:90%;left:53%;width:3px;height:3px;--tw:4.25s;animation-delay:3.64s"></div><div class="star-gold" style="top:20%;left:55%;width:2px;height:2px;--tw:3.87s;animation-delay:0.23s"></div><div class="star-gold" style="top:75%;left:53%;width:2px;height:2px;--tw:2.62s;animation-delay:3.48s"></div><div class="star-gold" style="top:78%;left:24%;width:2px;height:2px;--tw:3.19s;animation-delay:1.04s"></div><div class="star-gold" style="top:100%;left:85%;width:1px;height:1px;--tw:2.51s;animation-delay:3.71s"></div><div class="star-gold" style="top:89%;left:45%;width:2px;height:2px;--tw:4.46s;animation-delay:2.06s"></div><div class="star-gold big" style="top:57%;left:97%;width:3px;height:3px;--tw:4.73s;animation-delay:2.62s"></div><div class="star-gold" style="top:28%;left:85%;width:2px;height:2px;--tw:3.4s;animation-delay:1.14s"></div><div class="star-gold" style="top:45%;left:34%;width:1px;height:1px;--tw:3.86s;animation-delay:3.1s"></div><div class="star-gold big" style="top:80%;left:21%;width:3px;height:3px;--tw:4.75s;animation-delay:3.14s"></div><div class="star-gold" style="top:19%;left:97%;width:2px;height:2px;--tw:3.67s;animation-delay:2.52s"></div><div class="star-gold" style="top:72%;left:97%;width:2px;height:2px;--tw:5.83s;animation-delay:4.64s"></div><div class="star-gold big" style="top:10%;left:69%;width:3px;height:3px;--tw:4.04s;animation-delay:2.26s"></div><div class="star-gold" style="top:66%;left:11%;width:1px;height:1px;--tw:2.54s;animation-delay:2.37s"></div><div class="star-gold" style="top:22%;left:43%;width:1px;height:1px;--tw:5.05s;animation-delay:0.06s"></div><div class="star-gold" style="top:0%;left:9%;width:2px;height:2px;--tw:2.98s;animation-delay:1.93s"></div><div class="star-gold big" style="top:8%;left:25%;width:3px;height:3px;--tw:4.94s;animation-delay:1.07s"></div><div class="star-gold big" style="top:41%;left:27%;width:3px;height:3px;--tw:3.75s;animation-delay:0.08s"></div><div class="star-gold big" style="top:33%;left:20%;width:3px;height:3px;--tw:3.26s;animation-delay:4.55s"></div><div class="star-gold" style="top:38%;left:56%;width:2px;height:2px;--tw:5.03s;animation-delay:4.25s"></div><div class="star-gold big" style="top:32%;left:9%;width:3px;height:3px;--tw:5.39s;animation-delay:0.7s"></div><div class="star-gold big" style="top:71%;left:57%;width:3px;height:3px;--tw:5.65s;animation-delay:1.28s"></div><div class="star-gold big" style="top:74%;left:62%;width:4px;height:4px;--tw:2.58s;animation-delay:4.91s"></div><div class="star-gold" style="top:54%;left:54%;width:2px;height:2px;--tw:4.73s;animation-delay:4.96s"></div><div class="star-gold" style="top:95%;left:86%;width:2px;height:2px;--tw:4.45s;animation-delay:0.18s"></div><div class="star-gold" style="top:27%;left:59%;width:1px;height:1px;--tw:2.92s;animation-delay:2.39s"></div><div class="star-gold big" style="top:92%;left:87%;width:3px;height:3px;--tw:3.56s;animation-delay:1.42s"></div><div class="star-gold" style="top:97%;left:89%;width:2px;height:2px;--tw:3.41s;animation-delay:0.76s"></div><div class="star-gold" style="top:68%;left:26%;width:1px;height:1px;--tw:4.93s;animation-delay:4.4s"></div><div class="star-gold" style="top:18%;left:33%;width:2px;height:2px;--tw:2.8s;animation-delay:2.74s"></div><div class="star-gold" style="top:18%;left:27%;width:1px;height:1px;--tw:3.76s;animation-delay:0.47s"></div><div class="star-gold big" style="top:91%;left:39%;width:3px;height:3px;--tw:2.96s;animation-delay:1.39s"></div><div class="star-gold" style="top:7%;left:14%;width:1px;height:1px;--tw:2.58s;animation-delay:3.01s"></div><div class="star-gold" style="top:8%;left:4%;width:2px;height:2px;--tw:4.43s;animation-delay:2.67s"></div><div class="star-gold big" style="top:5%;left:87%;width:3px;height:3px;--tw:3.21s;animation-delay:0.97s"></div><div class="star-gold" style="top:83%;left:54%;width:1px;height:1px;--tw:5.46s;animation-delay:4.85s"></div><div class="star-gold big" style="top:2%;left:30%;width:4px;height:4px;--tw:4.66s;animation-delay:4.17s"></div><div class="star-gold" style="top:7%;left:79%;width:2px;height:2px;--tw:5.18s;animation-delay:0.35s"></div><div class="star-gold big" style="top:59%;left:98%;width:3px;height:3px;--tw:2.94s;animation-delay:1.48s"></div><div class="star-gold" style="top:5%;left:19%;width:2px;height:2px;--tw:4.89s;animation-delay:4.7s"></div><div class="star-gold" style="top:34%;left:21%;width:2px;height:2px;--tw:5.02s;animation-delay:3.96s"></div><div class="star-gold" style="top:48%;left:78%;width:1px;height:1px;--tw:3.88s;animation-delay:1.46s"></div><div class="star-gold big" style="top:1%;left:74%;width:3px;height:3px;--tw:5.76s;animation-delay:1.71s"></div><div class="star-gold" style="top:73%;left:27%;width:2px;height:2px;--tw:5.47s;animation-delay:4.3s"></div><div class="star-gold" style="top:98%;left:89%;width:1px;height:1px;--tw:4.37s;animation-delay:1.57s"></div><div class="star-gold" style="top:4%;left:66%;width:2px;height:2px;--tw:3.89s;animation-delay:3.22s"></div><div class="star-gold" style="top:9%;left:61%;width:1px;height:1px;--tw:5.16s;animation-delay:0.69s"></div><div class="star-gold big" style="top:83%;left:32%;width:3px;height:3px;--tw:3.26s;animation-delay:3.27s"></div><div class="star-gold big" style="top:58%;left:37%;width:3px;height:3px;--tw:5.61s;animation-delay:4.21s"></div><div class="star-gold big" style="top:15%;left:26%;width:3px;height:3px;--tw:2.54s;animation-delay:4.36s"></div><div class="star-gold" style="top:100%;left:50%;width:1px;height:1px;--tw:4.12s;animation-delay:0.1s"></div><div class="star-gold big" style="top:56%;left:37%;width:4px;height:4px;--tw:2.53s;animation-delay:3.44s"></div><div class="star-gold" style="top:22%;left:52%;width:1px;height:1px;--tw:4.08s;animation-delay:2.33s"></div><div class="star-gold big" style="top:58%;left:84%;width:3px;height:3px;--tw:3.79s;animation-delay:3.88s"></div><div class="star-gold big" style="top:18%;left:16%;width:3px;height:3px;--tw:5.9s;animation-delay:3.89s"></div><div class="star-gold" style="top:7%;left:30%;width:1px;height:1px;--tw:5.0s;animation-delay:0.71s"></div><div class="star-gold" style="top:22%;left:47%;width:1px;height:1px;--tw:3.48s;animation-delay:3.33s"></div><div class="star-gold" style="top:91%;left:1%;width:2px;height:2px;--tw:5.85s;animation-delay:2.91s"></div><div class="star-gold" style="top:44%;left:29%;width:2px;height:2px;--tw:3.31s;animation-delay:3.1s"></div><div class="star-gold" style="top:70%;left:20%;width:2px;height:2px;--tw:5.66s;animation-delay:2.83s"></div><div class="star-gold" style="top:35%;left:0%;width:2px;height:2px;--tw:2.81s;animation-delay:0.58s"></div><div class="star-gold" style="top:2%;left:94%;width:2px;height:2px;--tw:3.24s;animation-delay:0.69s"></div><div class="star-gold" style="top:66%;left:62%;width:2px;height:2px;--tw:3.49s;animation-delay:1.27s"></div><div class="star-gold big" style="top:57%;left:26%;width:4px;height:4px;--tw:3.45s;animation-delay:0.39s"></div><div class="star-gold" style="top:35%;left:87%;width:1px;height:1px;--tw:3.63s;animation-delay:2.79s"></div><div class="star-gold" style="top:7%;left:60%;width:2px;height:2px;--tw:4.63s;animation-delay:0.85s"></div><div class="star-gold" style="top:48%;left:13%;width:1px;height:1px;--tw:3.19s;animation-delay:2.68s"></div><div class="star-gold" style="top:98%;left:30%;width:2px;height:2px;--tw:5.95s;animation-delay:2.03s"></div><div class="star-gold big" style="top:33%;left:42%;width:4px;height:4px;--tw:4.37s;animation-delay:1.25s"></div><div class="star-gold" style="top:64%;left:35%;width:2px;height:2px;--tw:4.0s;animation-delay:3.25s"></div><div class="star-gold big" style="top:62%;left:71%;width:3px;height:3px;--tw:4.0s;animation-delay:4.95s"></div><div class="star-gold" style="top:24%;left:44%;width:2px;height:2px;--tw:3.5s;animation-delay:3.22s"></div><div class="star-gold" style="top:60%;left:18%;width:1px;height:1px;--tw:4.88s;animation-delay:4.88s"></div><div class="star-gold big" style="top:84%;left:94%;width:4px;height:4px;--tw:4.75s;animation-delay:2.13s"></div><div class="star-gold big" style="top:82%;left:48%;width:4px;height:4px;--tw:4.27s;animation-delay:2.63s"></div><div class="star-gold big" style="top:82%;left:91%;width:3px;height:3px;--tw:5.81s;animation-delay:2.42s"></div><div class="star-gold" style="top:43%;left:60%;width:2px;height:2px;--tw:5.92s;animation-delay:2.62s"></div><div class="star-gold" style="top:91%;left:2%;width:1px;height:1px;--tw:2.67s;animation-delay:4.63s"></div><div class="star-gold" style="top:22%;left:60%;width:2px;height:2px;--tw:5.77s;animation-delay:4.55s"></div><div class="star-gold big" style="top:47%;left:99%;width:3px;height:3px;--tw:4.74s;animation-delay:1.46s"></div><div class="star-gold" style="top:32%;left:47%;width:1px;height:1px;--tw:2.66s;animation-delay:3.93s"></div><div class="star-gold" style="top:23%;left:22%;width:2px;height:2px;--tw:4.78s;animation-delay:1.22s"></div><div class="star-gold big" style="top:97%;left:60%;width:3px;height:3px;--tw:4.71s;animation-delay:3.14s"></div><div class="star-gold" style="top:2%;left:91%;width:1px;height:1px;--tw:3.1s;animation-delay:3.27s"></div><div class="star-gold" style="top:33%;left:65%;width:1px;height:1px;--tw:3.44s;animation-delay:2.58s"></div><div class="star-gold" style="top:43%;left:87%;width:2px;height:2px;--tw:5.63s;animation-delay:1.49s"></div><div class="star-gold" style="top:33%;left:74%;width:1px;height:1px;--tw:5.3s;animation-delay:4.57s"></div><div class="star-gold big" style="top:54%;left:75%;width:3px;height:3px;--tw:4.27s;animation-delay:1.06s"></div><div class="star-gold big" style="top:96%;left:27%;width:3px;height:3px;--tw:3.24s;animation-delay:4.81s"></div><div class="star-gold big" style="top:91%;left:85%;width:4px;height:4px;--tw:4.18s;animation-delay:2.76s"></div><div class="star-gold" style="top:96%;left:28%;width:1px;height:1px;--tw:3.92s;animation-delay:0.79s"></div><div class="star-gold big" style="top:24%;left:40%;width:3px;height:3px;--tw:4.27s;animation-delay:2.96s"></div><div class="star-gold" style="top:61%;left:40%;width:1px;height:1px;--tw:5.63s;animation-delay:2.36s"></div><div class="star-gold big" style="top:31%;left:66%;width:3px;height:3px;--tw:5.66s;animation-delay:1.89s"></div><div class="star-gold" style="top:6%;left:81%;width:1px;height:1px;--tw:3.4s;animation-delay:0.42s"></div><div class="star-gold" style="top:20%;left:98%;width:1px;height:1px;--tw:3.48s;animation-delay:3.65s"></div><div class="star-gold big" style="top:86%;left:78%;width:3px;height:3px;--tw:3.92s;animation-delay:2.82s"></div><div class="star-gold" style="top:0%;left:47%;width:2px;height:2px;--tw:2.42s;animation-delay:3.58s"></div><div class="star-gold" style="top:12%;left:69%;width:2px;height:2px;--tw:5.19s;animation-delay:0.19s"></div><div class="star-gold" style="top:45%;left:18%;width:2px;height:2px;--tw:2.73s;animation-delay:3.8s"></div><div class="star-gold big" style="top:96%;left:33%;width:4px;height:4px;--tw:4.38s;animation-delay:1.38s"></div><div class="star-gold" style="top:83%;left:32%;width:1px;height:1px;--tw:4.23s;animation-delay:3.32s"></div><div class="star-gold big" style="top:20%;left:37%;width:4px;height:4px;--tw:5.06s;animation-delay:3.09s"></div><div class="star-gold" style="top:91%;left:14%;width:1px;height:1px;--tw:4.65s;animation-delay:3.31s"></div><div class="star-gold" style="top:33%;left:39%;width:2px;height:2px;--tw:4.69s;animation-delay:4.21s"></div><div class="star-gold big" style="top:14%;left:87%;width:3px;height:3px;--tw:4.03s;animation-delay:2.19s"></div><div class="star-gold" style="top:2%;left:71%;width:2px;height:2px;--tw:3.87s;animation-delay:4.35s"></div><div class="star-gold big" style="top:64%;left:87%;width:4px;height:4px;--tw:5.27s;animation-delay:4.23s"></div><div class="star-gold" style="top:3%;left:78%;width:2px;height:2px;--tw:5.48s;animation-delay:2.9s"></div><div class="star-gold big" style="top:29%;left:48%;width:3px;height:3px;--tw:3.57s;animation-delay:1.85s"></div><div class="star-gold" style="top:26%;left:13%;width:1px;height:1px;--tw:4.88s;animation-delay:1.86s"></div><div class="star-gold big" style="top:29%;left:5%;width:3px;height:3px;--tw:3.44s;animation-delay:4.21s"></div></div>
-
-<header class="bar">
-  <button class="back" onclick="openView('home')" aria-label="返回">‹</button>
-  <div class="brand" onclick="openView('home')"><span class="mark">范</span> 范广钰 · 作品集</div>
-  <div class="title" id="barTitle">作品集</div>
-</header>
-
-<section class="view active" id="home">
-  <div class="wrap">
-    <div class="hero">
-      <div class="hero-left">
-        <div class="avatar-wrap">
-          <img src="photo.jpg" alt="头像"
-               onerror="this.style.display='none';document.getElementById('avatarFallback').style.display='grid'">
-          <div class="avatar-fallback" id="avatarFallback">范</div>
-        </div>
-        <h1>范广钰</h1>
-        <div class="wish">求职意愿：新能源 / 机器人 出海内容运营 · AI 出海产品经理（B2B）</div>
-        <p class="intro">广告学本科，会拍摄剪辑，熟练 Codex / Work Buddy / DeepSeek Harness 等 AI 工具链。专注把中国新能源 / 机器人产品，用内容与智能体讲给海外 B2B 客户。</p>
-        <div class="tags">
-          <span>广告学</span><span>拍摄剪辑</span><span>AI 工具链</span><span>B2B 内容增长</span>
-        </div>
-        <div class="contacts">
-          <span class="contact"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2.4"/><path d="M3.5 7l8.5 5.5L20.5 7"/></svg><b>2317383228@qq.com</b></span>
-          <span class="contact"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.5 8.5 0 0 1-8.5 8.5c-1.4 0-2.7-.3-3.9-.9L3 21l1.9-5.6A8.5 8.5 0 1 1 21 11.5z"/><path d="M8.5 10.5h7M8.5 13.5h4"/></svg>微信 <b>Guanyuoto</b></span>
-        </div>
-      </div>
-      <div class="hero-right">
-        <div class="np-embed" id="npEmbed">
-        <div class="np-stage">
-          <div class="np-scene" id="npScene">
-            <div class="np-ground"></div>
-            <div class="np-pad" id="npPad">
-              <div class="plate"><div class="layer" style="transform:translateZ(-1px);background:rgb(214,217,223)"></div><div class="layer" style="transform:translateZ(-2px);background:rgb(213,216,222)"></div><div class="layer" style="transform:translateZ(-3px);background:rgb(212,215,221)"></div><div class="layer" style="transform:translateZ(-4px);background:rgb(212,215,221)"></div><div class="layer" style="transform:translateZ(-5px);background:rgb(211,214,220)"></div><div class="layer" style="transform:translateZ(-6px);background:rgb(210,213,219)"></div><div class="layer" style="transform:translateZ(-7px);background:rgb(210,213,219)"></div><div class="layer" style="transform:translateZ(-8px);background:rgb(209,212,218)"></div><div class="layer" style="transform:translateZ(-9px);background:rgb(208,211,217)"></div><div class="layer" style="transform:translateZ(-10px);background:rgb(207,210,216)"></div><div class="layer" style="transform:translateZ(-11px);background:rgb(207,210,216)"></div><div class="layer" style="transform:translateZ(-12px);background:rgb(206,209,215)"></div><div class="layer" style="transform:translateZ(-13px);background:rgb(205,208,214)"></div><div class="layer" style="transform:translateZ(-14px);background:rgb(205,208,214)"></div><div class="layer" style="transform:translateZ(-15px);background:rgb(204,207,213)"></div><div class="layer" style="transform:translateZ(-16px);background:rgb(203,206,212)"></div><div class="layer" style="transform:translateZ(-17px);background:rgb(203,206,212)"></div><div class="layer" style="transform:translateZ(-18px);background:rgb(202,205,211)"></div><div class="layer" style="transform:translateZ(-19px);background:rgb(201,204,210)"></div><div class="layer" style="transform:translateZ(-20px);background:rgb(200,203,209)"></div><div class="layer" style="transform:translateZ(-21px);background:rgb(200,203,209)"></div><div class="layer" style="transform:translateZ(-22px);background:rgb(199,202,208)"></div><div class="layer" style="transform:translateZ(-23px);background:rgb(198,201,207)"></div><div class="layer" style="transform:translateZ(-24px);background:rgb(198,201,207)"></div><div class="layer" style="transform:translateZ(-25px);background:rgb(197,200,206)"></div><div class="layer" style="transform:translateZ(-26px);background:rgb(196,199,205)"></div><div class="layer" style="transform:translateZ(-27px);background:rgb(196,199,205)"></div><div class="layer" style="transform:translateZ(-28px);background:rgb(195,198,204)"></div><div class="layer" style="transform:translateZ(-29px);background:rgb(194,197,203)"></div><div class="layer" style="transform:translateZ(-30px);background:rgb(193,196,202)"></div><div class="layer" style="transform:translateZ(-31px);background:rgb(193,196,202)"></div><div class="layer" style="transform:translateZ(-32px);background:rgb(192,195,201)"></div><div class="layer" style="transform:translateZ(-33px);background:rgb(191,194,200)"></div><div class="layer" style="transform:translateZ(-34px);background:rgb(191,194,200)"></div><div class="layer" style="transform:translateZ(-35px);background:rgb(190,193,199)"></div><div class="layer" style="transform:translateZ(-36px);background:rgb(189,192,198)"></div><div class="layer" style="transform:translateZ(-37px);background:rgb(189,192,198)"></div><div class="layer" style="transform:translateZ(-38px);background:rgb(188,191,197)"></div><div class="grid" id="npGrid"></div></div>
-            </div>
-          </div>
-          <div class="np-cap" id="npCap">苹果风 3D 键盘 · <b>按住左键拖动</b> 即可 360° 旋转</div>
-        </div>
-      </div>
-      </div>
-    </div>
-
-    <div class="modules">
-      
-  <button class="module" onclick="openView('video')">
-    <span class="m-num">01</span>
-    <span class="m-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5.5" width="18" height="13" rx="3.2"/><path d="M10.3 9.2l4.4 2.8-4.4 2.8z" fill="currentColor" stroke="none"/></svg></span>
-    <span class="m-title">视频作品集</span>
-    <span class="m-sub">拍摄 / 剪辑类作品，支持播放预览</span>
-  </button>
-  <button class="module" onclick="openView('docs')">
-    <span class="m-num">02</span>
-    <span class="m-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h7l4 4v14H7z"/><path d="M14 3v4h4"/><path d="M10.2 12h5M10.2 15.2h5"/></svg></span>
-    <span class="m-title">文档作品集</span>
-    <span class="m-sub">方案 / 报告类作品，点击即渲染阅读</span>
-  </button>
-  <button class="module" onclick="openView('web')">
-    <span class="m-num">03</span>
-    <span class="m-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="12" r="8.6"/><path d="M3.4 12h17.2M12 3.4c2.4 2.6 2.4 14.6 0 17.2M12 3.4c-2.4 2.6-2.4 14.6 0 17.2"/></svg></span>
-    <span class="m-title">网页作品集</span>
-    <span class="m-sub">网页 / 交互类作品，支持内嵌预览</span>
-  </button>
-  <button class="module" onclick="openView('about')">
-    <span class="m-num">04</span>
-    <span class="m-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.4"/><path d="M5.2 20c.8-3.4 3.4-4.9 6.8-4.9s6 1.5 6.8 4.9"/></svg></span>
-    <span class="m-title">关于 · 能力与背景</span>
-    <span class="m-sub">AI 工具栈、教育背景与联系方式</span>
-  </button>
-    </div>
-  </div>
+<div class="wrap">
+<section class="hero" id="home">
+  <h1>范广钰</h1>
+  <div class="tag">AI 出海产品经理（B2B）｜ 新能源 / 机器人 出海内容运营</div>
+  <p>广告学本科，擅长拍摄剪辑，熟练 Codex / Work Buddy / DeepSeek Harness 等 AI 工具链。专注把中国新能源 / 机器人产品，用内容与智能体讲给海外 B2B 客户。</p>
+  <div class="chips"><span class="chip">广告学</span><span class="chip">拍摄剪辑</span><span class="chip">AI 工具链</span><span class="chip">B2B 内容增长</span><span class="chip">2317383228@qq.com</span></div>
 </section>
 
-<section class="view" id="video">
-  <div class="wrap">
-    <div class="sub-head"><span class="sub-num">01</span><span class="sub-title">视频作品集</span></div>
-    <div class="sub-sub">拍摄 / 剪辑类作品，支持播放预览（素材整理中，结构已就绪可随时接入）。</div>
-    <div class="grid" style="margin-top:24px">
-      <article class="card vid-card">
-        <div class="vid-thumb"><span class="play">▶</span></div>
-        <div class="card-body">
-          <h3>硬科技工厂探访 vlog</h3>
-          <p>走访新能源 / 机器人产线，用真实画面讲中国智造（拍摄+剪辑）</p>
-          <button class="btn ghost" onclick="openVideo('硬科技工厂探访 vlog','')">播放预览</button>
-        </div>
-      </article>
-
-      <article class="card vid-card">
-        <div class="vid-thumb"><span class="play">▶</span></div>
-        <div class="card-body">
-          <h3>新能源产品演示短片</h3>
-          <p>把产品参数拍成老外看得懂的 60 秒演示（B2B 出海内容）</p>
-          <button class="btn ghost" onclick="openVideo('新能源产品演示短片','')">播放预览</button>
-        </div>
-      </article>
-
-      <article class="card vid-card">
-        <div class="vid-thumb"><span class="play">▶</span></div>
-        <div class="card-body">
-          <h3>我的 vlog 小综艺（和朋友）</h3>
-          <p>周末和朋友的轻量记录 / 访谈，练叙事与剪辑节奏</p>
-          <button class="btn ghost" onclick="openVideo('我的 vlog 小综艺（和朋友）','')">播放预览</button>
-        </div>
-      </article></div>
+<section class="sec" id="videos">
+  <h2>视频作品集</h2>
+  <div class="intro">已完成制作的成片，支持在线播放预览（点击播放即可）。</div>
+  <div class="cat">
+  <div class="cat-head"><h3>酒店 · 宣传</h3><span>酒店品牌宣传片 / 空间 / 人文</span></div>
+  <div class="vpad"><div class="vcard">
+  <div class="vwrap">
+    <video controls preload="metadata" playsinline poster="https://110104xiayu-cyber.github.io/fanguangyu-portfolio/videos/v01.jpg" src="https://110104xiayu-cyber.github.io/fanguangyu-portfolio/videos/v01.mp4"></video>
+    <span class="dur">0:58</span>
   </div>
-</section>
-<section class="view" id="docs">
-  <div class="wrap">
-    <div class="sub-head"><span class="sub-num">02</span><span class="sub-title">文档作品集</span></div>
-    <div class="sub-sub">方案 / 报告类作品，点击卡片即渲染阅读。</div>
-    <div class="grid" style="margin-top:24px">
-      <article class="card doc-card" onclick="openDoc('action','转行行动方案（总纲）')" tabindex="0">
-        <div class="card-body">
-          <h3>转行行动方案（总纲）</h3>
-          <p>AI 应用 × 跨境电商 × 内容创作 三线合一的整体规划与执行节奏</p>
-          <span class="card-meta">2026-08 · 点击阅读 →</span>
-        </div>
-      </article>
-
-      <article class="card doc-card" onclick="openDoc('adroute','广告学转行路线图')" tabindex="0">
-        <div class="card-body">
-          <h3>广告学转行路线图</h3>
-          <p>广告学背景如何切入 AI 出海 / 产品经理：路径、门槛与机会</p>
-          <span class="card-meta">2026-08 · 点击阅读 →</span>
-        </div>
-      </article>
-
-      <article class="card doc-card" onclick="openDoc('city','发展路线梳理（福州·合肥·上海）')" tabindex="0">
-        <div class="card-body">
-          <h3>发展路线梳理（福州·合肥·上海）</h3>
-          <p>三城阶梯定位与多年时间轴：从出海运营到 AI 出海 PM</p>
-          <span class="card-meta">2026-08 · 点击阅读 →</span>
-        </div>
-      </article>
-
-      <article class="card doc-card" onclick="openDoc('detail','方向细分规划（出海内容增长 / AI 产品经理）')" tabindex="0">
-        <div class="card-body">
-          <h3>方向细分规划（出海内容增长 / AI 产品经理）</h3>
-          <p>方向 1 与方向 3 的细分岗、JD、学习清单与组合落地</p>
-          <span class="card-meta">2026-08 · 点击阅读 →</span>
-        </div>
-      </article></div>
+  <div class="vmeta">
+    <h4>鼓岭书香闽江 · 宣传片</h4>
+    <p>鼓岭书香闽江品牌宣传片（竖版 1080×1920，面向文旅客群）</p>
   </div>
-</section>
-<section class="view" id="web">
-  <div class="wrap">
-    <div class="sub-head"><span class="sub-num">03</span><span class="sub-title">网页作品集</span></div>
-    <div class="sub-sub">网页 / 交互类作品，支持内嵌预览或新窗口打开。</div>
-    <div class="grid" style="margin-top:24px">
-      <article class="card web-card">
-        <div class="web-thumb"><span class="badge">作品集 No.1</span></div>
-        <div class="card-body">
-          <h3>新能源汽车海外内容方案</h3>
-          <p>B2B 新能源出海内容方案：定位 + 平台矩阵 + LinkedIn/YouTube/展会样稿 + AI 提效</p>
-          <div class="card-actions">
-            <button class="btn" onclick="openWeb('新能源汽车海外内容方案','portfolio-works/no1.html')">预览</button>
-            <a class="btn ghost" href="portfolio-works/no1.html" target="_blank" rel="noopener">新窗口打开</a>
-          </div>
-        </div>
-      </article>
-
-      <article class="card web-card">
-        <div class="web-thumb"><span class="badge">作品集 No.2</span></div>
-        <div class="card-body">
-          <h3>LinkedIn 帖三语版</h3>
-          <p>EN / DE / ES 三语 LinkedIn 帖 + 本地化方法论 + AI 提效 8×</p>
-          <div class="card-actions">
-            <button class="btn" onclick="openWeb('LinkedIn 帖三语版','portfolio-works/no2.html')">预览</button>
-            <a class="btn ghost" href="portfolio-works/no2.html" target="_blank" rel="noopener">新窗口打开</a>
-          </div>
-        </div>
-      </article></div>
+</div><div class="vcard">
+  <div class="vwrap">
+    <video controls preload="metadata" playsinline poster="https://110104xiayu-cyber.github.io/fanguangyu-portfolio/videos/v02.jpg" src="https://110104xiayu-cyber.github.io/fanguangyu-portfolio/videos/v02.mp4"></video>
+    <span class="dur">2:01</span>
   </div>
-</section>
-<section class="view" id="about">
-  <div class="wrap">
-    <div class="sub-head"><span class="sub-num">04</span><span class="sub-title">关于 · 能力与背景</span></div>
-    <div class="sub-sub">我掌握的 AI 工具栈与基础背景，便于快速判断匹配度。</div>
-    <div class="more-grid" style="margin-top:24px">
-      <div class="more-col">
-        <h4>AI 工具栈</h4>
-        
-        <div class="more-item">
-          <div class="more-title">Codex / Work Buddy / DeepSeek Harness</div>
-          <div class="more-desc">熟练用于内容生成、多语本地化、智能体搭建</div>
-        </div>
-        <div class="more-item">
-          <div class="more-title">剪映 / Premiere / 达芬奇</div>
-          <div class="more-desc">视频拍摄后的剪辑、调色与成片</div>
-        </div>
-        <div class="more-item">
-          <div class="more-title">Python + Prompt 工程</div>
-          <div class="more-desc">用脚本与提示词自动化内容生产流程</div>
-        </div>
-      </div>
-
-      <div class="more-col">
-        <h4>证书 / 背景</h4>
-        
-        <div class="more-item">
-          <div class="more-title">广告学 本科</div>
-          <div class="more-desc">内容策划 / 传播 / 消费者行为专业底色</div>
-        </div>
-        <div class="more-item">
-          <div class="more-title">英语 CET-6</div>
-          <div class="more-desc">可借助 AI 高效产出行业多语内容</div>
-        </div>
-        <div class="more-item">
-          <div class="more-title">工信部 AI 应用工程师（备考）</div>
-          <div class="more-desc">作为转行敲门砖</div>
-        </div>
-      </div></div>
-    <div class="about-contact">
-      <div>邮箱：<b>2317383228@qq.com</b></div>
-      <div>微信：<b>Guanyuoto</b></div>
-      <div>求职意向：<b>福州 / 合肥 / 上海 · 新能源·机器人 出海内容运营 / AI 出海产品经理（B2B）</b></div>
-    </div>
+  <div class="vmeta">
+    <h4>中旅酒店 · 宣传成片</h4>
+    <p>中旅旗下酒店品牌宣传成片（航拍+空间+人文）</p>
   </div>
-</section>
-
-<div class="modal" id="docModal" onclick="if(event.target===this)closeModal('docModal')">
-  <div class="modal-card"><div class="modal-head"><h3 id="docTitle">文档</h3><button class="x" onclick="closeModal('docModal')">✕</button></div>
-  <div class="modal-body"><div id="docView"></div></div></div>
+</div><div class="vcard">
+  <div class="vwrap">
+    <video controls preload="metadata" playsinline poster="https://110104xiayu-cyber.github.io/fanguangyu-portfolio/videos/v03.jpg" src="https://110104xiayu-cyber.github.io/fanguangyu-portfolio/videos/v03.mp4"></video>
+    <span class="dur">0:57</span>
+  </div>
+  <div class="vmeta">
+    <h4>园著闽江 · 沉浸式体验</h4>
+    <p>沉浸式入住体验短片，传递空间质感</p>
+  </div>
+</div><div class="vcard">
+  <div class="vwrap">
+    <video controls preload="metadata" playsinline poster="https://110104xiayu-cyber.github.io/fanguangyu-portfolio/videos/v04.jpg" src="https://110104xiayu-cyber.github.io/fanguangyu-portfolio/videos/v04.mp4"></video>
+    <span class="dur">0:27</span>
+  </div>
+  <div class="vmeta">
+    <h4>留云心谷 · 山野漂亮饭</h4>
+    <p>留云心谷山野餐食/场景短视频</p>
+  </div>
+</div></div>
 </div>
-<div class="modal" id="videoModal" onclick="if(event.target===this)closeModal('videoModal')">
-  <div class="modal-card"><div class="modal-head"><h3 id="videoTitle">视频</h3><button class="x" onclick="closeModal('videoModal')">✕</button></div>
-  <div class="modal-body"><div id="videoFrame"></div></div></div>
+<div class="cat">
+  <div class="cat-head"><h3>书单 · 荐书</h3><span>经典书籍推荐短片</span></div>
+  <div class="vpad"><div class="vcard">
+  <div class="vwrap">
+    <video controls preload="metadata" playsinline poster="https://110104xiayu-cyber.github.io/fanguangyu-portfolio/videos/v05.jpg" src="https://110104xiayu-cyber.github.io/fanguangyu-portfolio/videos/v05.mp4"></video>
+    <span class="dur">1:08</span>
+  </div>
+  <div class="vmeta">
+    <h4>书单视频 · 小王子</h4>
+    <p>《小王子》推荐视频，钩子+内容+金句</p>
+  </div>
+</div><div class="vcard">
+  <div class="vwrap">
+    <video controls preload="metadata" playsinline poster="https://110104xiayu-cyber.github.io/fanguangyu-portfolio/videos/v06.jpg" src="https://110104xiayu-cyber.github.io/fanguangyu-portfolio/videos/v06.mp4"></video>
+    <span class="dur">1:12</span>
+  </div>
+  <div class="vmeta">
+    <h4>书单视频 · 老人与海</h4>
+    <p>《老人与海》推荐视频</p>
+  </div>
+</div><div class="vcard">
+  <div class="vwrap">
+    <video controls preload="metadata" playsinline poster="https://110104xiayu-cyber.github.io/fanguangyu-portfolio/videos/v07.jpg" src="https://110104xiayu-cyber.github.io/fanguangyu-portfolio/videos/v07.mp4"></video>
+    <span class="dur">1:14</span>
+  </div>
+  <div class="vmeta">
+    <h4>书单视频 · 人生海海</h4>
+    <p>《人生海海》推荐视频</p>
+  </div>
+</div><div class="vcard">
+  <div class="vwrap">
+    <video controls preload="metadata" playsinline poster="https://110104xiayu-cyber.github.io/fanguangyu-portfolio/videos/v08.jpg" src="https://110104xiayu-cyber.github.io/fanguangyu-portfolio/videos/v08.mp4"></video>
+    <span class="dur">0:57</span>
+  </div>
+  <div class="vmeta">
+    <h4>书单视频 · 我的阿勒泰</h4>
+    <p>《我的阿勒泰》推荐视频</p>
+  </div>
+</div></div>
 </div>
-<div class="modal" id="webModal" onclick="if(event.target===this)closeModal('webModal')">
-  <div class="modal-card"><div class="modal-head"><h3 id="webTitle">网页</h3><button class="x" onclick="closeModal('webModal')">✕</button></div>
-  <div class="modal-body"><div id="webFrame"></div></div></div>
+<div class="cat">
+  <div class="cat-head"><h3>探店 · 活动</h3><span>探店纪实 / 节日主题活动</span></div>
+  <div class="vpad"><div class="vcard">
+  <div class="vwrap">
+    <video controls preload="metadata" playsinline poster="https://110104xiayu-cyber.github.io/fanguangyu-portfolio/videos/v09.jpg" src="https://110104xiayu-cyber.github.io/fanguangyu-portfolio/videos/v09.mp4"></video>
+    <span class="dur">1:00</span>
+  </div>
+  <div class="vmeta">
+    <h4>鼓岭书香闽江 · 探店</h4>
+    <p>鼓岭书香闽江探店纪实</p>
+  </div>
+</div><div class="vcard">
+  <div class="vwrap">
+    <video controls preload="metadata" playsinline poster="https://110104xiayu-cyber.github.io/fanguangyu-portfolio/videos/v10.jpg" src="https://110104xiayu-cyber.github.io/fanguangyu-portfolio/videos/v10.mp4"></video>
+    <span class="dur">0:30</span>
+  </div>
+  <div class="vmeta">
+    <h4>鼓岭 · 圣诞特辑</h4>
+    <p>鼓岭圣诞氛围视频</p>
+  </div>
+</div><div class="vcard">
+  <div class="vwrap">
+    <video controls preload="metadata" playsinline poster="https://110104xiayu-cyber.github.io/fanguangyu-portfolio/videos/v11.jpg" src="https://110104xiayu-cyber.github.io/fanguangyu-portfolio/videos/v11.mp4"></video>
+    <span class="dur">0:37</span>
+  </div>
+  <div class="vmeta">
+    <h4>妇女节 · 特别辑</h4>
+    <p>三八妇女节主题短片</p>
+  </div>
+</div><div class="vcard">
+  <div class="vwrap">
+    <video controls preload="metadata" playsinline poster="https://110104xiayu-cyber.github.io/fanguangyu-portfolio/videos/v12.jpg" src="https://110104xiayu-cyber.github.io/fanguangyu-portfolio/videos/v12.mp4"></video>
+    <span class="dur">2:07</span>
+  </div>
+  <div class="vmeta">
+    <h4>山姆小镇 · 宣传</h4>
+    <p>山姆小镇项目宣传视频</p>
+  </div>
+</div></div>
 </div>
 
-<div style="display:none"><div id="doc-action" class="doc-body"><h1>唐枫转行行动方案（2026-08-25 定稿）</h1>
-<blockquote>
-<p>背景：24 岁，福州，国企酒店在职，想尽快离职；要高工资、有发展、能吃苦、愿意学"市场不具备的能力"。
-历史硬约束：双休+法定节假日、国家支持方向、长发展空间+未来可创业、薪资不低。</p>
-</blockquote>
-<hr />
-<h2>一、一句话结论</h2>
-<p><strong>主推：AI 应用 × 跨境电商 × 内容创作（AIGC 新媒体 / 短视频 / AI 电商运营）</strong>
-<strong>备选：网络安全（NISP→CISP 路线）</strong>
-<strong>不碰：新能源运维、低空飞手、设备维修（无双休，违反你的硬约束）</strong></p>
-<p>理由一句话：这条路把"国家人工智能+战略 + 福州侨乡/自贸区跨境电商红利 + 你酒店的服务/运营/客户认知 + <strong>你爱拍摄剪辑的爱好</strong>"四件事叠在一起，而且<strong>越往后越稀缺、越能自己单干</strong>——本职双休拿工资，周末用爱好做自己的账号和 vlog 小综艺，时间自由、还能攒创业资本。</p>
-<hr />
-<h2>二、为什么这条路最契合你</h2>
-<table>
-<thead>
-<tr>
-<th>你的条件</th>
-<th>这条路怎么接住</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>在福州，想尽快离职但不想跑远</td>
-<td>福州 2026 已办 6 期"数字经济专场招聘会"，AI 工程师、跨境电商运营、数字化运维缺口突出；本地龙头扬腾创新"AI 电商运营"给 <strong>20–30K/月</strong></td>
-</tr>
-<tr>
-<td>国企酒店经验（服务/运营/客户）</td>
-<td>搜索结论一致：<strong>AI 落地岗疯抢"懂业务场景"的人</strong>，你十年的行业认知是别人 3 个月学不来的护城河，不是包袱</td>
-</tr>
-<tr>
-<td>能吃苦、能学"市场不具备的能力"</td>
-<td>普通"会用 AI 写文案"已被替代；<strong>Agent 开发 / 企业 AI 落地</strong>才是稀缺高薪层（Agent 开发岗 2026 招聘同比 +244%，年薪 20–65 万）</td>
-</tr>
-<tr>
-<td>双休+法定节假日</td>
-<td>福州成熟跨境电商企业已有"周末固定双休"岗（如汽配类跨境运营 1–1.8 万）；体制内/大厂 AI 岗双休普遍。刚转行前 1–2 年可能要适应期，成熟后双休可达</td>
-</tr>
-<tr>
-<td>未来想创业</td>
-<td>AI+出海是福州侨乡天然赛道：独立站、AI 代运营、企业智能体定制，都可从一人公司起步</td>
-</tr>
-<tr>
-<td>喜欢拍摄/剪辑，想做自己的账号、跟朋友录 vlog 小综艺</td>
-<td>这是隐藏王牌：<strong>短视频剪辑/新媒体运营是福州招聘会 Top 缺口岗</strong>；AIGC 内容创作（AI 短视频/数字人/脚本）6K–30K，且"有审美、文字或视频基础"的人最吃香——你正好占。自己的账号既是面试作品集、又是副业变现、更是未来创业；本职双休 → 周末/晚上正好拍剪，时间不冲突</td>
-</tr>
-</tbody>
-</table>
-<hr />
-<h2>三、主推方向拆解（两条进阶阶梯）</h2>
-<p><strong>阶梯 A（0–3 个月，快速上岸，拿 8–15K）</strong>
-- 岗位：AI 电商运营 / 跨境电商运营（亚马逊、沃尔玛、独立站）
-- 核心技能：Prompt 工程、主流 AI 工具（DeepSeek/Claude/ChatGPT）、Excel 数据、基础 Python 自动化、英语读写（CET-4 够用，CET-6 加分）
-- 福州参考薪资：跨境电商运营 6–20K；AI 电商运营 20–30K（扬腾）</p>
-<p><strong>阶梯 B（3–6 个月，冲稀缺层，拿 20–60K+）</strong>
-- 岗位：AI 应用工程师 / Agent 开发 / AI 落地顾问
-- 核心技能：Python、RAG 知识库、Dify/Coze/LangGraph 智能体搭建、把 AI 接进企业系统（客服/营销/ERP）
-- 优势：你已装好 <strong>DeepSeek Harness（dsh）</strong>，它就是现成的学习和做项目工具——用它练 Prompt、搭智能体、做实战 demo，简历直接有作品</p>
-<blockquote>
-<p>学历说明：跨境运营/提示词/AI 应用多数<strong>大专或学历不限</strong>；若你是本科，上限更高（可冲算法/战略岗，50–80 万）。无论学历，阶梯 A→B 这条路都走得通。</p>
-</blockquote>
-<h3>附：拍摄/剪辑是你的隐藏王牌（你刚补充的爱好）</h3>
-<p>你爱拍摄、想自己拍剪各种题材、做自己的账号、跟朋友录 vlog 小综艺——这不光是爱好，是<strong>职场护城河 + 创业跳板</strong>：</p>
-<ul>
-<li><strong>本职直接对口</strong>：福州 2026 数字经济招聘会"短视频剪辑、新媒体运营"是缺口 Top；AIGC 内容创作师（AI 绘图/短视频/数字人/脚本）薪资 6K–30K，且"有审美、文字或视频基础"的人最吃香——你正好占。</li>
-<li><strong>AI 替代不了"人味"</strong>：拍摄、表演、叙事、真实感是 AI 短期学不来的，这层越老越值钱，正是你说的"市场不具备的能力"。</li>
-<li><strong>自己的账号 = 三重价值</strong>：① 面试作品集（比 GitHub demo 对新媒/运营岗更有说服力）② 副业变现（广告/带货/知识付费）③ 未来一人公司创业基石。</li>
-<li><strong>完美满足双休需求</strong>：选双休本职（AI 电商运营/新媒体运营），下班和周末就是你的创作时间，录 vlog、剪小综艺完全不冲突。</li>
-</ul>
-<blockquote>
-<p>策略升级：<strong>阶梯 A 从"纯运营"改为"运营 + 内容"双修</strong>。先靠运营技能快速上岸拿工资，同时用爱好养账号；账号做起来后，可平滑转向"内容/新媒体负责人"或全职自媒体，薪资与自由度双升。</p>
-</blockquote>
-<hr />
-<h2>四、3–6 个月学习路线图（今天就能开始，运营 + 内容双修）</h2>
-<p><strong>第 1 个月：打底 + 拿起相机</strong>
-- 每天下班 1.5–2 小时。用 dsh 跟着练 Prompt 工程（Zero-shot / Few-shot / 思维链）
-- 学 Python 基础（变量、循环、函数、requests 库），目标：能写脚本自动处理 Excel/抓数据
-- 注册跨境电商平台卖家大学（亚马逊/沃尔玛），看懂后台和 Listing 逻辑
-- <strong>剪辑入门</strong>：装剪映/CapCut，每周拍剪 1 条 1 分钟短视频（酒店日常、福州街景、吃喝都行），先练手感</p>
-<p><strong>第 2 个月：AI 应用实战 + AI 视频</strong>
-- 用 dsh + Python 做一个"酒店/餐饮 AI 客服智能体"demo（接微信/网页，能答预订、投诉、推荐）
-- 学 RAG：把一份产品手册/制度文档做成可问答知识库（Chroma/FAISS）
-- <strong>AI 视频生成</strong>：玩转可灵/即梦/Runway，用 dsh 写分镜脚本，做一条 AI 短片 demo
-- 考 <strong>工信部"AI 应用工程师"或"提示词工程师"证书（初级零基础可报）</strong>，作为敲门砖</p>
-<p><strong>第 3 个月：跨境 + 作品集 + 起号</strong>
-- 选一个细分品类（汽配/服装/家居，福州产业带多），用 AI 做选品分析 + Listing 优化 + 自动日报
-- 把前两个月 demo + 短视频整理成<strong>作品集</strong>（GitHub 网页 + 自己的社交账号）
-- <strong>正式起自己的账号</strong>：固定一个你能持续做的题材（福州探店/酒店行业内幕/AI 实测都行），每周更 2–3 条
-- 开始投福州"AI 电商运营 / 新媒体运营 / 短视频剪辑 / 数字化运维"岗，同步接远程兼职单练手</p>
-<p><strong>第 4–6 个月：冲阶梯 B + 内容矩阵</strong>
-- 学 Dify/Coze/LangGraph 搭多智能体，做一个"企业客服+销售+复盘"闭环 demo
-- <strong>内容升级</strong>：做数字人分身、vlog 小综艺（拉朋友录一期），测试带货/商单变现
-- 考 CDA 数据分析师 Level I（低门槛、全行业通用，简历加分）
-- 目标：拿到 15–30K Offer 后正式离职；账号若起量，可并行做副业</p>
-<hr />
-<h2>五、离职节奏（关键：别裸辞）</h2>
-<ol>
-<li><strong>现在–第 3 个月</strong>：酒店照常干，攒生活费+社保不断；下班猛学，做出 2 个能展示的 demo</li>
-<li><strong>第 3 个月</strong>：边干边投，拿到第一个 8–15K 的 AI/跨境 Offer 即可启动离职流程</li>
-<li><strong>拿到 Offer 当天</strong>再提离职（国企一般有 30 天交接），无缝衔接不空窗</li>
-<li>若 3 个月没成，不慌——延到第 4–6 个月冲阶梯 B，薪资更狠，别在酒店耗但也别裸跳</li>
-</ol>
-<blockquote>
-<p>为什么不建议立刻裸辞：你"尽快离职"的心情我懂，但空窗期会让你在谈薪时被动，且失去"边干边学"的稳定现金流。用 3 个月换一个薪资翻 2–3 倍的新起点，比赌一把稳得多。</p>
-</blockquote>
-<hr />
-<h2>六、福州真实岗位与薪资（2026 招聘市场）</h2>
-<ul>
-<li><strong>扬腾创新（福建）</strong>：AI 电商运营 20–30K；跨境电商运营 8–20K；战略/项目管理 50–80 万/年（福州）</li>
-<li><strong>福州数字经济专场招聘会</strong>：AI 工程师、跨境电商运营、数字化运维为缺口Top，50 家企业、近千岗，最高年薪 40 万</li>
-<li><strong>智联福州跨境岗</strong>：跨境电商运营 6–20K 不等；"汽配类跨境电商运营（周末固定双休）"1–1.8 万</li>
-<li><strong>远程/自由职业</strong>：提示词优化、企业智能体定制，单项目 5K–20K，适合未来创业过渡</li>
-<li><strong>短视频/新媒体（福州）</strong>：短视频剪辑、新媒体运营是 2026 福州数字经济招聘会缺口 Top；AIGC 内容创作师 6K–30K；自己账号做起来后可接商单/带货，月入弹性大</li>
-</ul>
-<hr />
-<h2>七、避坑（句句真话）</h2>
-<ul>
-<li><strong>别花几万报"AI 包就业"培训班</strong>。市场缺的是"能用 AI 解决问题"的人，不是"上过课"的人。你已有 dsh，自学+做项目完全够</li>
-<li><strong>别只学"用 AI 写文案/画图"</strong>，那层 80% 的人会被替代。往 Agent/落地/数据分析走，才是稀缺护城河</li>
-<li><strong>英语不用怕</strong>，跨境运营读写够用，真做大了再补</li>
-<li><strong>第一份 AI 工作薪资可能不如预期高峰</strong>，但 1–2 年跳一次，30 岁前到 30–60 万是可期的</li>
-</ul>
-<hr />
-<h2>八、今天就能做的 3 件事</h2>
-<ol>
-<li>打开 dsh（桌面"DeepSeek Harness"入口），让我陪你写第一个 Python 脚本 / 第一个 Prompt 工作流；顺便用 dsh 帮你写一条短视频脚本练手</li>
-<li>在招聘 APP 搜"福州 AI 电商运营 / 跨境电商运营 / 短视频剪辑 / 新媒体运营"，收藏 10 个岗位，看它们的技能要求——这就是你的学习清单</li>
-<li>今晚就用手机拍一段 1 分钟 vlog（酒店日常/福州街景都行），用剪映剪一版发到自己的账号——<strong>第一个作品就是作品集起点，别等"学好了再开始"</strong></li>
-</ol>
-<p>需要的话，下一步我可以直接在 dsh 里带你把第 1 个月的 Python + Prompt + 剪辑训练拆成每日打卡表。</p></div>
-<div id="doc-adroute" class="doc-body"><h1>唐枫 广告学转行路线图（2026-08-25）</h1>
-<blockquote>
-<p>关键信息：你<strong>广告学毕业</strong>。这直接改变了转行打法——不需要回炉读计算机，靠"广告学专业力 + 一层 AI 素养 + 作品集证明"就能切入 A/B/C 三大方向。
-你感兴趣的国家方向：人工智能专项行动、跨境电商出海；你点名的方向：AI 产品经理、AI 应用。</p>
-</blockquote>
-<hr />
-<h2>一、一句话结论</h2>
-<p><strong>广告学是你最大的隐藏优势，不是短板。</strong> 三方向（A 跨境 / B 内容 / C AI产品）全都要"懂用户、懂传播、懂创意、能落地"，而这正好是广告学的老本行。你不用和计算机科班拼写代码，要拼的是"用 AI 放大你的专业力"。</p>
-<blockquote>
-<p>权威佐证（2026 招聘研究）：
-- 高校跨境讲座原话："<strong>广告专业同学在内容创作与传播方面的专长，恰是当前跨境电商领域的核心稀缺能力</strong>……内容策划、短视频创作与账号运营等能力，在跨境领域具有显著优势"，且"AI 尚不能替代人类的创意与情感洞察，广告人依然不可替代"。
-- AI 产品经理明确<strong>不要求计算机学位/不写代码</strong>，适配人群写着"市场营销、管理学等专业优先；擅长沟通、有全局思维、不想写代码但想切入 AI 的人"——几乎是为你写的。</p>
-</blockquote>
-<hr />
-<h2>二、三条细分路径（都适合广告学，按你的兴趣排）</h2>
-<h3>路径 1：AI 跨境营销 / 出海内容增长（= A × B 融合，最稳最对口）</h3>
-<ul>
-<li><strong>是什么</strong>：用 AI 做多语种广告文案、短视频、社媒内容、投放优化，帮中国品牌出海。岗位名如 AI Cross-Border Marketing Specialist、跨境内容运营、TikTok 出海短视频运营。</li>
-<li><strong>为什么适合广告学</strong>：内容策划、传播、文案、文化转译本是广告学核心；AI 只是把你的产能放大 10 倍。</li>
-<li><strong>薪资</strong>：国内出海营销/AI 营销岗通常 <strong>15–40K/月</strong>；海外同岗参考 $78k–155k/年；资深可冲增长负责人（50–80 万/年）。</li>
-<li><strong>要补的</strong>：跨境平台（Amazon/TikTok Shop/Shopify）后台、AI 内容工具链（dsh 写文案+可灵/即梦做视频）、投放基础（Google/Meta/TikTok Ads）、基础数据（ROAS/CAC）。</li>
-<li><strong>机会</strong>：福州有扬腾创新（AI 电商运营 20–30K）、侨乡出海产业带；也可远程接出海项目。</li>
-</ul>
-<h3>路径 2：AIGC 内容编导 / 新媒体（= B，爱好直接变现）</h3>
-<ul>
-<li><strong>是什么</strong>：短视频编导、剪辑师、探店/知识博主、数字人内容制作、品牌新媒体运营。</li>
-<li><strong>为什么适合广告学</strong>：内容策划+叙事+审美是你专业基本功，再加你"爱拍摄剪辑"的爱好，等于科班+热情双buff。</li>
-<li><strong>薪资</strong>：剪辑/新媒体 6–15K 起；AIGC 内容创作师 6–30K；自己账号变现弹性大。</li>
-<li><strong>要补的</strong>：剪映/CapCut 进阶、AI 视频生成（可灵/即梦/Runway）、账号运营方法论、数据复盘。</li>
-<li><strong>机会</strong>：福州 2026 数字经济招聘会"短视频剪辑、新媒体运营"是缺口 Top；自己账号=作品集+副业+创业。</li>
-</ul>
-<h3>路径 3：AI 产品经理（= C，天花板最高、不写代码）</h3>
-<ul>
-<li><strong>是什么</strong>：定义 AI 产品"做什么、为谁做、怎么衡量"，协调研发/设计/市场推动落地。不训练模型、不写生产代码。</li>
-<li><strong>为什么适合广告学</strong>：AI PM 核心能力=<strong>用户洞察 + 商业判断 + 跨部门沟通 + 需求定义</strong>，广告学的消费者行为/传播/品牌思维天然匹配；技术侧只需"AI 素养"不必"会写代码"。</li>
-<li><strong>薪资（国内）</strong>：初级 <strong>12–20K/月（15–25 万/年）</strong>，中级 20–35K（30–50 万），资深 40K+/月（60–100 万+）。非技术转行通常 <strong>4–6 个月</strong>可切入。</li>
-<li><strong>要补的</strong>：AI 素养（LLM 能/不能做什么、RAG、Prompt、Token/成本、延迟、评估 Evals）、数据素养（SQL/看板基础）、产品工具（Axure/墨刀/Figma 画原型、写 PRD）、敏捷协作。</li>
-<li><strong>机会</strong>：AI 应用/智能体公司、出海 SaaS、大厂 AI 团队都在抢"懂业务又懂 AI"的 PM；可远程。</li>
-</ul>
-<blockquote>
-<p><strong>三选建议</strong>：想最快上岸拿工资 → 路径 1 或 2；想冲最高天花板且不想写代码 → 路径 3（AI PM）。三者底层能力互通，前期可"1+2 双修先上岸，再转 3"。</p>
-</blockquote>
-<hr />
-<h2>三、广告学转行的通用打法（核心方法论）</h2>
-<p><strong>1. 叠加，不回炉。</strong> 保留广告学优势，只补"一层 AI 素养 + 工具"，不重新读学位。
-<strong>2. 用作品集代替学历证明。</strong> 招聘方信"做出来过什么"胜过"学过什么"。做 2–3 个能展示的项目：
-   - 用 dsh + AI 做一套<strong>跨境品牌出海内容方案</strong>（含多语种文案+短视频脚本+投放计划）
-   - 写一个<strong>AI 产品 PRD + 原型</strong>（比如"面向酒店的 AI 客服智能体"产品方案）
-   - 起一个<strong>自己的账号</strong>，发 4–8 条 vlog/小综艺，证明内容力
-<strong>3. 考证加分（不强制）</strong>：Google Digital Marketing &amp; E-commerce 证书、Meta Blueprint、工信部"提示词工程师"证书、CDA Level I（数据分析，锦上添花）。</p>
-<blockquote>
-<p>注：此前方案里写"多数岗大专/学历不限"是保守说法；<strong>你是广告学本科，天花板可上调</strong>——AI PM、出海增长、内容负责人都向你敞开，不必自我降级。</p>
-</blockquote>
-<hr />
-<h2>四、广告学专属 3–6 个月学习路线图</h2>
-<p><strong>第 1 个月：AI 素养地基 + 专业迁移</strong>
-- 用 dsh 每天练 Prompt（Zero-shot/Few-shot/思维链），建立"AI 能/不能做什么"的直觉
-- 搞懂 AI PM 概念：LLM、RAG、Token 成本、延迟、Evals 是什么（看科普，不写代码）
-- 把广告学知识"翻译"成 AI 语言：4P/消费者洞察 → AI 产品需求；内容策划 → AI 工作流</p>
-<p><strong>第 2 个月：选主攻方向做作品</strong>
-- 冲路径 1/2：起自己账号 + 用 AI 做一套跨境出海内容 demo（文案+短视频）；学剪映/可灵
-- 冲路径 3：学画原型（墨刀/Figma）、写 PRD、做一份 AI 产品竞品分析
-- 考 1 张证书（提示词工程师 / Google 数字营销）</p>
-<p><strong>第 3 个月：作品集 + 投岗</strong>
-- 把作品整理成网页/作品集；开始投福州（扬腾 AI 电商运营、跨境电商、新媒体）+ 远程（AI 营销/AI PM 助理）岗
-- 同步接小兼职单练手（帮小商家做 AI 内容/账号诊断）</p>
-<p><strong>第 4–6 个月：纵深</strong>
-- 路径 1/2：做数字人分身、vlog 小综艺，测试带货/商单变现
-- 路径 3：补 SQL/看板基础，冲"AI PM 助理/产品经理"正式岗
-- 目标：拿到 15–30K Offer 后离职（别裸辞，边学边跳）</p>
-<hr />
-<h2>五、今天就能做的 3 件事</h2>
-<ol>
-<li>打开 dsh，让我陪你用 Prompt 写一条"某跨境品牌出海"的多语种文案 + 短视频脚本——这就是路径 1 的第一个作品</li>
-<li>在招聘 APP 搜"福州 AI 电商运营 / 跨境电商运营 / 新媒体运营 / AI 产品经理"，收藏 10 个岗，把JD技能要求抄成你的学习清单</li>
-<li>今晚用手机拍 1 分钟 vlog 发自己账号——广告学的"内容力"从第一条就开始攒</li>
-</ol>
-<hr />
-<h2>六、下一步</h2>
-<p>你从路径 1 / 2 / 3 里挑<strong>一个主攻 + 一个备选</strong>告诉我，我直接钻进去给你做：
-<strong>岗位 JD 拆解 → 精确学习清单 → 福州/远程具体公司 → 简历作品集怎么包装广告学背景 → 薪资谈判点</strong>。</p></div>
-<div id="doc-city" class="doc-body"><h1>范广钰 · 发展路线梳理（2026.08 收口版）</h1>
-<blockquote>
-<p>把前面所有对话收敛成一句话：<strong>未来多年 = AI 出海产品经理（B2B 硬科技：新能源 / 机器人），城市路径 福州 → 合肥 → 上海。</strong>
-本文先"理需求"，再"捋路线"，最后给"今天就能做"的下一步。</p>
-</blockquote>
-<hr />
-<h2>一、需求梳理：你到底要什么</h2>
-<table>
-<thead>
-<tr>
-<th>维度</th>
-<th>你的现状 / 诉求</th>
-<th>推论</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>身份</strong></td>
-<td>24 岁，福州，国企酒店在职，广告学本科，想尽快离职</td>
-<td>需要"边干边转"，不能长期空窗</td>
-</tr>
-<tr>
-<td><strong>硬约束（你原话）</strong></td>
-<td>① 双休 + 法定节假日 ② 国家大力推崇方向、长发展空间、未来能创业 ③ 薪资不低</td>
-<td>所有方向都按这三条筛</td>
-</tr>
-<tr>
-<td><strong>资产（你的优势）</strong></td>
-<td>广告学（内容/传播/用户洞察）、会拍会剪、新媒体涨粉 1w+、美团从 0 起盘竞争圈第 2、政企客户经验、AI 工具（dsh/RAG/Agent）</td>
-<td>这恰恰是 B2B 硬科技出海最缺的"跨界人"</td>
-</tr>
-<tr>
-<td><strong>已点名的方向</strong></td>
-<td>人工智能专项行动、跨境电商出海；新能源/机器人出海是"大头"</td>
-<td>方向已收敛，不用再广撒网</td>
-</tr>
-<tr>
-<td><strong>已排除</strong></td>
-<td>新能源运维、低空飞手、设备维修（无双休，撞硬约束）；纯消费品出海（你认定 B2B 前景更好）</td>
-<td>聚焦 B2B</td>
-</tr>
-</tbody>
-</table>
-<p><strong>一句话需求</strong>：用广告学 + 拍摄剪辑 + AI 工具的底子，转进"新能源/机器人 B2B 出海"，做不写代码、但能吃透业务和 AI 的<strong>产品经理 / 出海增长</strong>，几年后具备自己单干的能力。</p>
-<hr />
-<h2>二、方向定位：一条主线，不是两个选择</h2>
-<p>你前面说"AI 产品经理"和"B2B 新能源/机器人出海"都想做——<strong>这俩不是二选一，是叠加</strong>。叠加后就是：</p>
-<blockquote>
-<p><strong>AI 出海产品经理（B2B 硬科技方向）</strong>
-即：用 AI 产品思维 + 内容/增长能力，帮中国新能源/机器人企业把产品卖到海外 B2B 客户。</p>
-</blockquote>
-<p>这正好对应之前方案里的 <strong>3.3 AI 出海增长 PM</strong>（AI PM × 出海），天花板组合：
-- 初级 12–20K → 中级 20–35K → 资深 40K+（国内）
-- 不写代码，适配"广告学/市场营销背景、擅长沟通、想切 AI"的人
-- 国家方向全中：人工智能+ / 新三样出海 / 机器人 / 双碳</p>
-<hr />
-<h2>三、三城布局逻辑：福州起步、合肥进阶、上海冲顶</h2>
-<table>
-<thead>
-<tr>
-<th></th>
-<th><strong>福州（大本营）</strong></th>
-<th><strong>合肥（进阶跳板）</strong></th>
-<th><strong>上海（天花板）</strong></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>你的角色</strong></td>
-<td>先上岸、低成本积累</td>
-<td>跳新能源/机器人出海 PM</td>
-<td>冲资深 / 国际化 / 自己干</td>
-</tr>
-<tr>
-<td><strong>产业底子（2026 核实）</strong></td>
-<td>宁德时代 HQ 在宁德，离福州约 1 小时；福建侨乡+自贸区，出海基因强</td>
-<td>蔚来 HQ、国轩高科 HQ、大众安徽、江淮、比亚迪基地；6 家整车、140+ 链企；安徽光储全国第三、工业机器人出口全国第二</td>
-<td>智元机器人（张江，全球人形机器人出货第一 39%）、四大家族（ABB/发那科/库卡/安川）均在沪；上海口岸机器人出口占全国超四成、居首；AI 高地 6370 亿规模</td>
-</tr>
-<tr>
-<td><strong>代表企业 / 机会</strong></td>
-<td>宁德时代（福州/宁德基地）、福建储能/光伏企业</td>
-<td>蔚来、国轩高科（"雁阵出海"德/越/印尼/泰）、阳光电源、奇瑞</td>
-<td>智元机器人、临港新片区（跨境数据白名单）、张江机器人谷、国际业务总部</td>
-</tr>
-<tr>
-<td><strong>对口岗位（真实 JD）</strong></td>
-<td>宁德时代「海外公关-社媒营销」15–25K·17薪·双休（传播优先）；「海外乘用车产品工程师」15–30K·双休</td>
-<td>新能源出海内容运营 / 海外产品助理 / 出海增长</td>
-<td>出海产品 PM / 国际增长负责人 / 体系出海</td>
-</tr>
-<tr>
-<td><strong>为什么是这一站</strong></td>
-<td>生活成本低、离家近、不裸辞也能投；先把行业话术和作品攒出来</td>
-<td>产业集群最密、出海进行中，岗位需求最集中，最适合从"内容运营"长成"产品 PM"</td>
-<td>国际化程度最高、海外资源最强，是 3–5 年后冲资深/创业的舞台</td>
-</tr>
-</tbody>
-</table>
-<p><strong>逻辑链</strong>：福州用低成本和近水楼台先"进场"，合肥用最密的产业集群把能力做厚，上海用国际化舞台兑现天花板——三城不是随便选，是同一主线的三个台阶。</p>
-<hr />
-<h2>四、多年发展路线（时间轴）</h2>
-<pre><code>现在 ──0–3月──▶ 阶段1 ──1–2年──▶ 阶段2 ──2–4年──▶ 阶段3 ──4–6年+──▶ 长期
-(福州/宁德)      (福州/宁德)        (合肥)            (上海)            (自己干)
- 边学边投        出海内容运营        新能源/机器人      资深出海产品/       AI 出海
- 攒作品集         /海外产品助理       出海 PM            增长负责人          一人公司
-</code></pre>
-<p><strong>阶段 0（现在 → 上岗前，0–3 个月）｜福州</strong>
-- 别裸辞。下班用 dsh 做：Python 地基 + Prompt + 拍摄剪辑 + 跨境电商话术。
-- 产出作品集 3 件套（已完成第 1 件：新能源汽车海外内容方案）。
-- 目标：投福州/宁德"出海内容运营 / 海外社媒 / 海外产品助理"岗，拿到 8–15K Offer 再提离职。</p>
-<p><strong>阶段 1（上岗后 1–2 年）｜福州 / 宁德</strong>
-- 岗：出海内容运营 / 海外公关社媒 / 海外产品助理（如宁德时代 15–25K·17薪·双休）。
-- 攒：硬科技术语、海外平台（LinkedIn/YouTube）打法、多语内容本地化、客户沟通。
-- 副：业余做自己的"中国硬科技出海"账号，反哺内容力。</p>
-<p><strong>阶段 2（2–4 年）｜合肥</strong>
-- 跳：新能源/机器人企业的<strong>出海产品 PM / 增长 PM</strong>（国轩、蔚来、阳光电源等都在做"体系出海"）。
-- 补：PRD、需求拆解、海外产品落地、数据驱动增长——从"做内容"升级为"做产品"。
-- 薪资目标：20–35K。</p>
-<p><strong>阶段 3（4–6 年+）｜上海</strong>
-- 冲：资深出海产品 / 国际增长负责人，或接触全球市场（智元等机器人出海总部在沪）。
-- 薪资目标：40K+；或攒够资源做 AI 出海一人公司（独立站 / 代运营 / 企业智能体定制）。</p>
-<p><strong>创业锚点（贯穿全程）</strong>：你的拍摄剪辑 + 内容 + AI 工具，天然能接"中国企业出海内容代运营 / 智能体定制"的活——这是随时可启动的副业到主业的路径。</p>
-<hr />
-<h2>五、能力 / 作品集对照（每阶段要攒什么）</h2>
-<table>
-<thead>
-<tr>
-<th>阶段</th>
-<th>必攒能力</th>
-<th>作品集证据</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>0</td>
-<td>硬科技术语 + 拍摄剪辑 + AI 本地化</td>
-<td>新能源汽车海外内容方案（已做）、个人出海账号</td>
-</tr>
-<tr>
-<td>1</td>
-<td>海外平台打法 + 客户沟通 + 多语内容</td>
-<td>企业出海内容 SOP、涨粉/询盘数据</td>
-</tr>
-<tr>
-<td>2</td>
-<td>PRD + 需求拆解 + 增长数据</td>
-<td>某出海产品需求文档、增长复盘</td>
-</tr>
-<tr>
-<td>3</td>
-<td>国际资源整合 + 团队/预算</td>
-<td>完整出海产品案例、可独立交付的方案</td>
-</tr>
-</tbody>
-</table>
-<hr />
-<h2>六、下一步（今天就能做）</h2>
-<ol>
-<li><strong>定城市先行</strong>：先投福州/宁德（宁德时代 Talent.CATL.com 搜"海外公关/社媒/产品"），拿到保底 Offer 再图合肥。</li>
-<li><strong>补作品集第 2 件</strong>：把方案里那条英文 LinkedIn 帖，用 dsh 真生成 EN/DE/ES 三语版。</li>
-<li><strong>简历已就绪</strong>：<code>D:\桌面\01-通用版简历\范广钰-求职简历-B2B出海版-2026-08-25.docx</code> 直接可投。</li>
-</ol>
-<blockquote>
-<p>一句话收尾：<strong>你不是"想清楚要做什么"，你其实已经想清楚了——只是需要这条线把它串起来。现在线已经串好了：AI 出海产品经理（B2B 硬科技），福州起步、合肥做厚、上海兑现。</strong></p>
-</blockquote></div>
-<div id="doc-detail" class="doc-body"><h1>唐枫 方向1 &amp; 方向3 细分规划（2026-08-25）</h1>
-<blockquote>
-<p>你定的选择：<strong>主攻 1（AI 跨境营销 / 出海内容增长）+ 3（AI 产品经理），2（AIGC 内容编导）做备选。</strong>
-本文件把方向 1、3 各自拆成 3 个细分岗，每个都给：①这岗位每天干啥 ②广告学已具备/要补什么 ③学习清单 ④福州&amp;远程公司 ⑤作品集怎么包装 ⑥薪资谈判点 ⑦双休/福利/工时。
-薪资沿用之前口径：国内出海营销 15–40K/月，AI PM 初级 12–20K、中级 20–35K、资深 40K+/月。</p>
-</blockquote>
-<hr />
-<h2>0. 先讲清楚：出海内容增长 vs 跨境营销，分别干什么？</h2>
-<p>你问的这两个词经常被混用，其实是一个漏斗的两端：</p>
-<h3>跨境营销（Cross-Border Marketing）= 把货卖出去的全流程</h3>
-<p><strong>一句话</strong>：在海外用各种渠道把中国产品卖出去，对"销售额"负责。
-<strong>每天干的事</strong>：
-- 选品/市场调研：用 AI 扒竞品、看哪些品在海外好卖（AI 帮你省 80% 人工）
-- 搭店铺/账号：Amazon、TikTok Shop、Shopify 独立站的上架与装修
-- <strong>广告投放</strong>：在 Google / Meta(Facebook) / TikTok 上花钱买流量，盯 ROAS（广告花 1 块赚回几块）、CAC（获客成本）
-- 写卖货内容：产品 Listing、详情页、促销文案（多语种）
-- 数据分析：看转化率、客单价、复购率，用数据调策略
-- 大促活动：黑五、Prime Day 的策划和跟进度
-- 红人/KOL 合作：找海外博主带货、寄样</p>
-<h3>出海内容增长（Overseas Content Growth）= 用内容"免费"把人引来并养熟</h3>
-<p><strong>一句话</strong>：不靠烧广告，靠短视频/社媒/SEO 内容自然获客、做品牌、攒粉丝，对"流量+粉丝增长"负责。
-<strong>每天干的事</strong>：
-- 内容策略：定账号人设、选题日历、什么内容能爆
-- <strong>短视频创作</strong>：TikTok / Reels / Shorts 的脚本→拍摄→剪辑→投流（这步你爱拍剪的爱好直接变现）
-- 多语种内容本地化：用 AI 把一篇中文稿翻成英/日/西语，还要"本土化"改得像当地人写的
-- 社媒矩阵：TikTok + Instagram + YouTube + Reddit 一起运营
-- SEO 内容：写博客/长视频吃自然搜索流量
-- 社区运营：回评论、建粉丝群、做互动
-- 数据复盘：完播率、播放量、引流到店铺的转化
-- <strong>用 AI 批量产内容</strong>：dsh 写脚本、可灵/即梦生成视频，一个人顶一个团队</p>
-<h3>两者区别一张表</h3>
-<table>
-<thead>
-<tr>
-<th></th>
-<th>跨境营销</th>
-<th>出海内容增长</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>核心目标</td>
-<td>销售额 / ROAS</td>
-<td>流量 / 粉丝 / 自然增长</td>
-</tr>
-<tr>
-<td>主要手段</td>
-<td>广告投放 + 全漏斗</td>
-<td>内容 + 社区 + SEO</td>
-</tr>
-<tr>
-<td>花钱吗</td>
-<td>大量烧广告费</td>
-<td>主要花时间做内容</td>
-</tr>
-<tr>
-<td>你爱拍剪能用上吗</td>
-<td>中等（产品视频/投流素材）</td>
-<td><strong>极大（日常就是拍剪）</strong></td>
-</tr>
-<tr>
-<td>你做自己账号的爱好</td>
-<td>能兼顾</td>
-<td><strong>完全重合</strong></td>
-</tr>
-<tr>
-<td>门槛</td>
-<td>要懂投放数据</td>
-<td>要懂内容+本地化</td>
-</tr>
-</tbody>
-</table>
-<p><strong>对你而言</strong>：出海内容增长更契合（爱好=工作），跨境营销上限更高（更贴近生意、涨薪快）。<strong>建议 1 内部先冲"出海内容增长"，再补投放知识变"全栈跨境营销人"。</strong></p>
-<hr />
-<h1>一、方向 1 细分（AI 跨境营销 / 出海内容增长）</h1>
-<h2>1.1 TikTok 出海内容增长 / 短视频运营 ★最契合你</h2>
-<ul>
-<li><strong>岗位 JD 拆</strong>：负责品牌 TikTok 账号的内容策划、短视频制作、达人合作、直播引流，对播放量/涨粉/小店成交负责。</li>
-<li><strong>广告学已具备</strong>：内容策划、叙事、用户洞察、审美（全是广告学核心课）。</li>
-<li><strong>要补的</strong>：TikTok 算法与爆款逻辑、CapCut/剪映进阶、AI 视频工具（可灵/即梦/Runway）、基础投放（TikTok Ads 投流）、英文/小语种内容本地化。</li>
-<li><strong>学习清单</strong>：</li>
-<li>第1月：每天刷 30 条海外爆款，拆"前3秒钩子+结构"；用 dsh 写 10 条英文口播脚本；剪映剪出 5 条</li>
-<li>第2月：用可灵生成 3 条 AI 视频；做 1 个"假账号"完整内容日历；学 TikTok Shop 后台</li>
-<li>第3月：投 100 元测试一条视频投流；出一份"某品类 TikTok 出海内容方案"</li>
-<li><strong>公司（福州+远程）</strong>：福州扬腾创新（AI 电商运营 20–30K）、福州侨乡出海产业带商家；远程接出海品牌内容外包；自己起号。</li>
-<li><strong>作品集</strong>：起一个英文 TikTok/小红书国际版账号，发 8–12 条，截图数据；再用 dsh 出一份多语种内容方案。</li>
-<li><strong>薪资谈判点</strong>：强调"广告学内容功底 + 已能独立产出 AI 视频 + 有真实账号数据"，要价 8–15K 起、熟手 20–30K。</li>
-<li><strong>双休/福利/工时</strong>：大厂/品牌方双休普遍；小团队可能单休——挑岗看准。大促忙 1–2 月。五险一金+年终。</li>
-</ul>
-<h2>1.2 出海品牌内容营销（多语种社媒 + 独立站内容）</h2>
-<ul>
-<li><strong>岗位 JD 拆</strong>：为出海品牌做多平台（IG/YT/LinkedIn/独立站博客）内容策略与本地化，做品牌声量，不直接管投放。</li>
-<li><strong>广告学已具备</strong>：品牌传播、整合营销、文案——广告学的强项。</li>
-<li><strong>要补的</strong>：海外各平台调性差异、SEO 基础、AI 多语种本地化（不是机翻，是本土化改写）、社媒数据看板。</li>
-<li><strong>学习清单</strong>：学 Ahrefs/SEMrush 基础；用 dsh 做"一稿多语本地化"工作台；写 3 套不同国家的内容日历。</li>
-<li><strong>公司</strong>：出海 SaaS、DTC 品牌、福州外贸企业数字化转型岗；远程自由职业（给多个品牌做内容）。</li>
-<li><strong>作品集</strong>：一份"某品牌 4 国本地化内容矩阵方案"+ 实际发布的 2–3 篇多语种长文/视频。</li>
-<li><strong>薪资谈判点</strong>：突出"跨文化内容能力 + AI 提效 10 倍"，要价 12–25K。</li>
-<li><strong>双休/福利/工时</strong>：比投放岗轻松，双休普遍，项目制弹性。</li>
-</ul>
-<h2>1.3 AI 出海内容生产专家（用 AI 批量做内容，偏效率/工具）</h2>
-<ul>
-<li><strong>岗位 JD 拆</strong>：搭建"AI 内容流水线"——用 dsh/Coze/Dify 把脚本、多语翻译、视频生成、排版自动化，一个人产出过去一个团队的体量。</li>
-<li><strong>广告学已具备</strong>：懂什么内容有效（判断 AI 产出好不好的"审美标准"是广告人的核心）。</li>
-<li><strong>要补的</strong>：AI 工作流搭建（dsh 提示词链、Coze/Dify 智能体）、批量工具（可灵 API、翻译 API）、基础 Python 自动化。</li>
-<li><strong>学习清单</strong>：在 dsh 里搭一个"输入品类→输出 5 国文案+视频脚本"的智能体；学 Python 批量处理。</li>
-<li><strong>公司</strong>：AI 营销工具公司、出海 MCN、自媒体矩阵团队；或自己当"AI 内容外包"一人公司。</li>
-<li><strong>作品集</strong>：你搭的那个智能体本身 + 它产出的 20 条多语内容样例。</li>
-<li><strong>薪资谈判点</strong>：这是"市场不具备的能力"，要价可上探 20–35K（提效价值可量化）。</li>
-<li><strong>双休/福利/工时</strong>：技术/工具岗，双休普遍，远程友好。</li>
-</ul>
-<blockquote>
-<p>1.4 备选——跨境广告投放增长（偏烧钱买量，更贴近生意）：想冲更高薪资再补，不急。</p>
-</blockquote>
-<h2>1.4/1.5 硬科技出海（新能源 / 机器人 / 光伏储能）—— 你点出的关键方向 ★</h2>
-<blockquote>
-<p>用户 13:54 关键洞察：国家真正的出海大头是<strong>新能源、机器人、光伏储能</strong>等硬科技，不是小消费品。本节能否成立、对你是否更优，必须回答。</p>
-</blockquote>
-<ul>
-<li><strong>你说得对</strong>：中国出海的"大生意"确实是宁德时代(电池)、比亚迪(车)、光伏储能、工业机器人、人形机器人(宇树/优必选)这些。国家"双碳 / 智能制造 / 机器人+"战略全压在这，长期政策兜底最强。</li>
-<li><strong>那"出海内容增长 / 跨境营销"还成立吗？成立，且对这些大公司更重要</strong>，只是<strong>工作形式变了</strong>：</li>
-<li>从"B2C 刷 TikTok 爆款卖茶" → 变成 <strong>"B2B 专业内容 + 视频演示 + 海外社媒(LinkedIn/YouTube) + 行业媒体 + 海外展会内容 + 技术文档本地化"</strong>。</li>
-<li>典型岗位：<strong>新能源/机器人 海外内容营销、海外品牌增长、技术内容本地化、B2B 线索增长、海外社媒运营</strong>。</li>
-<li><strong>为什么对你可能比消费品更好</strong>：</li>
-<li><strong>双休更稳</strong>：硬科技出海主体是上市公司/大厂/出海事业部，双休+五险一金+年终普遍比小跨境卖家规范；</li>
-<li><strong>薪资更高</strong>：硬科技出海营销/增长通常 <strong>20–50K/月</strong>，资深能到 40–80 万/年，高于消费品跨境；</li>
-<li><strong>国家背书最强</strong>：双碳+机器人+智能制造+人工智能+，全中你的硬约束；</li>
-<li><strong>稀缺能力完美契合</strong>："既懂硬科技、又懂海外内容、还会用 AI 本地化"的人极少 = 你说的"市场不具备的能力"；</li>
-<li><strong>创业空间大</strong>：做海外代理、技术服务商、独立站、行业自媒体 IP 都能起。</li>
-<li><strong>你爱拍摄还能用上吗？能，且赛道更性感</strong>：拍产品演示、工厂探访、技术讲解、"中国硬科技"主题账号——这类内容在海外 YouTube/LinkedIn 正火、竞争少、门槛高(要懂点技术)，正好吃"稀缺"。</li>
-<li><strong>福建本地利好（重点）</strong>：<strong>宁德时代总部就在福建宁德，离福州很近</strong>；福建还有完整电池/储能/光伏产业链，以及机器人布局。你在福州就能接触新能源出海产业，不用去一线。</li>
-<li><strong>要补的</strong>：行业基础知识(电池/储能/机器人术语)、B2B 内容逻辑(LinkedIn+白皮书+案例)、技术内容本地化、海外展会内容打法；拍摄剪辑能力直接复用。</li>
-<li><strong>公司（福州/福建+远程）</strong>：宁德时代及供应链、福建光伏/储能企业、机器人公司出海事业部；远程接硬科技出海内容外包；自己做起号 IP。</li>
-<li><strong>作品集</strong>：做一个"某新能源/机器人产品海外内容方案"+ 拍 1 条产品演示/工厂探访视频；起一个"中国硬科技出海"主题账号。</li>
-</ul>
-<h3>消费品出海 vs 硬科技出海，怎么选？</h3>
-<table>
-<thead>
-<tr>
-<th>维度</th>
-<th>消费品出海（茶/服饰等）</th>
-<th>硬科技出海（新能源/机器人）</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>国家方向强度</td>
-<td>中（跨境电商）</td>
-<td><strong>极强（双碳/机器人/智造）</strong></td>
-</tr>
-<tr>
-<td>薪资上限</td>
-<td>15–40K</td>
-<td><strong>20–50K+</strong></td>
-</tr>
-<tr>
-<td>双休稳定性</td>
-<td>看公司，小团队易单休</td>
-<td><strong>大厂/上市公司普遍双休</strong></td>
-</tr>
-<tr>
-<td>内容形式</td>
-<td>TikTok 爆款、短平快</td>
-<td>专业内容+视频演示+B2B</td>
-</tr>
-<tr>
-<td>你的拍摄爱好</td>
-<td>自由好玩、vlog 感强</td>
-<td>产品/工厂/技术，更"专业酷"</td>
-</tr>
-<tr>
-<td>稀缺度</td>
-<td>中</td>
-<td><strong>高（跨界人才极少）</strong></td>
-</tr>
-<tr>
-<td>福建本地机会</td>
-<td>一般</td>
-<td><strong>强（宁德时代产业链）</strong></td>
-</tr>
-</tbody>
-</table>
-<blockquote>
-<p><strong>结论微调</strong>：你点出的硬科技出海，在"国家方向+薪资+双休+稀缺"四个维度上比消费品更贴合你的硬约束。建议<strong>主攻方向 1 升级为"硬科技(新能源/机器人)出海内容增长 + 跨境营销"</strong>，消费品作为理解B2C的 supplement。方向 3(AI PM) 不变——且"AI+硬科技出海"的 PM 是天花板组合。</p>
-</blockquote>
-<hr />
-<h1>二、方向 3 细分（AI 产品经理）</h1>
-<blockquote>
-<p>核心提醒：AI PM <strong>不写代码、不训练模型</strong>，拼的是"用户洞察 + 商业判断 + 把 AI 能力翻译成需求"。广告学的消费者行为/传播/品牌课全用得上。</p>
-</blockquote>
-<h2>3.1 AI 应用 / 工具产品经理（最通用，最好上岸）</h2>
-<ul>
-<li><strong>岗位 JD 拆</strong>：定义一款 AI 产品（如 AI 写作/设计/客服/提效工具）做什么、为谁做、怎么衡量成功，写 PRD、画原型、协调研发落地。</li>
-<li><strong>广告学已具备</strong>：用户需求洞察、场景判断、商业化思维。</li>
-<li><strong>要补的</strong>：AI 素养（LLM/RAG/Prompt/Token 成本/延迟/Evals 是什么，不看代码）、产品工具（墨刀/Figma 画原型、写 PRD）、数据基础（SQL 看懂就行、看板）。</li>
-<li><strong>学习清单</strong>：</li>
-<li>第1月：搞懂 AI PM 概念（看科普，不写码）；用 dsh 体验 20 个 AI 产品，写"竞品分析"</li>
-<li>第2月：学墨刀画原型 + 写一份 PRD（例："面向酒店的 AI 客服智能体"）</li>
-<li>第3月：补 SQL 基础 + 看板，做一份"AI 产品数据指标设计"</li>
-<li><strong>公司（福州+远程）</strong>：AI 应用公司、出海 SaaS、大厂 AI 团队；大量远程 PM 岗。</li>
-<li><strong>作品集</strong>：1 份完整 PRD + 可点击原型 + 1 份竞品分析（3 个 AI 产品）。</li>
-<li><strong>薪资谈判点</strong>：强调"广告学用户洞察 + AI 素养已具备 + 有 PRD/原型作品"，初级要价 12–20K。</li>
-<li><strong>双休/福利/工时</strong>：互联网 PM 双休普遍（大促/版本期加班），五险一金+期权（创业公司）。</li>
-</ul>
-<h2>3.2 AI Agent / 智能体产品经理（最稀缺高薪）</h2>
-<ul>
-<li><strong>岗位 JD 拆</strong>：设计"能自动执行多步任务的智能体"（如自动客服、自动运营、自动分析），定义它的能力边界、工具调用、评估标准。</li>
-<li><strong>广告学已具备</strong>：理解"业务流程"和"人和系统的交互"——Agent 本质是把业务流程自动化。</li>
-<li><strong>要补的</strong>：Agent 原理（规划/记忆/工具调用）、Dify/Coze/LangGraph 搭建（不用深写码，但要懂逻辑）、Evals 评估方法。</li>
-<li><strong>学习清单</strong>：在 dsh/Coze 搭 2 个 Agent（酒店客服 Agent、跨境内容 Agent）；学"如何评估 Agent 好坏"。</li>
-<li><strong>公司</strong>：智能体平台公司、AI 原生创业公司、企业 AI 中台；远程需求大。</li>
-<li><strong>作品集</strong>：你搭的 2 个 Agent 演示 + 一份"Agent 产品设计文档"。</li>
-<li><strong>薪资谈判点</strong>：稀缺岗，中级可要 20–35K、资深 40K+；强调"能独立定义并搭建 Agent"。</li>
-<li><strong>双休/福利/工时</strong>：技术密集岗，双休普遍，年轻期版本忙。</li>
-</ul>
-<h2>3.3 AI 出海 / 增长产品经理（= 1 × 3 融合，天花板最高）</h2>
-<ul>
-<li><strong>岗位 JD 拆</strong>：负责海外 AI 产品的增长（拉新/留存/付费），把 AI 能力变成用户愿意付费的增长引擎；或做"帮出海商家增长的 AI 产品"。</li>
-<li><strong>广告学已具备</strong>：增长的本质是"理解用户为什么买单"——广告学的看家本领。</li>
-<li><strong>要补的</strong>：增长方法论（AARRR 漏斗）、海外增长渠道（ASO/海外社媒/付费）、AI 产品 + 出海双背景。</li>
-<li><strong>学习清单</strong>：把 1.1 的内容增长 + 3.1 的 PM 能力叠加；做一份"某 AI 出海产品的增长方案"。</li>
-<li><strong>公司</strong>：出海 AI 应用（如 AI 写作/设计/客服出海）、跨境 SaaS；远程为主。</li>
-<li><strong>作品集</strong>：一份"AI 产品出海增长方案"+ 真实账号/投放数据。</li>
-<li><strong>薪资谈判点</strong>：双背景稀缺，要价 20–40K；这是你最终可冲的方向。</li>
-<li><strong>双休/福利/工时</strong>：双休普遍，增长岗结果导向、弹性大。</li>
-</ul>
-<blockquote>
-<p>3.4 备选——企业 AI 提效 PM（给企业内部做 AI 工具）：稳，但不如 3.3 有想象空间。</p>
-</blockquote>
-<hr />
-<h1>三、两条线怎么组合、怎么落地</h1>
-<p><strong>最优路径（按你的画像）</strong>：</p>
-<pre><code>第1–3月：主攻 1.1（出海内容增长）先上岸拿工资（8–15K）
-         同时用业余做 2（自己账号 vlog）攒内容力
-第3–6月：补 3.1（AI PM 基础：PRD+原型），把&quot;做出海内容&quot;升级为&quot;做出海内容产品&quot;
-第6月+ ：冲 3.3（AI 出海增长 PM），要价 20–40K，或自己用 AI 做起号/出海一人公司
-</code></pre>
-<p><strong>为什么这样排</strong>：先用你最熟的"内容+爱好"最快拿到工资（别裸辞），再用 PM 思维把经验溢价，最后用"AI+出海+产品"三重背景冲天花板——这也正好是你点名感兴趣的国家方向（人工智能专项行动 + 跨境电商出海）。</p>
-<p><strong>广告学背景怎么写进简历（话术）</strong>：
-- 别说"我学广告的，没技术"→ 说"广告学训练了用户洞察与跨文化内容能力，这是 AI 替代不了的核心，我用 AI 把产能放大 10 倍"
-- 作品集标题用"AI + 业务"：如《用 dsh 搭建跨境内容智能体，单人多语内容产出提效 10 倍》</p>
-<p><strong>作品集 3 件套（3 个月内凑齐）</strong>：
-1. 一个真实出海/内容账号（数据截图）
-2. 一份 AI 产品 PRD + 原型（酒店/跨境场景）
-3. 一个你搭的 AI 智能体 demo</p>
-<hr />
-<h1>四、双轨了解：B2B 硬科技（主攻）vs B2C 消费品（补充）</h1>
-<blockquote>
-<p>用户 13:57 决策：<strong>两个都先了解，但认定 B2B 行业发展前景好得多</strong>。本节能否同时看清两者、并确立"先 B2B 为主、消费品为辅"的学习顺序。</p>
-</blockquote>
-<h3>一图读懂两条赛道</h3>
-<table>
-<thead>
-<tr>
-<th>维度</th>
-<th><strong>B2B 硬科技出海（主攻）</strong></th>
-<th>B2C 消费品出海（补充）</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>卖什么</td>
-<td>新能源/机器人/储能给海外企业、经销商、政府项目</td>
-<td>茶/服饰/家居给海外个人消费者</td>
-</tr>
-<tr>
-<td>客户</td>
-<td>企业采购、工程师、渠道商</td>
-<td>普通消费者</td>
-</tr>
-<tr>
-<td>内容形式</td>
-<td>LinkedIn 专业内容、YouTube 产品演示/工厂探访、技术白皮书、案例、海外展会、技术文档本地化</td>
-<td>TikTok 爆款短视频、社媒种草、Listing、投放素材</td>
-</tr>
-<tr>
-<td>你的角色</td>
-<td>海外内容增长 / 跨境营销（把技术语言翻成老外想买的内容）</td>
-<td>内容运营 / 投流（把货用短视频卖出去）</td>
-</tr>
-<tr>
-<td>薪资</td>
-<td><strong>20–50K，资深 40–80 万</strong></td>
-<td>15–40K</td>
-</tr>
-<tr>
-<td>双休</td>
-<td><strong>大厂/上市公司普遍</strong></td>
-<td>看公司，小团队易单休</td>
-</tr>
-<tr>
-<td>国家方向</td>
-<td><strong>双碳+机器人+智造+AI+，顶级战略</strong></td>
-<td>跨境电商（中等）</td>
-</tr>
-<tr>
-<td>学习重点</td>
-<td>行业术语(电池/储能/机器人)、B2B 内容逻辑、LinkedIn/YouTube、技术本地化、展会</td>
-<td>TikTok 算法、短视频、投放 ROAS、多语种</td>
-</tr>
-<tr>
-<td>福建地利</td>
-<td><strong>宁德时代在宁德，产业链就在身边</strong></td>
-<td>一般</td>
-</tr>
-</tbody>
-</table>
-<h3>为什么 B2B 前景更好（用户判断，已认同）</h3>
-<ol>
-<li><strong>政策长坡</strong>：双碳/机器人/智能制造是国家十年级战略，兜底最强；</li>
-<li><strong>订单稳、客单高</strong>：企业/政府客户复购稳、预算足 → 营销岗和预算更稳，不靠"爆款运气"；</li>
-<li><strong>竞争少、护城河深</strong>：要同时懂技术+语言+文化+AI，跨界人才极少，越老越值钱，无 35 岁危机；</li>
-<li><strong>创业空间大</strong>：海外代理、技术服务商、行业自媒体 IP 都能从一人公司起步。</li>
-</ol>
-<h3>消费品为什么还要"了解"（作补充，不是主攻）</h3>
-<ul>
-<li>B2C 的"消费者侧内容 + 人性故事"逻辑，对 B2B 同样有用——老外企业买家也是人，爱看真实工厂/创始人故事；</li>
-<li>万一 B2B 岗位当地暂时少，消费品出海可作为过渡或副业弯道；</li>
-<li>你爱拍剪的爱好，在 B2C 短视频上练手最快，反哺 B2B 的演示视频功力。</li>
-</ul>
-<h3>学习顺序（先 B2B 为主，消费品为辅）</h3>
-<ul>
-<li><strong>第 1 月·打底</strong>：AI 素养 + 硬科技行业扫盲（电池/储能/机器人基础术语）+ LinkedIn/YouTube 内容逻辑 + <strong>拍第一条"产品演示/工厂探访"视频</strong>（用你的拍摄爱好直接上手）。</li>
-<li><strong>第 2 月·B2B 作品</strong>：做一份"某新能源产品（如储能电池）海外内容方案"（LinkedIn+YouTube+展会三件套）+ 技术文档本地化样例 + 起"中国硬科技出海"主题账号。</li>
-<li><strong>第 3 月·补 B2C 皮毛</strong>：理解 TikTok 消费者内容逻辑（作为 B2B human-story 补充）+ 投福州/福建硬科技出海岗（宁德时代供应链、储能/光伏企业）。</li>
-<li><strong>消费品深入</strong>留作备选/副业，不抢主线时间。</li>
-</ul>
-<hr />
-<h1>五、下一步你定（建议从 B2B 首个作品开刀）</h1>
-<p>我可以从下面任选一项直接带你动手（用 dsh 当场做）：
-- <strong>A（推荐）</strong>：在 dsh 里写出你的第一个 <strong>"某新能源/储能产品海外内容方案"</strong>（B2B 首个作品，LinkedIn+YouTube+展会三件套）
-- <strong>B</strong>：用 dsh + 墨刀思路，写出你的第一份 <strong>AI 产品 PRD 大纲</strong>（方向 3 首个作品，推荐做"硬科技出海内容平台/智能体"）
-- <strong>C</strong>：在 dsh 里搭一个 <strong>"输入硬科技产品→输出多语技术文案+演示视频脚本"的智能体</strong>（1.3/3.2 作品，最稀缺）</p>
-<p>你说走哪个，或直接说"三个都先做个最小版"——我建议<strong>从 A 开始</strong>，因为它最贴合你的 B2B 主攻打法，也最快出可展示作品。</p></div></div>
+</section>
 
+<section class="sec" id="projects">
+  <h2>网页 · APP 项目</h2>
+  <div class="intro">此前在 Codex 上完整开发的产品，含截图 / 说明与在线入口。</div>
+  <div class="pgrid"><div class="pcard">
+  <div class="pthumb"><div class="pcover" style="background:linear-gradient(135deg,#3a6ea5,#20232a)"><span>求</span></div></div>
+  <div class="pbody">
+    <h4>求职作战台</h4>
+    <div class="tech">HTML/JS · Node 定时 Agent · 数据看板</div>
+    <p>AI 求职产品 0→1：岗位雷达 + 投递追踪 + 求职作战平台，内嵌联网搜岗/自动更新的 Agent 能力。</p>
+    <a class="plink" href="https://110104xiayu-cyber.github.io/fanguangyu-portfolio/apps/jrw/index.html" target="_blank" rel="noopener">在线打开 ↗</a>
+  </div>
+</div><div class="pcard">
+  <div class="pthumb"><img src="assets/wenlv-shot1.png" alt="AI 文旅助手"></div>
+  <div class="pbody">
+    <h4>AI 文旅助手</h4>
+    <div class="tech">大模型 · RAG 知识库 · PRD</div>
+    <p>大模型+知识库智能客服 Demo（多轮问答 / 兜底），配套完整 PRD 与多端截图。</p>
+    <a class="plink" href="https://110104xiayu-cyber.github.io/fanguangyu-portfolio/apps/wenlv/index.html" target="_blank" rel="noopener">在线打开 ↗</a>
+  </div>
+</div><div class="pcard">
+  <div class="pthumb"><img src="assets/gzt-icon.png" alt="我的工作台"></div>
+  <div class="pbody">
+    <h4>我的工作台</h4>
+    <div class="tech">HTML/CSS · PowerShell · 桌面挂件</div>
+    <p>桌面卡片工作台（今日卡片 / 签到 / 每日数据），桌面常驻挂件，开机自启。</p>
+    <a class="plink" href="https://110104xiayu-cyber.github.io/fanguangyu-portfolio/apps/gzt/index.html" target="_blank" rel="noopener">在线打开 ↗</a>
+  </div>
+</div><div class="pcard">
+  <div class="pthumb"><div class="pcover" style="background:linear-gradient(135deg,#7a5ea5,#20232a)"><span>爆</span></div></div>
+  <div class="pbody">
+    <h4>每日爆点灵感助手</h4>
+    <div class="tech">热榜抓取 · 选题推荐 · 自动化</div>
+    <p>自动抓取抖音 / 小红书热榜 Top10，输出内容选题与创作灵感，实时刷新。</p>
+    <a class="plink" href="https://110104xiayu-cyber.github.io/fanguangyu-portfolio/apps/hotspot/index.html" target="_blank" rel="noopener">在线打开 ↗</a>
+  </div>
+</div></div>
+</section>
 
-<div class="np-edit-btn" id="npEditBtn" title="编辑键盘（仅你能开）" aria-label="编辑键盘">
-  <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3.2"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M19.1 4.9L17 7M7 17l-2.1 2.1"/></svg>
+<section class="sec" id="about">
+  <h2>关于 · 能力与背景</h2>
+  <div class="intro">AI 工具栈与基础背景，便于快速判断匹配度。</div>
+  <div class="pgrid">
+    <div class="pcard"><div class="pbody"><h4>AI 工具栈</h4><div class="tech">内容生成 / 多语本地化 / 智能体</div><p>Codex、Work Buddy、DeepSeek Harness；剪映 / Premiere / 达芬奇；Python + Prompt 工程。</p></div></div>
+    <div class="pcard"><div class="pbody"><h4>证书 / 背景</h4><div class="tech">教育 / 语言 / 认证</div><p>广告学本科（内容策划 / 传播 / 消费者行为）；英语 CET-6；工信部 AI 应用工程师（备考）。</p></div></div>
+  </div>
+</section>
+
+<footer><div class="wrap">邮箱 2317383228@qq.com ｜ 微信 Guanyuoto ｜ 求职意向：福州 / 合肥 / 上海 · 新能源·机器人 出海内容运营 / AI 出海产品经理（B2B）</div></footer>
 </div>
-<div class="np-scrim" id="npScrim"></div>
-<aside class="np-panel" id="npPanel" aria-hidden="true">
-  <div class="np-panel-head">
-    <div><div class="np-ph-title">键盘编辑器</div><div class="np-ph-sub">仅你能开 · 改动自动保存</div></div>
-    <button class="np-x" id="npDone" type="button" aria-label="完成编辑">✕</button>
-  </div>
-  <div class="np-panel-body">
-    <div class="np-sec">
-      <div class="np-sec-t">按键</div>
-      <p class="np-hint">双击按键改文字；先点一个键、再点另一个键即可交换位置。</p>
-      <button class="np-btn ghost" id="btnResetKeys" type="button">恢复默认按键</button>
-    </div>
-    <div class="np-sec">
-      <div class="np-sec-t">键帽颜色</div>
-      <div class="np-row"><label>文字</label><input type="color" id="cKText"></div>
-      <div class="np-row"><label>渐变上</label><input type="color" id="cKbg1"></div>
-      <div class="np-row"><label>渐变中</label><input type="color" id="cKbg2"></div>
-      <div class="np-row"><label>渐变下</label><input type="color" id="cKbg3"></div>
-      <div class="np-row"><label>立体阴影</label><input type="color" id="cKshadow"></div>
-      <div class="np-row"><label>圆角</label><input type="range" id="cRadius" min="14" max="44" step="1"><span class="np-val" id="cRadiusV"></span></div>
-    </div>
-    <div class="np-sec">
-      <div class="np-sec-t">底板</div>
-      <div class="np-row"><label>渐变上</label><input type="color" id="cPlate1"></div>
-      <div class="np-row"><label>渐变下</label><input type="color" id="cPlate2"></div>
-      <div class="np-row"><label>边框</label><input type="color" id="cPborder"></div>
-    </div>
-    <div class="np-sec">
-      <div class="np-sec-t">行为</div>
-      <div class="np-row"><label>回正秒数</label><input type="range" id="cIdle" min="0" max="15" step="1"><span class="np-val" id="cIdleV"></span></div>
-      <div class="np-row"><label>呼吸浮动</label><input type="checkbox" id="cFloaty"></div>
-      <div class="np-row"><label>星空背景</label><input type="checkbox" id="cStarOn"></div>
-      <div class="np-row"><label>星点数量</label><input type="range" id="cStarN" min="0" max="240" step="10"><span class="np-val" id="cStarNV"></span></div>
-    </div>
-    <div class="np-sec">
-      <div class="np-sec-t">配置 · 换设备</div>
-      <div class="np-btns">
-        <button class="np-btn" id="btnExport" type="button">导出配置</button>
-        <button class="np-btn" id="btnImport" type="button">导入配置</button>
-      </div>
-      <p class="np-hint">换电脑时：在此页点「导出配置」下载 JSON，到另一台设备打开作品集后点「导入配置」上传即可还原。</p>
-      <button class="np-btn danger" id="btnReset" type="button">恢复全部默认</button>
-      <input type="file" id="fileIn" accept="application/json" hidden>
-    </div>
-  </div>
-</aside>
-
-
-<script>
-const docBodies = {};
-document.querySelectorAll('.doc-body').forEach(d=>docBodies[d.id]=d.innerHTML);
-
-function openDoc(id,title){
-  document.getElementById('docTitle').textContent=title;
-  document.getElementById('docView').innerHTML='<div class="doc-body">'+docBodies['doc-'+id]+'</div>';
-  document.getElementById('docView').scrollTop=0;
-  document.getElementById('docModal').classList.add('open');
-}
-function openVideo(title,src){
-  document.getElementById('videoTitle').textContent=title;
-  document.getElementById('videoFrame').innerHTML = src
-    ? (src.includes('youtube')?'<iframe src="'+src+'" allowfullscreen></iframe>':'<video controls src="'+src+'"></video>')
-    : '<div class="ph">该作品素材整理中，敬请期待。<br>结构已就绪，接入视频链接即可在此播放。</div>';
-  document.getElementById('videoModal').classList.add('open');
-}
-function openWeb(title,src){
-  document.getElementById('webTitle').textContent=title;
-  document.getElementById('webFrame').innerHTML='<iframe src="'+src+'"></iframe>';
-  document.getElementById('webModal').classList.add('open');
-}
-function closeModal(id){document.getElementById(id).classList.remove('open');}
-document.addEventListener('keydown',e=>{if(e.key==='Escape')['docModal','videoModal','webModal'].forEach(closeModal);});
-
-/* 右侧 3D 数字小键盘已内联（见 hero-right 的 .np-embed），交互逻辑见下方 IIFE */
-
-/* ===== 视图切换 ===== */
-const TITLES={home:'作品集',video:'视频作品集',docs:'文档作品集',web:'网页作品集',about:'关于 · 能力与背景'};
-const VIEWS=['video','docs','web','about'];
-function openView(id,push=true){
-  const home=document.getElementById('home');
-  if(id==='home'){
-    VIEWS.forEach(v=>document.getElementById(v).classList.remove('active'));
-    home.classList.remove('behind');
-    document.body.classList.remove('sub-open');
-  }else if(VIEWS.includes(id)){
-    home.classList.add('behind');
-    const el=document.getElementById(id);
-    el.classList.add('active');
-    el.scrollTop=0;
-    document.body.classList.add('sub-open');
-  }
-  document.getElementById('barTitle').textContent=TITLES[id]||'作品集';
-  if(push && location.hash!=='#'+id) history.pushState({v:id},'', '#'+id);
-}
-window.addEventListener('popstate',e=>{ const v=(e.state&&e.state.v)||'home'; openView(v,false); });
-const init=location.hash.slice(1);
-if(VIEWS.includes(init)) openView(init,false); else openView('home',false);
-
-/* ===== 3D 数字小键盘 + 可视化编辑器（隐藏式：仅你能开） ===== */
-(function(){
-  const LS_KEY='numpad_cfg_v1';
-  const DEFAULT={keys:['7','8','9','⌫','4','5','6','÷','1','2','3','×','0','.','−','+'],
-    keyClass:['num','num','num','back','num','num','num','op','num','num','num','op','num','num','op','op'],
-    kText:'#1d1d1f',kBg1:'#ffffff',kBg2:'#f4f4f7',kBg3:'#e7e7ec',kShadow:'#d6d8df',
-    plateBg1:'#fcfcfe',plateBg2:'#e4e5ea',plateBorder:'#d3d6dd',kRadius:30,
-    idle:5,starOn:true,starN:120,floaty:true};
-  let cfg=Object.assign({},DEFAULT);
-  try{const s=localStorage.getItem(LS_KEY);if(s)cfg=Object.assign(cfg,JSON.parse(s));}catch(e){}
-  if(!Array.isArray(cfg.keys)||cfg.keys.length!==16)cfg.keys=DEFAULT.keys.slice();
-  if(!Array.isArray(cfg.keyClass)||cfg.keyClass.length!==16)cfg.keyClass=DEFAULT.keyClass.slice();
-
-  const embed=document.getElementById('npEmbed'),scene=document.getElementById('npScene'),
-        pad=document.getElementById('npPad'),grid=document.getElementById('npGrid'),cap=document.getElementById('npCap');
-  if(!scene||!pad||!grid)return;
-
-  function renderStars(n){const bg=document.querySelector('.bg-art');if(!bg)return;let h='';
-    const sizes=[1,1,2,2,2,3,3,4];
-    for(let i=0;i<n;i++){const top=Math.random()*100,left=Math.random()*100;
-      const size=sizes[Math.floor(Math.random()*sizes.length)];
-      const delay=(Math.random()*5).toFixed(2),dur=(2.4+Math.random()*3.6).toFixed(2);
-      const big=size>=3?' big':'';
-      h+='<div class="star-gold'+big+'" style="top:'+top.toFixed(2)+'%;left:'+left.toFixed(2)+'%;width:'+size+'px;height:'+size+'px;--tw:'+dur+'s;animation-delay:'+delay+'s"></div>';}
-    bg.innerHTML=h;}
-
-  function renderKeys(){grid.innerHTML='';
-    for(let i=0;i<16;i+=4){const row=document.createElement('div');row.className='krow';
-      for(let j=i;j<i+4;j++){const b=document.createElement('button');b.type='button';
-        b.className='k '+(cfg.keyClass[j]||'num');b.dataset.idx=j;b.textContent=cfg.keys[j];row.appendChild(b);}
-      grid.appendChild(row);}}
-
-  function setV(id,v){const e=document.getElementById(id);if(e)e.value=v;}
-  function setT(id,t){const e=document.getElementById(id);if(e)e.textContent=t;}
-  function setC(id,v){const e=document.getElementById(id);if(e)e.checked=!!v;}
-  function syncPanel(){
-    setV('cKText',cfg.kText);setV('cKbg1',cfg.kBg1);setV('cKbg2',cfg.kBg2);setV('cKbg3',cfg.kBg3);
-    setV('cKshadow',cfg.kShadow);setV('cPlate1',cfg.plateBg1);setV('cPlate2',cfg.plateBg2);setV('cPborder',cfg.plateBorder);
-    setV('cRadius',cfg.kRadius);setT('cRadiusV',cfg.kRadius+'px');
-    setV('cIdle',cfg.idle);setT('cIdleV',cfg.idle+'s');
-    setC('cFloaty',cfg.floaty);setC('cStarOn',cfg.starOn);
-    setV('cStarN',cfg.starN);setT('cStarNV',cfg.starN);}
-
-  function applyCfg(){
-    embed.style.setProperty('--k-text',cfg.kText);
-    embed.style.setProperty('--k-bg1',cfg.kBg1);embed.style.setProperty('--k-bg2',cfg.kBg2);embed.style.setProperty('--k-bg3',cfg.kBg3);
-    embed.style.setProperty('--k-shadow',cfg.kShadow);
-    embed.style.setProperty('--plate-bg1',cfg.plateBg1);embed.style.setProperty('--plate-bg2',cfg.plateBg2);embed.style.setProperty('--plate-border',cfg.plateBorder);
-    embed.style.setProperty('--k-radius',cfg.kRadius+'px');
-    renderStars(cfg.starOn?cfg.starN:0);
-    scene.style.animation=cfg.floaty?'npfloaty 5.5s ease-in-out infinite':'none';
-    syncPanel();
-  }
-  function save(){try{localStorage.setItem(LS_KEY,JSON.stringify(cfg));}catch(e){}}
-
-  /* 拖拽旋转 + 回正 */
-  const REST_X=54;let dragging=false,lastX=0,lastY=0,rotX=REST_X,rotY=0,tgtX=REST_X,tgtY=0,lastInteract=performance.now();
-  let editing=false,selIdx=-1;
-  scene.addEventListener('pointerdown',function(e){if(editing)return;if(e.button!==0)return;
-    dragging=true;lastX=e.clientX;lastY=e.clientY;lastInteract=performance.now();
-    scene.setPointerCapture(e.pointerId);scene.style.cursor='grabbing';});
-  scene.addEventListener('pointermove',function(e){if(editing||!dragging)return;
-    const dx=e.clientX-lastX,dy=e.clientY-lastY;lastX=e.clientX;lastY=e.clientY;lastInteract=performance.now();
-    tgtY+=dx*0.6;tgtX+=dy*0.6;if(tgtX>112)tgtX=112;if(tgtX<4)tgtX=4;});
-  function endDrag(e){if(!dragging)return;dragging=false;lastInteract=performance.now();scene.style.cursor='grab';try{scene.releasePointerCapture(e.pointerId);}catch(_){}}
-  scene.addEventListener('pointerup',endDrag);scene.addEventListener('pointercancel',endDrag);
-  function loop(){if(!dragging&&cfg.idle>0&&performance.now()-lastInteract>cfg.idle*1000){tgtX=REST_X;tgtY=0;}
-    rotX+=(tgtX-rotX)*0.12;rotY+=(tgtY-rotY)*0.12;
-    pad.style.transform='rotateX('+rotX.toFixed(2)+'deg) rotateY('+rotY.toFixed(2)+'deg)';requestAnimationFrame(loop);}
-  loop();
-
-  /* 编辑模式 */
-  const gear=document.getElementById('npEditBtn'),panel=document.getElementById('npPanel'),scrim=document.getElementById('npScrim');
-  function clearSel(){selIdx=-1;grid.querySelectorAll('.k.sel').forEach(function(k){k.classList.remove('sel');});}
-  function setEditing(on){editing=on;document.body.classList.toggle('np-editing',on);
-    panel.classList.toggle('open',on);scrim.classList.toggle('open',on);
-    scene.style.cursor=on?'default':'grab';
-    cap.innerHTML=on?'编辑模式：<b>双击键改字</b> · 点选两键交换 · 右侧调外观'
-                     :'苹果风 3D 键盘 · <b>按住左键拖动</b> 即可 360° 旋转';
-    if(!on)clearSel();}
-  if(gear)gear.addEventListener('click',function(){setEditing(!editing);});
-  if(scrim)scrim.addEventListener('click',function(){setEditing(false);});
-  const doneBtn=document.getElementById('npDone');if(doneBtn)doneBtn.addEventListener('click',function(){setEditing(false);});
-
-  grid.addEventListener('click',function(e){if(!editing)return;const k=e.target.closest('.k');if(!k)return;const i=+k.dataset.idx;
-    if(selIdx===-1){selIdx=i;k.classList.add('sel');}
-    else if(selIdx===i){clearSel();}
-    else{const a=selIdx,b=i;[cfg.keys[a],cfg.keys[b]]=[cfg.keys[b],cfg.keys[a]];[cfg.keyClass[a],cfg.keyClass[b]]=[cfg.keyClass[b],cfg.keyClass[a]];
-      renderKeys();save();clearSel();}});
-  grid.addEventListener('dblclick',function(e){if(!editing)return;const k=e.target.closest('.k');if(!k)return;startEdit(k);});
-  function startEdit(k){clearSel();k.classList.add('editing');k.setAttribute('contenteditable','true');k.focus();
-    const r=document.createRange();r.selectNodeContents(k);const s=getSelection();s.removeAllRanges();s.addRange(r);}
-  function finishEdit(k){k.classList.remove('editing');k.removeAttribute('contenteditable');
-    const i=+k.dataset.idx;cfg.keys[i]=(k.textContent||'').trim()||'·';k.textContent=cfg.keys[i];save();}
-  grid.addEventListener('blur',function(e){const k=e.target.closest&&e.target.closest('.k.editing');if(k)finishEdit(k);},true);
-  grid.addEventListener('keydown',function(e){const k=e.target.closest&&e.target.closest('.k.editing');if(!k)return;
-    if(e.key==='Enter'){e.preventDefault();k.blur();}
-    else if(e.key==='Escape'){e.preventDefault();k.textContent=cfg.keys[+k.dataset.idx];k.blur();}});
-
-  /* 面板控件 */
-  function bindColor(id,key){const el=document.getElementById(id);if(!el)return;el.addEventListener('input',function(){cfg[key]=el.value;applyCfg();save();});}
-  bindColor('cKText','kText');bindColor('cKbg1','kBg1');bindColor('cKbg2','kBg2');bindColor('cKbg3','kBg3');bindColor('cKshadow','kShadow');
-  bindColor('cPlate1','plateBg1');bindColor('cPlate2','plateBg2');bindColor('cPborder','plateBorder');
-  const rR=document.getElementById('cRadius');if(rR)rR.addEventListener('input',function(){cfg.kRadius=+rR.value;setT('cRadiusV',rR.value+'px');applyCfg();save();});
-  const rI=document.getElementById('cIdle');if(rI)rI.addEventListener('input',function(){cfg.idle=+rI.value;setT('cIdleV',rI.value+'s');save();});
-  const cF=document.getElementById('cFloaty');if(cF)cF.addEventListener('change',function(){cfg.floaty=cF.checked;applyCfg();save();});
-  const cS=document.getElementById('cStarOn');if(cS)cS.addEventListener('change',function(){cfg.starOn=cS.checked;applyCfg();save();});
-  const rS=document.getElementById('cStarN');if(rS)rS.addEventListener('input',function(){cfg.starN=+rS.value;setT('cStarNV',rS.value);renderStars(cfg.starOn?cfg.starN:0);save();});
-  const bRK=document.getElementById('btnResetKeys');if(bRK)bRK.addEventListener('click',function(){cfg.keys=DEFAULT.keys.slice();cfg.keyClass=DEFAULT.keyClass.slice();renderKeys();save();});
-  const bReset=document.getElementById('btnReset');if(bReset)bReset.addEventListener('click',function(){if(!confirm('恢复全部默认？（当前外观与按键清空）'))return;
-    cfg=JSON.parse(JSON.stringify(DEFAULT));renderKeys();applyCfg();save();});
-  const bExp=document.getElementById('btnExport');if(bExp)bExp.addEventListener('click',function(){
-    const blob=new Blob([JSON.stringify(cfg,null,2)],{type:'application/json'});const a=document.createElement('a');
-    a.href=URL.createObjectURL(blob);a.download='numpad-config.json';a.click();URL.revokeObjectURL(a.href);});
-  const fileIn=document.getElementById('fileIn');const bImp=document.getElementById('btnImport');
-  if(bImp&&fileIn)bImp.addEventListener('click',function(){fileIn.click();});
-  if(fileIn)fileIn.addEventListener('change',function(){const f=fileIn.files[0];if(!f)return;const rd=new FileReader();
-    rd.onload=function(){try{const o=JSON.parse(rd.result);cfg=Object.assign({},DEFAULT,o);
-      if(!Array.isArray(cfg.keys)||cfg.keys.length!==16)cfg.keys=DEFAULT.keys.slice();
-      if(!Array.isArray(cfg.keyClass)||cfg.keyClass.length!==16)cfg.keyClass=DEFAULT.keyClass.slice();
-      renderKeys();applyCfg();save();}catch(err){alert('配置文件格式不对，导入失败');}fileIn.value='';};
-    rd.readAsText(f);});
-
-  renderKeys();applyCfg();
-})();
-</script>
-</body>
-</html>
+</body></html>
